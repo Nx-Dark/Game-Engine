@@ -10,15 +10,11 @@ namespace Dark {
 
 	public:
 
-		inline static void Clear(const glm::vec4& p_Color)
-		{
-			s_RendererAPI->Clear(p_Color);
-		}
+		static void Init();
 
-		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray)
-		{
-			s_RendererAPI->DrawIndexed(vertexArray);
-		}
+		static void Clear(const glm::vec4& p_Color);
+
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray);
 	};
 
 }

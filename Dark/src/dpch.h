@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <memory>
 #include <chrono>
+#include <filesystem>
 
 #include "Dark/Log.h"
 #include "Dark/Core.h"

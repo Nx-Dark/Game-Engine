@@ -23,6 +23,8 @@ namespace Dark {
 		static API s_API;
 
 	public:
+		virtual void Init() = 0;
+
 		virtual void Clear(const glm::vec4& p_Color) = 0;
 		
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;

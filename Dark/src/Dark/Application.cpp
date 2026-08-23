@@ -10,6 +10,8 @@
 
 #include "Dark/Core/DeltaTime.h"
 
+#include "Dark/Renderer/Renderer.h"
+
 namespace Dark {
 	Application* Application::s_Instance{ nullptr };
 
@@ -23,6 +25,9 @@ namespace Dark {
 		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallBackFn(DARK_BIND_EVENT_FN(Application::OnEvent));
 		//m_Window->SetVsync(false);
+
+		//initializing the renderer
+		Renderer::Init();
 
 		//creating the imgui layer
 		m_ImGuiLayer = new ImGuiLayer();

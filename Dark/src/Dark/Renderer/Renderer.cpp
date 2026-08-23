@@ -7,6 +7,11 @@ namespace Dark {
 
 	Renderer::SceneData* Renderer::s_SceneData{ new SceneData() };
 
+	void Renderer::Init()
+	{
+		RenderCommand::Init();
+	}
+
 	void Renderer::BeginScene(OrthoGraphicCamera& camera)
 	{
 		s_SceneData->m_ProjectionViewMatrix = camera.GetProjectionViewMatrix();

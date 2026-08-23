@@ -8,7 +8,8 @@
 namespace Dark {
 
 
-	OpenGLShader::OpenGLShader(const std::string& vertexShaderFP, const std::string& fragmentShaderFP)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexShaderFP, const std::string& fragmentShaderFP)
+		: m_Name(name)
 	{
 		m_RendererID = CompileShader(vertexShaderFP, fragmentShaderFP);
 	}
@@ -28,6 +29,11 @@ namespace Dark {
 	{
 		//unusing the program when the shader is unbound
 		glUseProgram(0);
+	}
+
+	const std::string& OpenGLShader::GetName() const
+	{
+		return m_Name;
 	}
 
 	void OpenGLShader::SetUniformMatrix(const std::string& name, const glm::mat4& mat)
@@ -132,31 +138,36 @@ namespace Dark {
 		return programID;
 	}
 
-	std::string OpenGLShader::parseShader(const std::string& filepath)
+	std::string OpenGLShader::parseShader(const std::filesystem::path& filepath)
 	{
-		std::stringstream ss;
-		try {
-			//file stream to open the file
-			std::fstream filestream;
-			//setting failbit and badbit exceptions to handle file errors when it fails to open or find the file
-			filestream.exceptions(std::fstream::failbit | std::fstream::badbit);
 
-			filestream.open(filepath);
+		std::error_code ec{};
+		auto size{ std::filesystem::file_size(filepath, ec) };
 
-			//since its a stream, we are reading the file contents and streaming it to the strignstream
-			ss << filestream.rdbuf();
-
-			filestream.close();
-
-		}
-		catch (std::fstream::failure& e) {
-			//error handling when file fails to open or read data or stuff like that
-			DARK_CORE_ERROR("Shader Parsing Failed!\nFilePath: {0}\n{1}", filepath, e.what());
-			ss << "";
+		if (ec) {
+			DARK_CORE_ERROR("Failed To Retrieve Shader File Size! FilePath: '{0}'\n{1}", filepath.string(), ec.message());
+			return {};
 		}
 
-		//returns the shader source code as string from the shader source file
-		return ss.str();
+		std::ifstream file{ filepath, std::ios::in | std::ios::binary };
+		if (!file) {
+			DARK_CORE_ERROR("Couldn't Load Shader Source File! FilePath:'{0}'", filepath.string());
+			return {};
+		}
+
+		std::string shaderSrc{};
+		shaderSrc.resize(size);
+
+		file.read(shaderSrc.data(), size);
+
+		if (!file) {
+			DARK_CORE_ERROR("Couldn't Read Complete Shader Source File! FilePath: '{0}'", filepath.string());
+			file.close();
+			return {};
+		}
+
+		file.close();
+		return shaderSrc;
 
 	}
 

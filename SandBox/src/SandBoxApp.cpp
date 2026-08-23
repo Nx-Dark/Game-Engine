@@ -1,16 +1,13 @@
 #include "Dark.h"
 
-#include <imgui/imgui.h>
-
 #include "Platform/OpenGL/OpenGLShader.h"
 
 class ExampleLayer : public Dark::Layer
 {
 private:
-
 	Dark::Ref<Dark::VertexArray> m_SquareVA{};
-	Dark::Ref<Dark::Shader> m_Shader{}, m_TextureShader{};
-	Dark::Ref<Dark::Texture2D> m_Texture{};
+	Dark::Ref<Dark::ShaderLibrary> m_ShaderLib{}; //TODO: Must be Owned By the Renderer
+	Dark::Ref<Dark::Texture2D> m_Texture{}, m_BirdTexture{};
 
 	//bg color
 	glm::vec4 bg_clear_color{};
@@ -28,6 +25,9 @@ public:
 	ExampleLayer()
 		: Layer("ExampleLayer"), m_Camera{ -3.2f, 3.2f, 1.8f, -1.8f }
 	{
+
+		//creating the shader library; TODO: Must be owner by the Renderer;
+		m_ShaderLib = Dark::ShaderLibrary::Create();
 
 		//square
 		m_SquareVA = Dark::VertexArray::Create();
@@ -57,13 +57,15 @@ public:
 		Dark::Ref<Dark::IndexBuffer> squareIB{ Dark::IndexBuffer::Create(indicesSQ, 6) };
 		m_SquareVA->SetIndexBuffer(squareIB);
 
-		m_Shader = Dark::Shader::Create("Assets\\Shaders\\vert.glsl", "Assets\\Shaders\\frag.glsl");
+		//basic shader
+		m_ShaderLib->Load("Basic", "Assets\\Shaders\\vert.glsl", "Assets\\Shaders\\frag.glsl");
 
 		//texture
-		m_TextureShader = Dark::Shader::Create("Assets\\Shaders\\texVert.glsl", "Assets\\Shaders\\texFrag.glsl");
-		std::static_pointer_cast<Dark::OpenGLShader>(m_TextureShader)->SetUniformInt("u_Texture", 0);
+		auto texShader{ m_ShaderLib->Load("Texture", "Assets\\Shaders\\texVert.glsl", "Assets\\Shaders\\texFrag.glsl") };
+		std::static_pointer_cast<Dark::OpenGLShader>(texShader)->SetUniformInt("u_Texture", 0);
 
 		m_Texture = Dark::Texture2D::Create("Assets\\Textures\\adawong.jpg");
+		m_BirdTexture = Dark::Texture2D::Create("Assets\\Textures\\bird.png");
 
 		//camera stuff
 		m_Camera.SetPosition(m_CamPos);
@@ -76,9 +78,9 @@ public:
 
 		//camera update
 		if (Dark::Input::IsKeyPressed(DK_KEY_RIGHT)) m_CamPos.x += m_CamSpeed * dt;
-		if (Dark::Input::IsKeyPressed(DK_KEY_LEFT )) m_CamPos.x -= m_CamSpeed * dt;
-		if (Dark::Input::IsKeyPressed(DK_KEY_UP   )) m_CamPos.y += m_CamSpeed * dt;
-		if (Dark::Input::IsKeyPressed(DK_KEY_DOWN )) m_CamPos.y -= m_CamSpeed * dt;
+		if (Dark::Input::IsKeyPressed(DK_KEY_LEFT)) m_CamPos.x -= m_CamSpeed * dt;
+		if (Dark::Input::IsKeyPressed(DK_KEY_UP)) m_CamPos.y += m_CamSpeed * dt;
+		if (Dark::Input::IsKeyPressed(DK_KEY_DOWN)) m_CamPos.y -= m_CamSpeed * dt;
 
 		if (Dark::Input::IsKeyPressed(DK_KEY_J)) m_CamRotation += m_CamRotationSpeed * dt;
 		if (Dark::Input::IsKeyPressed(DK_KEY_L)) m_CamRotation -= m_CamRotationSpeed * dt;
@@ -91,21 +93,26 @@ public:
 
 		Dark::Renderer::BeginScene(m_Camera);
 
-		std::static_pointer_cast<Dark::OpenGLShader>(m_Shader)->Bind();
-		std::static_pointer_cast<Dark::OpenGLShader>(m_Shader)->SetUniformFloat4("u_Color", m_Color);
+		auto basic_shader{ m_ShaderLib->Get("Basic") };
+		basic_shader->Bind();
+		std::static_pointer_cast<Dark::OpenGLShader>(basic_shader)->SetUniformFloat4("u_Color", m_Color);
 
 		const glm::mat4& scale{ glm::scale(glm::mat4{1.0f}, glm::vec3{0.3f}) };
-	
+
 		for (int y{}; y++ < 20; ) {
 			for (int x{}; x++ < 20; ) {
 				glm::vec3 pos{ x * 0.33f, y * 0.33f, 0.0f };
 				const glm::mat4& transform{ glm::translate(glm::mat4{1.0f}, pos) * scale };
-				Dark::Renderer::Submit(m_Shader, m_SquareVA, transform);
+				Dark::Renderer::Submit(basic_shader, m_SquareVA, transform);
 			}
 		}
 
+		auto texShader{ m_ShaderLib->Get("Texture") };
 		m_Texture->Bind();
-		Dark::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4{ 1.0f }, glm::vec3{ 5.0f }));
+		Dark::Renderer::Submit(texShader, m_SquareVA, glm::scale(glm::mat4{ 1.0f }, glm::vec3{ 3.0f }));
+
+		m_BirdTexture->Bind();
+		Dark::Renderer::Submit(texShader, m_SquareVA, glm::scale(glm::mat4{ 1.0f }, glm::vec3{ 1.5f }));
 
 		Dark::Renderer::EndScene();
 	}
@@ -145,4 +152,5 @@ public:
 Dark::Application* Dark::CreateApplication() 
 {
 	return new Sandbox();
+
 }

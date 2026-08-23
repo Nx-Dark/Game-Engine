@@ -10,12 +10,16 @@ namespace Dark {
 	private:
 		uint32_t m_RendererID{};
 
+		std::string m_Name{};
+
 	public:
-		OpenGLShader(const std::string& vertexShaderFP, const std::string& fragmentShaderFP);
+		OpenGLShader(const std::string& name, const std::string& vertexShaderFP, const std::string& fragmentShaderFP);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
+		
+		virtual const std::string& GetName() const override;
 
 		//uniforms
 		void SetUniformMatrix(const std::string& name, const glm::mat4& mat);
@@ -30,7 +34,7 @@ namespace Dark {
 
 	private:
 
-		std::string parseShader(const std::string& filepath);
+		std::string parseShader(const std::filesystem::path& filepath);
 		uint32_t CompileShader(const std::string& vertexShaderFP, const std::string& fragmentShaderFP);
 		bool CheckCompileError(const std::string& shaderType, uint32_t shader);
 	};

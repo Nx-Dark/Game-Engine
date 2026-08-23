@@ -28,6 +28,10 @@
 #include <glm/gtc/type_ptr.hpp>
 //---------------------------------------------
 
+//--ImGui---------------
+#include <imgui/imgui.h>
+//----------------------
+
 /*--Entry Point--*/
 #include "Dark/EntryPoint.h"
 /*---------------*/

@@ -23,6 +23,8 @@ namespace Dark {
 
 	public:
 
+		static void Init();
+
 		//TODO: Add Parameters for various stuff
 		static void BeginScene(OrthoGraphicCamera& camera);
 		static void EndScene();
