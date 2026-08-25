@@ -13,19 +13,15 @@ private:
 	glm::vec4 bg_clear_color{};
 
 	//camera
-	Dark::OrthoGraphicCamera m_Camera;
-	glm::vec3 m_CamPos{};
-	float m_CamSpeed{5.0f};
-	float m_CamRotation{};
-	float m_CamRotationSpeed{ 90.0f };
+	Dark::OrthoGraphicCameraController m_CameraController;
 
 	//color vectors for the squares
 	glm::vec4 m_Color{ 0.0f, 0.0f, 1.0f, 1.0f };
 public:
 	ExampleLayer()
-		: Layer("ExampleLayer"), m_Camera{ -3.2f, 3.2f, 1.8f, -1.8f }
+		: Layer("ExampleLayer"), m_CameraController{ 960.0f / 540.0f, 1.0f, 45.0f, true}
 	{
-
+		 
 		//creating the shader library; TODO: Must be owner by the Renderer;
 		m_ShaderLib = Dark::ShaderLibrary::Create();
 
@@ -67,31 +63,16 @@ public:
 		m_Texture = Dark::Texture2D::Create("Assets\\Textures\\adawong.jpg");
 		m_BirdTexture = Dark::Texture2D::Create("Assets\\Textures\\bird.png");
 
-		//camera stuff
-		m_Camera.SetPosition(m_CamPos);
 	}
 
 	void OnUpdate(Dark::DeltaTime dt) override
 	{
 
-		DARK_CLIENT_INFO("DeltaTime: Milliseconds: {0}ms", dt.GetMilliseconds());
-
-		//camera update
-		if (Dark::Input::IsKeyPressed(DK_KEY_RIGHT)) m_CamPos.x += m_CamSpeed * dt;
-		if (Dark::Input::IsKeyPressed(DK_KEY_LEFT)) m_CamPos.x -= m_CamSpeed * dt;
-		if (Dark::Input::IsKeyPressed(DK_KEY_UP)) m_CamPos.y += m_CamSpeed * dt;
-		if (Dark::Input::IsKeyPressed(DK_KEY_DOWN)) m_CamPos.y -= m_CamSpeed * dt;
-
-		if (Dark::Input::IsKeyPressed(DK_KEY_J)) m_CamRotation += m_CamRotationSpeed * dt;
-		if (Dark::Input::IsKeyPressed(DK_KEY_L)) m_CamRotation -= m_CamRotationSpeed * dt;
-		//
-
-		m_Camera.SetPosition(m_CamPos);
-		m_Camera.SetRotation(m_CamRotation);
+		m_CameraController.OnUpdate(dt);
 
 		Dark::RenderCommand::Clear(bg_clear_color);
 
-		Dark::Renderer::BeginScene(m_Camera);
+		Dark::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		auto basic_shader{ m_ShaderLib->Get("Basic") };
 		basic_shader->Bind();
@@ -119,6 +100,9 @@ public:
 
 	void OnEvent(Dark::Event& e) override
 	{
+
+		m_CameraController.OnEvent(e);
+
 	}
 
 	void OnImGuiRender() override

@@ -17,6 +17,7 @@ namespace Dark {
 
 	public:
 		OrthoGraphicCamera(float left, float right, float top, float bottom);
+		void SetProjection(float left, float right, float top, float bottom);
 
 		inline void SetPosition(const glm::vec3& pos) { m_Position = pos; RecalcViewMatrix(); }
 		inline const glm::vec3& GetPosition() const { return m_Position; }

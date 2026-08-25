@@ -62,16 +62,16 @@ namespace Dark {
 	//Event dispatcher, for the engine only!
 	class EventDispatcher {
 
-		template <typename T>
-		using EventFn = std::function<bool(T&)>;
+		//template <typename T>
+		//using EventFn = std::function<bool(T&)>;
 
 		Event& m_Event;
 
 	public:
 		EventDispatcher(Event& e) : m_Event(e) { }
 
-		template <typename T>
-		bool Dispatch(EventFn<T> func) {
+		template <typename T, typename F>
+		bool Dispatch(const F& func) {
 
 			if (m_Event.GetEventType() == T::GetStaticType()) {
 				m_Event.m_Handled = func(static_cast<T&>(m_Event));

@@ -9,6 +9,7 @@
 #include "Dark/Log.h"
 #include "Dark/Core.h"
 #include "Dark/Layer.h"
+#include "Dark/OrthoGraphicCameraController.h"
 
 #include "Dark/Core/Timer.h"
 #include "Dark/Core/DeltaTime.h"

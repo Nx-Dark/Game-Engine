@@ -173,6 +173,7 @@
     <ClInclude Include="src\Dark\LayerStack.h" />
     <ClInclude Include="src\Dark\Log.h" />
     <ClInclude Include="src\Dark\MouseButtonCodes.h" />
+    <ClInclude Include="src\Dark\OrthoGraphicCameraController.h" />
     <ClInclude Include="src\Dark\Renderer\Buffer.h" />
     <ClInclude Include="src\Dark\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Dark\Renderer\OrthoGraphicCamera.h" />
@@ -622,6 +623,7 @@
     <ClCompile Include="src\Dark\Layer.cpp" />
     <ClCompile Include="src\Dark\LayerStack.cpp" />
     <ClCompile Include="src\Dark\Log.cpp" />
+    <ClCompile Include="src\Dark\OrthoGraphicCameraController.cpp" />
     <ClCompile Include="src\Dark\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCamera.cpp" />
     <ClCompile Include="src\Dark\Renderer\RenderCommand.cpp" />
