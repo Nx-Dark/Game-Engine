@@ -49,6 +49,8 @@ namespace Dark {
 		//layer stack
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+		void PopLayer(Layer* layer);
+		void PopOverlay(Layer* layer);
 
 		//function to get the window
 		inline Window& GetWindow() { return *m_Window; }

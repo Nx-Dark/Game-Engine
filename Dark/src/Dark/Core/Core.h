@@ -1,5 +1,23 @@
 #pragma once
 
+#ifdef _WIN32
+	
+	#ifdef _WIN64
+		#define DARK_PLATFORM_WINDOWS
+	#else
+		#error "X86 windows Not Supported!"
+	#endif
+
+#elif defined(__linux__)
+	#define DARK_PLATFORM_LINUX
+	#error "Linux not Supported For Now"
+
+#else
+	#define DARK_API
+	#error "UnSupported Platform!"
+
+#endif
+
 #ifdef DARK_PLATFORM_WINDOWS
 	#ifdef DARK_DYNAMIC_LINK
 		#ifdef DARK_BUILD_DLL
@@ -10,9 +28,24 @@
 	#else 
 		#define DARK_API
 	#endif
+
+#elif DARK_PLATFORM_LINUX
+	#ifdef DARK_DYNAMIC_LINK
+		#ifdef DARK_BUILD_DLL
+			#define DARK_API
+		#else
+			#define DARK_API
+		#endif
+	#else
+		#define DARK_API
+	#endif
+
 #else
-	#error DARK ENGINE IS ONLY SUPPORTED FOR WINDOWS!
+	#error ""UnSupported Platform!""
+
 #endif
+
+
 
 #ifdef DARK_DEBUG
 	#define DARK_ENABLE_ASSERTS

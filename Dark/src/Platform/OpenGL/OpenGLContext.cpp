@@ -25,6 +25,18 @@ namespace Dark {
 		DARK_CORE_INFO("	Vendor: {0}", (const char*)glGetString(GL_VENDOR));
 		DARK_CORE_INFO("	Renderer: {0}", (const char*)glGetString(GL_RENDERER));
 		DARK_CORE_INFO("	Version: {0}", (const char*)glGetString(GL_VERSION));
+
+#ifdef DARK_ENABLE_ASSERTS
+		int versionMajor{};
+		int versionMinor{};
+		
+		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
+		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+
+		DARK_CORE_ASSERT((versionMajor == 4 && versionMinor >= 5), "Dark Engine Requries OpenGL Core Version 4.5 or Above!");
+
+#endif
+
 	}
 
 	void OpenGLContext::SwapBuffers() {

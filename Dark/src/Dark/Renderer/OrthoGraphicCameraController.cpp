@@ -15,10 +15,10 @@ namespace Dark {
 	void OrthoGraphicCameraController::OnUpdate(DeltaTime dt)
 	{
 		//camera update
-		if (Input::IsKeyPressed(DK_KEY_D)) m_CamPos.x += m_CamTranslationSpeed * dt;
-		if (Input::IsKeyPressed(DK_KEY_A)) m_CamPos.x -= m_CamTranslationSpeed * dt;
-		if (Input::IsKeyPressed(DK_KEY_W)) m_CamPos.y += m_CamTranslationSpeed * dt;
-		if (Input::IsKeyPressed(DK_KEY_S)) m_CamPos.y -= m_CamTranslationSpeed * dt;
+		if (Input::IsKeyPressed(DK_KEY_D)) { m_CamPos.x +=  m_CamTranslationSpeed * dt; }
+		if (Input::IsKeyPressed(DK_KEY_A)) { m_CamPos.x -=  m_CamTranslationSpeed * dt; }
+		if (Input::IsKeyPressed(DK_KEY_W)) { m_CamPos.y +=  m_CamTranslationSpeed * dt; }
+		if (Input::IsKeyPressed(DK_KEY_S)) { m_CamPos.y -=  m_CamTranslationSpeed * dt; }
 
 		if (m_RotateCamera) {
 			if (Input::IsKeyPressed(DK_KEY_Q)) m_CamRotation += m_CamRotationSpeed * dt;

@@ -33,7 +33,3 @@
 //--ImGui---------------
 #include <imgui/imgui.h>
 //----------------------
-
-/*--Entry Point--*/
-#include "Dark/Core/EntryPoint.h"
-/*---------------*/
