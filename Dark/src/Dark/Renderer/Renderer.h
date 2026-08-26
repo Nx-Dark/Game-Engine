@@ -24,6 +24,7 @@ namespace Dark {
 	public:
 
 		static void Init();
+		static void ShutDown();
 
 		static void OnWindowResize(int width, int height);
 

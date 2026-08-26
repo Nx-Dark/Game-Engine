@@ -180,6 +180,7 @@
     <ClInclude Include="src\Dark\Renderer\OrthoGraphicCameraController.h" />
     <ClInclude Include="src\Dark\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Dark\Renderer\Renderer.h" />
+    <ClInclude Include="src\Dark\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Dark\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Dark\Renderer\Shader.h" />
     <ClInclude Include="src\Dark\Renderer\Texture.h" />
@@ -627,6 +628,7 @@
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCameraController.cpp" />
     <ClCompile Include="src\Dark\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Dark\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Dark\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Dark\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Dark\Renderer\Shader.cpp" />
     <ClCompile Include="src\Dark\Renderer\Texture.cpp" />

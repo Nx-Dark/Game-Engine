@@ -41,6 +41,8 @@ namespace Dark {
 
 	Application::~Application() {
 
+		Renderer::ShutDown();
+
 	}
 
 	void Application::Run() {

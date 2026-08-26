@@ -15,6 +15,8 @@
 
 //----Renderer---------------------------------
 #include "Dark/Renderer/Renderer.h"
+#include "Dark/Renderer/Renderer2D.h"
+
 #include "Dark/Renderer/RenderCommand.h"
 
 #include "Dark/Renderer/VertexArray.h"
