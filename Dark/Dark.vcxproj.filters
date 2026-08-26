@@ -57,20 +57,47 @@
     <ClInclude Include="src\Dark.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Application.h">
-      <Filter>src\Dark</Filter>
+    <ClInclude Include="src\Dark\Core\Application.h">
+      <Filter>src\Dark\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Core.h">
-      <Filter>src\Dark</Filter>
+    <ClInclude Include="src\Dark\Core\Core.h">
+      <Filter>src\Dark\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Core\DeltaTime.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\EntryPoint.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\GamePadCodes.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\Input.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\JoyStickCodes.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\KeyCodes.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\Layer.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\LayerStack.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\Log.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Core\MouseButtonCodes.h">
       <Filter>src\Dark\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Core\Timer.h">
       <Filter>src\Dark\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\EntryPoint.h">
-      <Filter>src\Dark</Filter>
+    <ClInclude Include="src\Dark\Core\Window.h">
+      <Filter>src\Dark\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Events\ApplicationEvent.h">
       <Filter>src\Dark\Events</Filter>
@@ -84,32 +111,8 @@
     <ClInclude Include="src\Dark\Events\MouseEvent.h">
       <Filter>src\Dark\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\GamePadCodes.h">
-      <Filter>src\Dark</Filter>
-    </ClInclude>
     <ClInclude Include="src\Dark\ImGui\ImGuiLayer.h">
       <Filter>src\Dark\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\Input.h">
-      <Filter>src\Dark</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\JoyStickCodes.h">
-      <Filter>src\Dark</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\KeyCodes.h">
-      <Filter>src\Dark</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\Layer.h">
-      <Filter>src\Dark</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\LayerStack.h">
-      <Filter>src\Dark</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\Log.h">
-      <Filter>src\Dark</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\MouseButtonCodes.h">
-      <Filter>src\Dark</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\Buffer.h">
       <Filter>src\Dark\Renderer</Filter>
@@ -118,6 +121,9 @@
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\OrthoGraphicCamera.h">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Renderer\OrthoGraphicCameraController.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\RenderCommand.h">
@@ -137,9 +143,6 @@
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\VertexArray.h">
       <Filter>src\Dark\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dark\Window.h">
-      <Filter>src\Dark</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1428,13 +1431,21 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\OrthoGraphicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Dark\Application.cpp">
-      <Filter>src\Dark</Filter>
+    <ClCompile Include="src\Dark\Core\Application.cpp">
+      <Filter>src\Dark\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\Core\Timer.cpp">
+    <ClCompile Include="src\Dark\Core\Input.cpp">
+      <Filter>src\Dark\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Core\Layer.cpp">
+      <Filter>src\Dark\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Core\LayerStack.cpp">
+      <Filter>src\Dark\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Core\Log.cpp">
       <Filter>src\Dark\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\ImGui\ImGuiBuild.cpp">
@@ -1443,22 +1454,13 @@
     <ClCompile Include="src\Dark\ImGui\ImGuiLayer.cpp">
       <Filter>src\Dark\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\Input.cpp">
-      <Filter>src\Dark</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Dark\Layer.cpp">
-      <Filter>src\Dark</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Dark\LayerStack.cpp">
-      <Filter>src\Dark</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Dark\Log.cpp">
-      <Filter>src\Dark</Filter>
-    </ClCompile>
     <ClCompile Include="src\Dark\Renderer\Buffer.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCamera.cpp">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Renderer\OrthoGraphicCameraController.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\Renderer\RenderCommand.cpp">
@@ -1509,6 +1511,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\OrthoGraphicCameraController.cpp" />
   </ItemGroup>
 </Project>

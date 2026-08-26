@@ -38,50 +38,58 @@ namespace Dark {
 
 	void OpenGLShader::SetUniformMatrix(const std::string& name, const glm::mat4& mat)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 
 	void OpenGLShader::SetUniformMatrix(const std::string& name, const glm::mat3& mat)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 
 	void OpenGLShader::SetUniformFloat4(const std::string& name, const glm::vec4& vec4)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniform4fv(location, 1, glm::value_ptr(vec4));
 	}
 
 	void OpenGLShader::SetUniformFloat3(const std::string& name, const glm::vec3& vec3)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniform3fv(location, 1, glm::value_ptr(vec3));
 	}
 
 	void OpenGLShader::SetUniformFloat2(const std::string& name, const glm::vec2& vec2)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniform2fv(location, 1, glm::value_ptr(vec2));
 	}
 
 	void OpenGLShader::SetUniformFloat(const std::string& name, float value)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniform1f(location, value);
 	}
 
 	void OpenGLShader::SetUniformInt(const std::string& name, int value)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniform1i(location, value);
 	}
 
 	void OpenGLShader::SetUniformUint(const std::string& name, uint32_t value)
 	{
-		int location{ glGetUniformLocation(m_RendererID, name.c_str()) };
+		int location{ GetUniformLocation(name) };
 		glUniform1ui(location, value);
+	}
+
+	//uniform caching
+	int OpenGLShader::GetUniformLocation(const std::string& u_Name)
+	{
+		if (!m_CachedUniforms.contains(u_Name)) m_CachedUniforms[u_Name] = glGetUniformLocation(m_RendererID, u_Name.c_str());
+
+		return m_CachedUniforms[u_Name];
 	}
 
 	//parsing and compiling shaders

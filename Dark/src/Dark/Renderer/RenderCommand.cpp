@@ -12,6 +12,11 @@ namespace Dark {
 		s_RendererAPI->Init();
 	}
 
+	void RenderCommand::SetViewport(int x, int y, int w, int h)
+	{
+		s_RendererAPI->SetViewport(x, y, w, h);
+	}
+
 	void RenderCommand::Clear(const glm::vec4& p_Color)
 	{
 		s_RendererAPI->Clear(p_Color);

@@ -14,8 +14,8 @@
 #include <chrono>
 #include <filesystem>
 
-#include "Dark/Log.h"
-#include "Dark/Core.h"
+#include "Dark/Core/Log.h"
+#include "Dark/Core/Core.h"
 
 #include <stack>
 #include <queue>

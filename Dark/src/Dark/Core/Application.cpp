@@ -4,7 +4,7 @@
 
 #include "Dark/Events/ApplicationEvent.h"
 
-#include "Dark/Input.h"
+#include "Dark/Core/Input.h"
 
 #include "Dark/Core/Timer.h"
 
@@ -53,19 +53,21 @@ namespace Dark {
 			m_lastFrameTime = curTime;
 			//***********************************************//
 
-			//layer update
-			for (Layer* layer : m_LayerStack) {
-				layer->OnUpdate(delatTime);
+			if (!m_Minimized)
+			{
+				//layer update
+				for (Layer* layer : m_LayerStack) {
+					layer->OnUpdate(delatTime);
+				}
 			}
 
 			//imgui rendering for the layers
 			m_ImGuiLayer->Begin();
-				for (Layer* layer : m_LayerStack)
-				{
-					layer->OnImGuiRender();
-				}
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
 			m_ImGuiLayer->End();
-
 
 			//window update
 			m_Window->OnUpdate();
@@ -79,16 +81,35 @@ namespace Dark {
 		EventDispatcher dispatcher{ e }; //event dispatcher
 
 		//Window closing event dispatch
-		dispatcher.Dispatch<WindowCloseEvent>([this](const WindowCloseEvent& e) -> bool {
-			m_Running = false;
-			return true;
-		});
+		dispatcher.Dispatch<WindowCloseEvent>(DARK_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(DARK_BIND_EVENT_FN(Application::OnWindowResize));
 
-		////layer event handling
+		//layer event handling
 		for (auto it{ m_LayerStack.rbegin() }; it != m_LayerStack.rend(); it++) {
 			(*it)->OnEvent(e);
 			if (e.Handled()) break;
 		}
+
+	}
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
+		m_Running = false;
+		return true;
+	}
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+
+		m_Minimized = false;
+
+		//setting the view port in the renderer;
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
 
 	}
 

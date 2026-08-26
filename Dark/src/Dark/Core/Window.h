@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core.h"
-#include "Events/Event.h"
+#include "Dark/Core/Core.h"
+#include "Dark/Events/Event.h"
 
 namespace Dark {
 

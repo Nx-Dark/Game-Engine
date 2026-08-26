@@ -12,6 +12,11 @@ namespace Dark {
 		RenderCommand::Init();
 	}
 
+	void Renderer::OnWindowResize(int width, int height)
+	{
+		RenderCommand::SetViewport(0, 0, width, height);
+	}
+
 	void Renderer::BeginScene(OrthoGraphicCamera& camera)
 	{
 		s_SceneData->m_ProjectionViewMatrix = camera.GetProjectionViewMatrix();

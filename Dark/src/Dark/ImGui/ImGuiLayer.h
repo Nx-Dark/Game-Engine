@@ -1,6 +1,8 @@
 #pragma once
 
-#include <Dark/Layer.h>
+#include "Dark/Core/Core.h"
+
+#include <Dark/Core/Layer.h>
 
 #include <Dark/Events/ApplicationEvent.h>
 #include <Dark/Events/KeyEvent.h>

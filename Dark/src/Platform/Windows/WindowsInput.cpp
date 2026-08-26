@@ -1,7 +1,7 @@
 #include "dpch.h"
 #include "WindowsInput.h"
 
-#include "Dark/Application.h"
+#include "Dark/Core/Application.h"
 
 #include "GLFW/glfw3.h"
 

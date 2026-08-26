@@ -10,6 +10,7 @@ namespace Dark {
 	{
 	public:
 		virtual void Init() override;
+		virtual void SetViewport(int x, int y, int w, int h) override;
 		virtual void Clear(const glm::vec4& p_Color) override;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 

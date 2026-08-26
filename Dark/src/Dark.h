@@ -4,12 +4,11 @@
 
 #include "dpch.h"
 
-#include "Dark/Application.h"
-#include "Dark/Input.h"
-#include "Dark/Log.h"
-#include "Dark/Core.h"
-#include "Dark/Layer.h"
-#include "Dark/OrthoGraphicCameraController.h"
+#include "Dark/Core/Application.h"
+#include "Dark/Core/Input.h"
+#include "Dark/Core/Log.h"
+#include "Dark/Core/Core.h"
+#include "Dark/Core/Layer.h"
 
 #include "Dark/Core/Timer.h"
 #include "Dark/Core/DeltaTime.h"
@@ -24,6 +23,8 @@
 #include "Dark/Renderer/Texture.h"
 
 #include "Dark/Renderer/OrthoGraphicCamera.h"
+#include "Dark/Renderer/OrthoGraphicCameraController.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -34,5 +35,5 @@
 //----------------------
 
 /*--Entry Point--*/
-#include "Dark/EntryPoint.h"
+#include "Dark/Core/EntryPoint.h"
 /*---------------*/

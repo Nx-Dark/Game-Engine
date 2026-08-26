@@ -12,6 +12,9 @@ namespace Dark {
 
 		std::string m_Name{};
 
+		//hashing(caching uniforms
+		std::unordered_map<std::string, int> m_CachedUniforms{};
+
 	public:
 		OpenGLShader(const std::string& name, const std::string& vertexShaderFP, const std::string& fragmentShaderFP);
 		virtual ~OpenGLShader();
@@ -33,6 +36,7 @@ namespace Dark {
 		void SetUniformUint(const std::string& name, uint32_t value);
 
 	private:
+		int GetUniformLocation(const std::string& u_Name);
 
 		std::string parseShader(const std::filesystem::path& filepath);
 		uint32_t CompileShader(const std::string& vertexShaderFP, const std::string& fragmentShaderFP);

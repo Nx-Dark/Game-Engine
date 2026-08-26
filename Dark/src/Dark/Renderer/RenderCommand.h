@@ -12,6 +12,8 @@ namespace Dark {
 
 		static void Init();
 
+		static void SetViewport(int x, int y, int w, int h);
+
 		static void Clear(const glm::vec4& p_Color);
 
 		static void DrawIndexed(const Ref<VertexArray>& vertexArray);

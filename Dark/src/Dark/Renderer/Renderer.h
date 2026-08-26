@@ -4,8 +4,8 @@
 #include "Dark/Renderer/RenderCommand.h"
 
 //TEMP STUFF
-#include "OrthoGraphicCamera.h"
-#include "Shader.h"
+#include "Dark/Renderer/OrthoGraphicCamera.h"
+#include "Dark/Renderer/Shader.h"
 #include <glm/glm.hpp>
 //
 
@@ -25,6 +25,8 @@ namespace Dark {
 
 		static void Init();
 
+		static void OnWindowResize(int width, int height);
+
 		//TODO: Add Parameters for various stuff
 		static void BeginScene(OrthoGraphicCamera& camera);
 		static void EndScene();
@@ -33,6 +35,8 @@ namespace Dark {
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 		inline static void SetAPI(RendererAPI::API api) { RendererAPI::SetAPI(api); }
+
+
 
 	};
 

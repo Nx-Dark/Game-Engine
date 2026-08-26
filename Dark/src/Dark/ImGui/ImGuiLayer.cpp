@@ -4,9 +4,9 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 
-#include "Dark/Application.h"
+#include "Dark/Core/Application.h"
 
-#include "Dark/Input.h"
+#include "Dark/Core/Input.h"
 
 //TEMPORARY
 #include <GLFW/glfw3.h>

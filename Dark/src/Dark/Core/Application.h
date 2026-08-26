@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Core.h"
+#include "Dark/Core/Core.h"
 
-#include "Dark/Layer.h"
-#include "Dark/LayerStack.h"
+#include "Dark/Core/Layer.h"
+#include "Dark/Core/LayerStack.h"
 
 #include "Dark/Events/Event.h"
 
-#include "Dark/Window.h"
+#include "Dark/Core/Window.h"
 
 #include "Dark/ImGui/ImGuiLayer.h"
 
@@ -26,7 +26,7 @@ namespace Dark {
 		static Application* s_Instance;
 
 		std::unique_ptr<Window> m_Window;
-		bool m_Running = true;
+		bool m_Running{true}, m_Minimized{false};
 
 		//layer stack
 		LayerStack m_LayerStack;
@@ -53,6 +53,11 @@ namespace Dark {
 		//function to get the window
 		inline Window& GetWindow() { return *m_Window; }
 
+	private:
+		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
+
+	public:
 		//accessing application from anywhere
 		inline static Application& Get() { return *s_Instance; }
 	};

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Dark/Window.h"
+#include "Dark/Core/Window.h"
 #include "Dark/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;

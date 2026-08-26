@@ -1,7 +1,7 @@
 #include "dpch.h"
 #include "OrthographicCameraController.h"
 
-#include "Dark/Input.h"
+#include "Dark/Core/Input.h"
 
 namespace Dark {
 

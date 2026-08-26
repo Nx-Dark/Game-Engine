@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Core.h"
+#include "Dark/Core/Core.h"
 
-#include "Dark/KeyCodes.h"
-#include "Dark/GamePadCodes.h"
-#include "Dark/JoyStickCodes.h"
-#include "Dark/MouseButtonCodes.h"
+#include "Dark/Core/KeyCodes.h"
+#include "Dark/Core/GamePadCodes.h"
+#include "Dark/Core/JoyStickCodes.h"
+#include "Dark/Core/MouseButtonCodes.h"
 
 namespace Dark {
 
