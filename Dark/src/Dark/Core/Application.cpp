@@ -24,7 +24,7 @@ namespace Dark {
 		//creating window
 		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallBackFn(DARK_BIND_EVENT_FN(Application::OnEvent));
-		//m_Window->SetVsync(false);
+		m_Window->SetVsync(false);
 
 		//initializing the renderer
 		Renderer::Init();

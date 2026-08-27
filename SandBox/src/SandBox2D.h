@@ -6,6 +6,15 @@ class SandBox2D : public Dark::Layer
 {
 
 private:
+	struct ProfileResult
+	{
+		const char* name;
+		float duration;
+	};
+
+	std::vector<ProfileResult> m_ProfileResults{};
+
+private:
 	//camera
 	Dark::OrthoGraphicCameraController m_CameraController;
 	
