@@ -13,8 +13,8 @@ namespace Dark {
 	struct Renderer2DData
 	{
 		Ref<VertexArray> VertexArray{};
-		Ref<Shader> ColorShader{};
 		Ref<Shader> TextureShader{};
+		Ref<Texture2D> WhiteTexture{};
 	};
 
 	static Ref<Renderer2DData> s_RendererData{};
@@ -51,9 +51,11 @@ namespace Dark {
 		Dark::Ref<Dark::IndexBuffer> indexBuffer{ Dark::IndexBuffer::Create(indices, 6) };
 		s_RendererData->VertexArray->SetIndexBuffer(indexBuffer);
 
-		//basic shader
-		s_RendererData->ColorShader= Dark::Shader::Create("Basic", "Assets/Shaders/vert.glsl", "Assets/Shaders/frag.glsl");
-			
+		//white texture
+		s_RendererData->WhiteTexture = Dark::Texture2D::Create(1, 1);
+		uint32_t textureData = 0xffffffff;
+		s_RendererData->WhiteTexture->SetData(&textureData, sizeof(textureData));
+
 		//texture shader
 		s_RendererData->TextureShader = Dark::Shader::Create("Texture", "Assets/Shaders/texVert.glsl", "Assets/Shaders/texFrag.glsl");
 		s_RendererData->TextureShader->Bind();
@@ -67,9 +69,6 @@ namespace Dark {
 
 	void Renderer2D::BeginScene(const OrthoGraphicCamera& camera)
 	{
-		s_RendererData->ColorShader->Bind();
-		s_RendererData->ColorShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
-
 		s_RendererData->TextureShader->Bind();
 		s_RendererData->TextureShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
 	}
@@ -86,15 +85,15 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
 	{
-		s_RendererData->ColorShader->Bind();
-		s_RendererData->ColorShader->SetFloat4("u_Color", color);
+		s_RendererData->TextureShader->SetFloat4("u_Color", color);
 
 		//Order -> TRS(Translation then Rotation then Scale)
 		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos)
 			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
 
-		s_RendererData->ColorShader->SetMat4("u_Transform", transform);
+		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
 
+		s_RendererData->WhiteTexture->Bind();
 		s_RendererData->VertexArray->Bind();
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
@@ -106,15 +105,15 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle)
 	{
-		s_RendererData->ColorShader->Bind();
-		s_RendererData->ColorShader->SetFloat4("u_Color", color);
+		s_RendererData->TextureShader->SetFloat4("u_Color", color);
 
 		//Order -> TRS(Translation then Rotation then Scale)
 		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos) * glm::rotate(glm::mat4{1.0f}, glm::radians(angle), glm::vec3{0.0f, 0.0f, 1.0f} )
 			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
 
-		s_RendererData->ColorShader->SetMat4("u_Transform", transform);
+		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
 
+		s_RendererData->WhiteTexture->Bind();
 		s_RendererData->VertexArray->Bind();
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
@@ -126,8 +125,7 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
 	{
-		s_RendererData->TextureShader->Bind();
-		s_RendererData->TextureShader->SetFloat4("u_TintColor", tint);
+		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
 
 		//Order -> TRS(Translation then Rotation then Scale)
 		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos)
@@ -147,8 +145,7 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle)
 	{
-		s_RendererData->TextureShader->Bind();
-		s_RendererData->TextureShader->SetFloat4("u_TintColor", tint);
+		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
 
 		//Order -> TRS(Translation then Rotation then Scale)
 		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos) * glm::rotate(glm::mat4{1.0f}, glm::radians(angle), glm::vec3{0.0f, 0.0f, 1.0f})

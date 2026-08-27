@@ -27,6 +27,9 @@ namespace Dark {
 		
 		DARK_CORE_ASSERT(internalFormat & dataFormat, "Texture Image Format Not Supported!");
 
+		m_InternalFormat = internalFormat;
+		m_DataFormat = dataFormat;
+
 		//create opengl textures and shit
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
@@ -42,6 +45,31 @@ namespace Dark {
 
 		//free the img
 		stbi_image_free(img_data);
+	}
+
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
+		: m_Width{ width }, m_Height{ height }
+	{
+
+		m_InternalFormat = GL_RGBA8;
+		m_DataFormat = GL_RGBA;
+		m_Bpp = m_InternalFormat == GL_RGBA8 ? 4 : 3;
+
+		//create opengl textures and shit
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+
+		//tex parameters
+		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
+
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
+		DARK_CORE_ASSERT(size == m_Width * m_Height * m_Bpp, "Size of Data Must of Full Texture!");
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 	}
 
 
