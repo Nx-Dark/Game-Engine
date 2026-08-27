@@ -5,9 +5,10 @@ layout(location = 0) out vec4 fragColor;
 in vec2 v_TexCoords;
 
 uniform sampler2D u_Texture;
+uniform vec4 u_TintColor;
 
 void main() {
 
-	fragColor = texture(u_Texture, v_TexCoords);
+	fragColor = u_TintColor * texture(u_Texture, v_TexCoords);
 
 }

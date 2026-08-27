@@ -51,6 +51,11 @@ namespace Dark {
 		SetUniformMatrix(name, mat4);
 	}
 
+	void OpenGLShader::SetInt(const std::string& name, int val)
+	{
+		SetUniformInt(name, val);
+	}
+
 	void OpenGLShader::SetUniformMatrix(const std::string& name, const glm::mat4& mat)
 	{
 		int location{ GetUniformLocation(name) };

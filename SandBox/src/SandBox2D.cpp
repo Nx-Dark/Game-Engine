@@ -8,6 +8,9 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
+
+	m_Texture = Dark::Texture2D::Create("Assets/Textures/adawong.jpg");
+
 }
 
 void SandBox2D::OnDetach()
@@ -22,7 +25,8 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 	
 	Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Dark::Renderer2D::DrawRotatedQuad(m_Pos, m_Size, m_Color, m_Angle);
+	Dark::Renderer2D::DrawQuad(m_Pos, m_Size, m_Texture, m_TintColor, m_Angle);
+	Dark::Renderer2D::DrawQuad({ 1.5f, 0.0f, 0.1f }, m_Size, m_Color);
 
 	Dark::Renderer2D::EndScene();
 }
@@ -39,6 +43,7 @@ void SandBox2D::OnImGuiRender()
 		ImGui::ColorEdit4("Tile Color", glm::value_ptr(m_Color));
 		ImGui::InputFloat2("Position", glm::value_ptr(m_Pos));
 		ImGui::InputFloat2("Size", glm::value_ptr(m_Size));
+		ImGui::ColorEdit4("Tint", glm::value_ptr(m_TintColor));
 		ImGui::InputFloat("Angle", &m_Angle);
 
 	ImGui::End();

@@ -1,6 +1,9 @@
 
+#include "Dark/Core/Core.h"
 #include <glm/glm.hpp>
 #include "Dark/Renderer/OrthoGraphicCamera.h"
+
+#include "Texture.h"
 
 namespace Dark {
 
@@ -16,8 +19,13 @@ namespace Dark {
 
 		static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
 		static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color);
-		static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle);
-		static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle);
+		static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle);
+		static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle);
+		static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint);
+		static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint);
+		static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle);
+		static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle);
 	};
+
 
 }

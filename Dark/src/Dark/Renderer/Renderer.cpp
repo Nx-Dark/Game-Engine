@@ -38,8 +38,8 @@ namespace Dark {
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
-		std::static_pointer_cast<OpenGLShader>(shader)->SetUniformMatrix("u_ProjectionView", s_SceneData->m_ProjectionViewMatrix);
-		std::static_pointer_cast<OpenGLShader>(shader)->SetUniformMatrix("u_Transform", transform);
+		shader->SetMat4("u_ProjectionView", s_SceneData->m_ProjectionViewMatrix);
+		shader->SetMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

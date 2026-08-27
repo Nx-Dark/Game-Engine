@@ -14,6 +14,7 @@ namespace Dark {
 	{
 		Ref<VertexArray> VertexArray{};
 		Ref<Shader> ColorShader{};
+		Ref<Shader> TextureShader{};
 	};
 
 	static Ref<Renderer2DData> s_RendererData{};
@@ -25,11 +26,11 @@ namespace Dark {
 		//square
 		s_RendererData->VertexArray = Dark::VertexArray::Create();
 
-		float vertices[12]{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f, 0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f,
+		float vertices[20]{
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f, 0.5f, 0.0f,  1.0f, 1.0f,
+			-0.5f, 0.5f, 0.0f,  0.0f, 1.0f
 		};
 
 		Dark::Ref<Dark::VertexBuffer> vertexBuffer{ Dark::VertexBuffer::Create(vertices, sizeof(vertices)) };
@@ -37,6 +38,7 @@ namespace Dark {
 		Dark::BufferLayout layout
 		{
 			{"aPos", Dark::ShaderDataType::Float3},
+			{"aTexCoords", Dark::ShaderDataType::Float2}
 		};
 
 		vertexBuffer->SetLayout(layout);
@@ -51,8 +53,13 @@ namespace Dark {
 
 		//basic shader
 		s_RendererData->ColorShader= Dark::Shader::Create("Basic", "Assets/Shaders/vert.glsl", "Assets/Shaders/frag.glsl");
+			
+		//texture shader
+		s_RendererData->TextureShader = Dark::Shader::Create("Texture", "Assets/Shaders/texVert.glsl", "Assets/Shaders/texFrag.glsl");
+		s_RendererData->TextureShader->Bind();
+		s_RendererData->TextureShader->SetInt("u_Texutre", 0);
 	}
-
+	
 	void Renderer2D::ShutDown()
 	{
 
@@ -62,6 +69,9 @@ namespace Dark {
 	{
 		s_RendererData->ColorShader->Bind();
 		s_RendererData->ColorShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
+
+		s_RendererData->TextureShader->Bind();
+		s_RendererData->TextureShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -89,12 +99,12 @@ namespace Dark {
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle)
+	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle)
 	{
-		DrawRotatedQuad({ pos.x, pos.y, 0.0f }, size, color, angle);
+		DrawQuad({ pos.x, pos.y, -0.5f }, size, color, angle);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle)
+	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle)
 	{
 		s_RendererData->ColorShader->Bind();
 		s_RendererData->ColorShader->SetFloat4("u_Color", color);
@@ -105,6 +115,48 @@ namespace Dark {
 
 		s_RendererData->ColorShader->SetMat4("u_Transform", transform);
 
+		s_RendererData->VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	{
+		DrawQuad({ pos.x, pos.y, 0.0f }, size, texture, tint);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	{
+		s_RendererData->TextureShader->Bind();
+		s_RendererData->TextureShader->SetFloat4("u_TintColor", tint);
+
+		//Order -> TRS(Translation then Rotation then Scale)
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos)
+			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+
+		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
+
+		texture->Bind();
+		s_RendererData->VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle)
+	{
+		DrawQuad({ pos.x, pos.y, 0.0f }, size, texture, tint, angle);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle)
+	{
+		s_RendererData->TextureShader->Bind();
+		s_RendererData->TextureShader->SetFloat4("u_TintColor", tint);
+
+		//Order -> TRS(Translation then Rotation then Scale)
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos) * glm::rotate(glm::mat4{1.0f}, glm::radians(angle), glm::vec3{0.0f, 0.0f, 1.0f})
+			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+
+		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
+
+		texture->Bind();
 		s_RendererData->VertexArray->Bind();
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
