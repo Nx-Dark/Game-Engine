@@ -1,7 +1,5 @@
 #include "SandBox2D.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
-
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), m_CameraController{ 960.0f / 540.0f, 2.0f, 45.0f }
 {
@@ -24,7 +22,7 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 	
 	Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Dark::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, m_Color);
+	Dark::Renderer2D::DrawRotatedQuad(m_Pos, m_Size, m_Color, m_Angle);
 
 	Dark::Renderer2D::EndScene();
 }
@@ -39,6 +37,9 @@ void SandBox2D::OnImGuiRender()
 	ImGui::Begin(m_Name.c_str());;
 
 		ImGui::ColorEdit4("Tile Color", glm::value_ptr(m_Color));
+		ImGui::InputFloat2("Position", glm::value_ptr(m_Pos));
+		ImGui::InputFloat2("Size", glm::value_ptr(m_Size));
+		ImGui::InputFloat("Angle", &m_Angle);
 
 	ImGui::End();
 }

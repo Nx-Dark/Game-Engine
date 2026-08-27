@@ -6,8 +6,6 @@
 
 #include "RenderCommand.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
-
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Dark {
@@ -62,8 +60,8 @@ namespace Dark {
 
 	void Renderer2D::BeginScene(const OrthoGraphicCamera& camera)
 	{
-		std::static_pointer_cast<OpenGLShader>(s_RendererData->ColorShader)->Bind();
-		std::static_pointer_cast<OpenGLShader>(s_RendererData->ColorShader)->SetUniformMatrix("u_ProjectionView", camera.GetProjectionViewMatrix());
+		s_RendererData->ColorShader->Bind();
+		s_RendererData->ColorShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -73,20 +71,43 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
 	{
-		//glm::mat4 transform{ 1.0f };
-		//transform = glm::scale(transform, glm::vec3{ size, 0.0f });
-		//transform = glm::translate(transform, glm::vec3{ pos, 0.0f });
-		std::static_pointer_cast<OpenGLShader>(s_RendererData->ColorShader)->Bind();
-		std::static_pointer_cast<OpenGLShader>(s_RendererData->ColorShader)->SetUniformFloat4("u_Color", color);
-		std::static_pointer_cast<OpenGLShader>(s_RendererData->ColorShader)->SetUniformMatrix("u_Transform", glm::mat4{ 1.0f });
+		DrawQuad({ pos.x, pos.y, 0.0f }, size, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
+	{
+		s_RendererData->ColorShader->Bind();
+		s_RendererData->ColorShader->SetFloat4("u_Color", color);
+
+		//Order -> TRS(Translation then Rotation then Scale)
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos)
+			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+
+		s_RendererData->ColorShader->SetMat4("u_Transform", transform);
 
 		s_RendererData->VertexArray->Bind();
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle)
 	{
-
+		DrawRotatedQuad({ pos.x, pos.y, 0.0f }, size, color, angle);
 	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle)
+	{
+		s_RendererData->ColorShader->Bind();
+		s_RendererData->ColorShader->SetFloat4("u_Color", color);
+
+		//Order -> TRS(Translation then Rotation then Scale)
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos) * glm::rotate(glm::mat4{1.0f}, glm::radians(angle), glm::vec3{0.0f, 0.0f, 1.0f} )
+			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+
+		s_RendererData->ColorShader->SetMat4("u_Transform", transform);
+
+		s_RendererData->VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
+	}
+
 
 }

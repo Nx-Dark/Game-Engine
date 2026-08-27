@@ -36,6 +36,21 @@ namespace Dark {
 		return m_Name;
 	}
 
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& vec4)
+	{
+		SetUniformFloat4(name, vec4);
+	}
+
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& vec3)
+	{
+		SetUniformFloat3(name, vec3);
+	}
+
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& mat4)
+	{
+		SetUniformMatrix(name, mat4);
+	}
+
 	void OpenGLShader::SetUniformMatrix(const std::string& name, const glm::mat4& mat)
 	{
 		int location{ GetUniformLocation(name) };

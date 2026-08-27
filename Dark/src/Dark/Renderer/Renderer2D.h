@@ -16,7 +16,8 @@ namespace Dark {
 
 		static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
 		static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color);
-
+		static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle);
+		static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle);
 	};
 
 }
