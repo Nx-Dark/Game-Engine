@@ -161,6 +161,7 @@
     <ClInclude Include="src\Dark\Core\EntryPoint.h" />
     <ClInclude Include="src\Dark\Core\GamePadCodes.h" />
     <ClInclude Include="src\Dark\Core\Input.h" />
+    <ClInclude Include="src\Dark\Debug\InstrumentationProfiler.h" />
     <ClInclude Include="src\Dark\Core\JoyStickCodes.h" />
     <ClInclude Include="src\Dark\Core\KeyCodes.h" />
     <ClInclude Include="src\Dark\Core\Layer.h" />

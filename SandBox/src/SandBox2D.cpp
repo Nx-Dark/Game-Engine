@@ -10,6 +10,7 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
+	DARK_PROFILE_FUNCTION();
 
 	m_Texture = Dark::Texture2D::Create("Assets/Textures/adawong.jpg");
 
@@ -17,26 +18,26 @@ void SandBox2D::OnAttach()
 
 void SandBox2D::OnDetach()
 {
+	DARK_PROFILE_FUNCTION();
+
 }
 
 void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 {
 
-	SCOPE_PROFILE("SandBox2D::OnUpdate");
+	DARK_PROFILE_FUNCTION();
 	
-{
-	SCOPE_PROFILE("CameraController::OnUpdate");
+
 	m_CameraController.OnUpdate(dt);
-}
 
 {
-	SCOPE_PROFILE("Render Prep");
+	DARK_PROFILE_SCOPE("Render Prep");
 	Dark::RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
 	Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
 }
 
 {
-	SCOPE_PROFILE("Render Draw");
+	DARK_PROFILE_SCOPE("Render Draw");
 	Dark::Renderer2D::DrawQuad(m_Pos, m_Size, m_Texture, m_TintColor, m_Angle);
 	Dark::Renderer2D::DrawQuad({ 1.5f, 0.0f, 0.1f }, m_Size, m_Color);
 
@@ -52,6 +53,8 @@ void SandBox2D::OnEvent(Dark::Event& e)
 
 void SandBox2D::OnImGuiRender()
 {
+	DARK_PROFILE_FUNCTION();
+
 	ImGui::Begin(m_Name.c_str());;
 
 		ImGui::ColorEdit4("Tile Color", glm::value_ptr(m_Color));
@@ -59,16 +62,6 @@ void SandBox2D::OnImGuiRender()
 		ImGui::InputFloat2("Size", glm::value_ptr(m_Size));
 		ImGui::ColorEdit4("Tint", glm::value_ptr(m_TintColor));
 		ImGui::InputFloat("Angle", &m_Angle);
-
-		for (auto& pr : m_ProfileResults)
-		{
-			char buff[50];
-			strcpy(buff, "%.3fms  ");
-			strcat(buff, pr.name);
-			ImGui::Text(buff, pr.duration);
-		}
-
-		m_ProfileResults.clear();
 
 	ImGui::End();
 }

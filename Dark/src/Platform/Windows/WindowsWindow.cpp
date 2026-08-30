@@ -18,26 +18,36 @@ namespace Dark {
 		DARK_CORE_ERROR("GLFW ERROR ({0}) : {1}", error_code, description);
 	}
 
-	Window* Window::Create(const WindowProps& props) {
-		return new WindowsWindow(props);
+	Scope<Window> Window::Create(const WindowProps& props) {
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props) {
+		DARK_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow() {
+		DARK_PROFILE_FUNCTION();
+
 		ShutDown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props) {
+
+		DARK_PROFILE_FUNCTION();
+
 		m_Data.title = props.title;
 		m_Data.width = props.width;
 		m_Data.height = props.height;
 		
 		DARK_CORE_INFO("Creating Window {0}, {1}, {2}", m_Data.title, m_Data.width, m_Data.height);
 
-		if (!s_GLFWinit) {
+		if (!s_GLFWinit) 
+		{
+			DARK_PROFILE_SCOPE("glfwInit");
+
 			bool success = glfwInit();
 			DARK_CORE_ASSERT(success, "Could Not Initialize GLFW!");
 
@@ -46,10 +56,13 @@ namespace Dark {
 			s_GLFWinit = success;
 		}
 
-		m_Window = glfwCreateWindow(
-			static_cast<int>(m_Data.width), static_cast<int>(m_Data.height),
-			m_Data.title.c_str(), nullptr, nullptr
-		);
+		{
+			DARK_PROFILE_SCOPE("glfwCreateWindow");
+			m_Window = glfwCreateWindow(
+				static_cast<int>(m_Data.width), static_cast<int>(m_Data.height),
+				m_Data.title.c_str(), nullptr, nullptr
+			);
+		}
 
 		//creating a new opengl context
 		m_Context = new OpenGLContext(m_Window);
@@ -161,6 +174,8 @@ namespace Dark {
 
 	//vsync
 	void WindowsWindow::SetVsync(bool val) {
+		DARK_PROFILE_FUNCTION();
+
 		glfwSwapInterval(val);
 
 		m_Data.isVsync = val;

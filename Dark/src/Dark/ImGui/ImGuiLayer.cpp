@@ -26,6 +26,8 @@ namespace Dark {
 
 	void ImGuiLayer::OnAttach() 
 	{
+		DARK_PROFILE_FUNCTION();
+
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -55,6 +57,8 @@ namespace Dark {
 
 	void ImGuiLayer::OnDetach()
 	{
+		DARK_PROFILE_FUNCTION();
+
 		//Shut down shit on detach
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
@@ -62,7 +66,10 @@ namespace Dark {
 
 	}
 
-	void ImGuiLayer::Begin() {
+	void ImGuiLayer::Begin() 
+	{
+
+		DARK_PROFILE_FUNCTION();
 
 		//New frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -71,7 +78,9 @@ namespace Dark {
 
 	}
 
-	void ImGuiLayer::End() {
+	void ImGuiLayer::End()
+	{
+		DARK_PROFILE_FUNCTION();
 
 		ImGuiIO& io{ ImGui::GetIO() };
 		Application& app{ Application::Get() };
@@ -96,5 +105,7 @@ namespace Dark {
 
 	void ImGuiLayer::OnImGuiRender()
 	{
+		DARK_PROFILE_FUNCTION();
+
 	}
 }

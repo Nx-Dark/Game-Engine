@@ -17,6 +17,8 @@
 #include "Dark/Core/Log.h"
 #include "Dark/Core/Core.h"
 
+#include "Dark/Debug/InstrumentationProfiler.h"
+
 #include <stack>
 #include <queue>
 #include <vector>

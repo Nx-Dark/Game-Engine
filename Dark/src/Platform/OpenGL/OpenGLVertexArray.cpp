@@ -5,6 +5,9 @@
 
 namespace Dark {
 
+	//Instead of DARK_PROFILE_FUNCTION macro
+	//Something like DARK_PROFILE_RENDERER_FUCNTION should be more suitable as its the renderer which is quite independent from the application
+
 	//temporary, will be updated
 	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
 	{
@@ -33,27 +36,37 @@ namespace Dark {
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		DARK_PROFILE_FUNCTION();
+
 		glCreateVertexArrays(1, &m_RendererID);
 		glBindVertexArray(m_RendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		DARK_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
 	{
+		DARK_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 	}
 
 	void OpenGLVertexArray::UnBind() const
 	{
+		DARK_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		DARK_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBufferLayout has not Elements/Attributes!");
 
 		glBindVertexArray(m_RendererID);
@@ -77,6 +90,8 @@ namespace Dark {
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 

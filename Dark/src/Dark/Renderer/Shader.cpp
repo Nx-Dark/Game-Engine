@@ -13,7 +13,7 @@ namespace Dark {
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: DARK_CORE_ASSERT(false, "Rendering API Cannot be None!"); return nullptr;
-			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>( name, vertexShaderFP, fragmentShaderFP );
+			case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>( name, vertexShaderFP, fragmentShaderFP );
 		}
 
 		DARK_CORE_ASSERT(false, "UnknownRenderingAPI! Error");
@@ -44,7 +44,7 @@ namespace Dark {
 
 	Ref<ShaderLibrary> ShaderLibrary::Create()
 	{
-		return std::make_shared<ShaderLibrary>();
+		return CreateRef<ShaderLibrary>();
 	}
 
 }

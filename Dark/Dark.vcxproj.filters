@@ -1431,6 +1431,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dark\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Dark\Debug\InstrumentationProfiler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Core\Application.cpp">
@@ -1511,5 +1513,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dark\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

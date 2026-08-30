@@ -17,11 +17,13 @@ namespace Dark {
 		Ref<Texture2D> WhiteTexture{};
 	};
 
-	static Ref<Renderer2DData> s_RendererData{};
+	static Renderer2DData* s_RendererData{};
 
 	void Renderer2D::Init()
 	{
-		s_RendererData = std::make_unique<Renderer2DData>();
+		DARK_PROFILE_FUNCTION();
+
+		s_RendererData = new Renderer2DData();
 
 		//square
 		s_RendererData->VertexArray = Dark::VertexArray::Create();
@@ -64,27 +66,36 @@ namespace Dark {
 	
 	void Renderer2D::ShutDown()
 	{
+		DARK_PROFILE_FUNCTION();
 
+		delete s_RendererData;
 	}
 
 	void Renderer2D::BeginScene(const OrthoGraphicCamera& camera)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		s_RendererData->TextureShader->Bind();
 		s_RendererData->TextureShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
 	}
 
 	void Renderer2D::EndScene()
 	{
+		DARK_PROFILE_FUNCTION();
 
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		DrawQuad({ pos.x, pos.y, 0.0f }, size, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		s_RendererData->TextureShader->SetFloat4("u_Color", color);
 
 		//Order -> TRS(Translation then Rotation then Scale)
@@ -100,11 +111,14 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle)
 	{
+
 		DrawQuad({ pos.x, pos.y, -0.5f }, size, color, angle);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		s_RendererData->TextureShader->SetFloat4("u_Color", color);
 
 		//Order -> TRS(Translation then Rotation then Scale)
@@ -120,11 +134,14 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
 	{
+
 		DrawQuad({ pos.x, pos.y, 0.0f }, size, texture, tint);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
 
 		//Order -> TRS(Translation then Rotation then Scale)
@@ -145,6 +162,8 @@ namespace Dark {
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
 
 		//Order -> TRS(Translation then Rotation then Scale)

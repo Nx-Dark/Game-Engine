@@ -14,6 +14,8 @@ namespace Dark {
 
 	void OrthoGraphicCameraController::OnUpdate(DeltaTime dt)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		//camera update
 		if (Input::IsKeyPressed(DK_KEY_D)) { m_CamPos.x +=  m_CamTranslationSpeed * dt; }
 		if (Input::IsKeyPressed(DK_KEY_A)) { m_CamPos.x -=  m_CamTranslationSpeed * dt; }
@@ -35,6 +37,8 @@ namespace Dark {
 	void OrthoGraphicCameraController::OnEvent(Event& e)
 	{
 
+		DARK_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher{ e };
 
 		dispatcher.Dispatch<MouseScrolledEvent>(DARK_BIND_EVENT_FN(OrthoGraphicCameraController::OnMouseScrolledEvent));
@@ -44,6 +48,9 @@ namespace Dark {
 
 	bool OrthoGraphicCameraController::OnMouseScrolledEvent(MouseScrolledEvent& e)
 	{
+
+		DARK_PROFILE_FUNCTION();
+
 		m_ZoomLevel -= (e.GetYOffset() * 0.25f);
 		m_ZoomLevel = std::clamp(m_ZoomLevel, 0.05f, 10.0f);
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, m_ZoomLevel, -m_ZoomLevel);
@@ -53,6 +60,8 @@ namespace Dark {
 
 	bool OrthoGraphicCameraController::OnWindowResizeEvent(WindowResizeEvent& e)
 	{
+
+		DARK_PROFILE_FUNCTION();
 
 		m_AspectRatio = static_cast<float>(e.GetWidth()) / static_cast<float>(e.GetHeight());
 

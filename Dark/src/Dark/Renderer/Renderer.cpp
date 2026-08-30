@@ -11,12 +11,16 @@ namespace Dark {
 
 	void Renderer::Init()
 	{
+		DARK_PROFILE_FUNCTION();
+
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}
 
 	void Renderer::ShutDown()
 	{
+		DARK_PROFILE_FUNCTION();
+
 		Renderer2D::ShutDown();
 	}
 

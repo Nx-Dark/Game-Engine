@@ -17,12 +17,13 @@ namespace Dark {
 
 	Application::Application()
 	{
+		DARK_PROFILE_FUNCTION();
 
 		DARK_CORE_ASSERT(!s_Instance, "Application Already Exists");
 		s_Instance = this;
 
 		//creating window
-		m_Window = Scope<Window>(Window::Create());
+		m_Window = Window::Create();
 		m_Window->SetEventCallBackFn(DARK_BIND_EVENT_FN(Application::OnEvent));
 		m_Window->SetVsync(false);
 
@@ -41,13 +42,20 @@ namespace Dark {
 
 	Application::~Application() {
 
+		DARK_PROFILE_FUNCTION();
+
 		Renderer::ShutDown();
 
 	}
 
 	void Application::Run() {
 
-		while(m_Running) {
+		DARK_PROFILE_FUNCTION();
+
+		while(m_Running) 
+		{
+			DARK_PROFILE_SCOPE("RunLoop");
+
 
 			//******Delta Time Stuff*************************//
 			float curTime{ Timer::GetElapsedTime() };
@@ -57,19 +65,28 @@ namespace Dark {
 
 			if (!m_Minimized)
 			{
-				//layer update
-				for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate(delatTime);
-				}
-			}
+				{
+					DARK_PROFILE_SCOPE("LayerStack OnUpdate");
 
-			//imgui rendering for the layers
-			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-			{
-				layer->OnImGuiRender();
+					//layer update
+					for (Layer* layer : m_LayerStack)
+					{
+						layer->OnUpdate(delatTime);
+					}
+				}
+
+				//imgui rendering for the layers
+				m_ImGuiLayer->Begin();
+				{
+					DARK_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+					for (Layer* layer : m_LayerStack)
+					{
+						layer->OnImGuiRender();
+					}
+				}
+				m_ImGuiLayer->End();
 			}
-			m_ImGuiLayer->End();
 
 			//window update
 			m_Window->OnUpdate();
@@ -78,7 +95,10 @@ namespace Dark {
 	}
 
 	//Event
-	void Application::OnEvent(Event& e) {
+	void Application::OnEvent(Event& e)
+	{
+
+		DARK_PROFILE_FUNCTION();
 
 		EventDispatcher dispatcher{ e }; //event dispatcher
 
@@ -93,13 +113,17 @@ namespace Dark {
 		}
 
 	}
+
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
 		return true;
 	}
+
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

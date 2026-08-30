@@ -11,22 +11,30 @@ namespace Dark {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexShaderFP, const std::string& fragmentShaderFP)
 		: m_Name(name)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		m_RendererID = CompileShader(vertexShaderFP, fragmentShaderFP);
 	}
 
 	OpenGLShader::~OpenGLShader()
 	{
+		DARK_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+		DARK_PROFILE_FUNCTION();
+
 		//using the program when the shader is bound
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::UnBind() const
 	{
+		DARK_PROFILE_FUNCTION();
+
 		//unusing the program when the shader is unbound
 		glUseProgram(0);
 	}
@@ -38,21 +46,29 @@ namespace Dark {
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& vec4)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		SetUniformFloat4(name, vec4);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& vec3)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		SetUniformFloat3(name, vec3);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& mat4)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		SetUniformMatrix(name, mat4);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, int val)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		SetUniformInt(name, val);
 	}
 
@@ -107,6 +123,8 @@ namespace Dark {
 	//uniform caching
 	int OpenGLShader::GetUniformLocation(const std::string& u_Name)
 	{
+		DARK_PROFILE_FUNCTION();
+
 		if (!m_CachedUniforms.contains(u_Name)) m_CachedUniforms[u_Name] = glGetUniformLocation(m_RendererID, u_Name.c_str());
 
 		return m_CachedUniforms[u_Name];
@@ -114,6 +132,8 @@ namespace Dark {
 
 	//parsing and compiling shaders
 	uint32_t OpenGLShader::CompileShader(const std::string& vertexShaderFP, const std::string& fragmentShaderFP) {
+
+		DARK_PROFILE_FUNCTION();
 
 		//creating the shader in GPU memory
 		uint32_t vertex_shader{ glCreateShader(GL_VERTEX_SHADER) };
@@ -169,6 +189,8 @@ namespace Dark {
 	std::string OpenGLShader::parseShader(const std::filesystem::path& filepath)
 	{
 
+		DARK_PROFILE_FUNCTION();
+
 		std::error_code ec{};
 		auto size{ std::filesystem::file_size(filepath, ec) };
 
@@ -200,6 +222,8 @@ namespace Dark {
 	}
 
 	bool OpenGLShader::CheckCompileError(const std::string& shaderType, uint32_t shader) {
+
+		DARK_PROFILE_FUNCTION();
 
 		int infoLen;
 		int success{};
