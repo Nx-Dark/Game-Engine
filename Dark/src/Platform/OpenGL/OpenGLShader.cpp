@@ -72,6 +72,13 @@ namespace Dark {
 		SetUniformInt(name, val);
 	}
 
+	void OpenGLShader::SetFloat(const std::string& name, float val)
+	{
+		DARK_PROFILE_FUNCTION();
+
+		SetUniformFloat(name, val);
+	}
+
 	void OpenGLShader::SetUniformMatrix(const std::string& name, const glm::mat4& mat)
 	{
 		int location{ GetUniformLocation(name) };

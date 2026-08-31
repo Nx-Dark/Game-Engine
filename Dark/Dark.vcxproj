@@ -175,6 +175,7 @@
     <ClInclude Include="src\Dark\Events\KeyEvent.h" />
     <ClInclude Include="src\Dark\Events\MouseEvent.h" />
     <ClInclude Include="src\Dark\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Dark\Physics\Rect.h" />
     <ClInclude Include="src\Dark\Renderer\Buffer.h" />
     <ClInclude Include="src\Dark\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Dark\Renderer\OrthoGraphicCamera.h" />
@@ -624,6 +625,7 @@
     <ClCompile Include="src\Dark\Core\Log.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Dark\Physics\Rect.cpp" />
     <ClCompile Include="src\Dark\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCamera.cpp" />
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCameraController.cpp" />

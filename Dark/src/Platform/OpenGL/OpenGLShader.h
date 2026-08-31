@@ -26,6 +26,7 @@ namespace Dark {
 		virtual void SetFloat3(const std::string& name, const glm::vec3& vec3) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& mat4) override;
 		virtual void SetInt(const std::string& name, int val) override;
+		virtual void SetFloat(const std::string& name, float val) override;
 		
 		virtual const std::string& GetName() const override;
 

@@ -13,6 +13,10 @@
 #include "Dark/Core/Timer.h"
 #include "Dark/Core/DeltaTime.h"
 
+//----Physics--------------------------------
+#include "Dark/Physics/Rect.h"
+//-------------------------------------------
+
 //----Renderer---------------------------------
 #include "Dark/Renderer/Renderer.h"
 #include "Dark/Renderer/Renderer2D.h"

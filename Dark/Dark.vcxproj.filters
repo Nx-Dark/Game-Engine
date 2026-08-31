@@ -1433,6 +1433,7 @@
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Dark\Debug\InstrumentationProfiler.h" />
+    <ClInclude Include="src\Dark\Physics\Rect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Core\Application.cpp">
@@ -1514,5 +1515,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="src\Dark\Physics\Rect.cpp" />
   </ItemGroup>
 </Project>

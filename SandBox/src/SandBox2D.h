@@ -11,9 +11,9 @@ private:
 	
 	Dark::Ref<Dark::Texture2D> m_Texture{};
 
-	glm::vec2 m_Pos{ 0.0f };
-	glm::vec2 m_Size{ 1.0f };
-	glm::vec4 m_Color{ 0.0f, 0.0f, 1.0f, 1.0f };
+	Dark::Ref<Dark::ColorRect> m_Rect{};
+	Dark::Ref<Dark::Rect> m_TexRect{};
+
 	glm::vec4 m_TintColor{ 1.0f };
 	float m_Angle{};
 public:

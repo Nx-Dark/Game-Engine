@@ -85,22 +85,24 @@ namespace Dark {
 
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
+	//colored quad
+	void Renderer2D::DrawQuad(const Ref<ColorRect>& colorRect)
 	{
 		DARK_PROFILE_FUNCTION();
 
-		DrawQuad({ pos.x, pos.y, 0.0f }, size, color);
+		DrawQuad(colorRect, -0.5f);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const Ref<ColorRect>& colorRect, float depth)
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData->TextureShader->SetFloat4("u_Color", color);
+		s_RendererData->TextureShader->SetFloat4("u_Color", colorRect->color);
+		s_RendererData->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
 		//Order -> TRS(Translation then Rotation then Scale)
-		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos)
-			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth})
+			* glm::scale(glm::mat4{1.0f}, {colorRect->size, 1.0f}) };
 
 		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
 
@@ -109,21 +111,23 @@ namespace Dark {
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color, float angle)
+	//colored rotated quad
+	void Renderer2D::DrawRotatedQuad(const Ref<ColorRect>& colorRect, float angleInRads)
 	{
 
-		DrawQuad({ pos.x, pos.y, -0.5f }, size, color, angle);
+		DrawRotatedQuad(colorRect, -0.5f, angleInRads);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color, float angle)
+	void Renderer2D::DrawRotatedQuad(const Ref<ColorRect>& colorRect, float depth, float angleInRads)
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData->TextureShader->SetFloat4("u_Color", color);
+		s_RendererData->TextureShader->SetFloat4("u_Color", colorRect->color);
+		s_RendererData->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
 		//Order -> TRS(Translation then Rotation then Scale)
-		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos) * glm::rotate(glm::mat4{1.0f}, glm::radians(angle), glm::vec3{0.0f, 0.0f, 1.0f} )
-			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth}) * glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
+			* glm::scale(glm::mat4{1.0f}, {colorRect->size, 1.0f}) };
 
 		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
 
@@ -132,21 +136,23 @@ namespace Dark {
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	//textured quad
+	void Renderer2D::DrawQuad(const Ref<Rect>& rect, const Ref<Texture2D>& texture, const glm::vec4& tint, float tiling_factor)
 	{
 
-		DrawQuad({ pos.x, pos.y, 0.0f }, size, texture, tint);
+		DrawQuad(rect, -0.5f, texture, tint, tiling_factor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const Ref<Rect>& rect, float depth, const Ref<Texture2D>& texture, const glm::vec4& tint, float tiling_factor)
 	{
 		DARK_PROFILE_FUNCTION();
 
 		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
+		s_RendererData->TextureShader->SetFloat("u_TilingFactor", tiling_factor);
 
 		//Order -> TRS(Translation then Rotation then Scale)
-		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos)
-			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{rect->position, depth})
+			* glm::scale(glm::mat4{1.0f}, {rect->size, 1.0f}) };
 
 		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
 
@@ -155,20 +161,22 @@ namespace Dark {
 		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle)
+	//textured rotated quad
+	void Renderer2D::DrawRotatedQuad(const Ref<Rect>& rect, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint, float tiling_factor)
 	{
-		DrawQuad({ pos.x, pos.y, 0.0f }, size, texture, tint, angle);
+		DrawRotatedQuad(rect, -0.5f, texture, angleInRads, tint, tiling_factor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint, float angle)
+	void Renderer2D::DrawRotatedQuad(const Ref<Rect>& rect, float depth, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint, float tiling_factor)
 	{
 		DARK_PROFILE_FUNCTION();
 
 		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
+		s_RendererData->TextureShader->SetFloat("u_TilingFactor", tiling_factor);
 
 		//Order -> TRS(Translation then Rotation then Scale)
-		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, pos) * glm::rotate(glm::mat4{1.0f}, glm::radians(angle), glm::vec3{0.0f, 0.0f, 1.0f})
-			* glm::scale(glm::mat4{1.0f}, {size.x, size.y, 1.0f}) };
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{rect->position, depth}) * glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
+			* glm::scale(glm::mat4{1.0f}, {rect->size, 1.0f}) };
 
 		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
 
