@@ -10,79 +10,113 @@
 
 namespace Dark {
 
-	struct Renderer2DData
+	struct QuadVertex
 	{
-		Ref<VertexArray> VertexArray{};
-		Ref<Shader> TextureShader{};
-		Ref<Texture2D> WhiteTexture{};
+		glm::vec3 pos{};
+		glm::vec4 color{};
+		glm::vec2 texCoords{};
 	};
 
-	static Renderer2DData* s_RendererData{};
+	struct Renderer2DData
+	{
+		const uint32_t MaxQuadCount{ 10000 };
+		const uint32_t MaxVertexCount{ MaxQuadCount * 4 };
+		const uint32_t MaxIndexCount{ MaxQuadCount * 6 };
+
+		Ref<VertexArray> VertexArray{};
+		Ref<VertexBuffer> VertexBuffer{};
+		Ref<Shader> TextureShader{};
+		Ref<Texture2D> WhiteTexture{};
+
+		uint32_t QuadIndexCount{};
+		QuadVertex* QuadVertexBufferBase{ nullptr };
+		QuadVertex* QuadVertexBufferPtr{ nullptr };
+	};
+
+	static Renderer2DData s_RendererData;
 
 	void Renderer2D::Init()
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData = new Renderer2DData();
-
 		//square
-		s_RendererData->VertexArray = Dark::VertexArray::Create();
+		s_RendererData.VertexArray = VertexArray::Create();
 
-		float vertices[20]{
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.5f, 0.5f, 0.0f,  1.0f, 1.0f,
-			-0.5f, 0.5f, 0.0f,  0.0f, 1.0f
-		};
+		s_RendererData.VertexBuffer = VertexBuffer::Create(s_RendererData.MaxVertexCount * sizeof(QuadVertex));
 
-		Dark::Ref<Dark::VertexBuffer> vertexBuffer{ Dark::VertexBuffer::Create(vertices, sizeof(vertices)) };
-
-		Dark::BufferLayout layout
+		BufferLayout layout
 		{
-			{"aPos", Dark::ShaderDataType::Float3},
-			{"aTexCoords", Dark::ShaderDataType::Float2}
+			{"aPos", ShaderDataType::Float3},
+			{"aColor", ShaderDataType::Float4},
+			{"aTexCoords", ShaderDataType::Float2}
 		};
 
-		vertexBuffer->SetLayout(layout);
-		s_RendererData->VertexArray->AddVertexBuffer(vertexBuffer);
+		s_RendererData.VertexBuffer->SetLayout(layout);
+		s_RendererData.VertexArray->AddVertexBuffer(s_RendererData.VertexBuffer);
 
-		uint32_t indices[6]{
-			0, 1, 2, 2, 3, 0
-		};
+		s_RendererData.QuadVertexBufferBase = new QuadVertex[s_RendererData.MaxVertexCount];
 
-		Dark::Ref<Dark::IndexBuffer> indexBuffer{ Dark::IndexBuffer::Create(indices, 6) };
-		s_RendererData->VertexArray->SetIndexBuffer(indexBuffer);
+		uint32_t* indices{ new uint32_t[s_RendererData.MaxIndexCount] };
+
+		uint32_t offset{};
+		for (size_t i{}; i < s_RendererData.MaxIndexCount; i+=6)
+		{
+			indices[i + 0] = offset + 0;
+			indices[i + 1] = offset + 1;
+			indices[i + 2] = offset + 2;
+			
+			indices[i + 3] = offset + 2;
+			indices[i + 4] = offset + 3;
+			indices[i + 5] = offset + 0;
+
+			offset += 4;
+		}
+
+		Ref<IndexBuffer> indexBuffer{ IndexBuffer::Create(indices, s_RendererData.MaxIndexCount) };
+		s_RendererData.VertexArray->SetIndexBuffer(indexBuffer);
+		delete[] indices;
 
 		//white texture
-		s_RendererData->WhiteTexture = Dark::Texture2D::Create(1, 1);
+		s_RendererData.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t textureData = 0xffffffff;
-		s_RendererData->WhiteTexture->SetData(&textureData, sizeof(textureData));
+		s_RendererData.WhiteTexture->SetData(&textureData, sizeof(textureData));
 
 		//texture shader
-		s_RendererData->TextureShader = Dark::Shader::Create("Texture", "Assets/Shaders/texVert.glsl", "Assets/Shaders/texFrag.glsl");
-		s_RendererData->TextureShader->Bind();
-		s_RendererData->TextureShader->SetInt("u_Texutre", 0);
+		s_RendererData.TextureShader = Shader::Create("Texture", "Assets/Shaders/texVert.glsl", "Assets/Shaders/texFrag.glsl");
+		s_RendererData.TextureShader->Bind();
+		s_RendererData.TextureShader->SetInt("u_Texutre", 0);
 	}
 	
 	void Renderer2D::ShutDown()
 	{
 		DARK_PROFILE_FUNCTION();
 
-		delete s_RendererData;
 	}
 
 	void Renderer2D::BeginScene(const OrthoGraphicCamera& camera)
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData->TextureShader->Bind();
-		s_RendererData->TextureShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
+		s_RendererData.TextureShader->Bind();
+		s_RendererData.TextureShader->SetMat4("u_ProjectionView", camera.GetProjectionViewMatrix());
+
+		s_RendererData.QuadIndexCount = 0;
+		s_RendererData.QuadVertexBufferPtr = s_RendererData.QuadVertexBufferBase;
 	}
 
 	void Renderer2D::EndScene()
 	{
 		DARK_PROFILE_FUNCTION();
+		
+		uint32_t dataSize = (uint8_t*)s_RendererData.QuadVertexBufferPtr - (uint8_t*)s_RendererData.QuadVertexBufferBase;
+		s_RendererData.VertexBuffer->UploadData(s_RendererData.QuadVertexBufferBase, dataSize);
 
+		Flush();
+	}
+
+	void Renderer2D::Flush()
+	{
+		RenderCommand::DrawIndexed(s_RendererData.VertexArray, s_RendererData.QuadIndexCount);
 	}
 
 	//colored quad
@@ -97,18 +131,42 @@ namespace Dark {
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData->TextureShader->SetFloat4("u_Color", colorRect->color);
-		s_RendererData->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		//Setting Vertex Stuff;
+		s_RendererData.QuadVertexBufferPtr->pos = { colorRect->position, depth };
+		s_RendererData.QuadVertexBufferPtr->color = colorRect->color;
+		s_RendererData.QuadVertexBufferPtr->texCoords = { 0.0f, 0.0f };
+		s_RendererData.QuadVertexBufferPtr++;
 
-		//Order -> TRS(Translation then Rotation then Scale)
-		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth})
-			* glm::scale(glm::mat4{1.0f}, {colorRect->size, 1.0f}) };
+		s_RendererData.QuadVertexBufferPtr->pos = { colorRect->position.x + colorRect->size.x, colorRect->position.y, depth };
+		s_RendererData.QuadVertexBufferPtr->color = colorRect->color;
+		s_RendererData.QuadVertexBufferPtr->texCoords = { 1.0f, 0.0f };
+		s_RendererData.QuadVertexBufferPtr++;
 
-		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
+		s_RendererData.QuadVertexBufferPtr->pos = { colorRect->position + colorRect->size, depth };
+		s_RendererData.QuadVertexBufferPtr->color = colorRect->color;
+		s_RendererData.QuadVertexBufferPtr->texCoords = { 1.0f, 1.0f };
+		s_RendererData.QuadVertexBufferPtr++;
+		 
+		s_RendererData.QuadVertexBufferPtr->pos = { colorRect->position.x, colorRect->position.y + colorRect->size.y, depth };
+		s_RendererData.QuadVertexBufferPtr->color = colorRect->color;
+		s_RendererData.QuadVertexBufferPtr->texCoords = { 0.0f, 1.0f };
+		s_RendererData.QuadVertexBufferPtr++;
+		//***********************************//
 
-		s_RendererData->WhiteTexture->Bind();
-		s_RendererData->VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
+		s_RendererData.QuadIndexCount += 6;
+
+		//batching, so this is meaning less
+		//s_RendererData.TextureShader->SetFloat("u_TilingFactor", 1.0f);
+
+		////Order -> TRS(Translation then Rotation then Scale)
+		//glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth})
+		//	* glm::scale(glm::mat4{1.0f}, {colorRect->size, 1.0f}) };
+
+		//s_RendererData.TextureShader->SetMat4("u_Transform", transform);
+
+		//s_RendererData.WhiteTexture->Bind();
+		//s_RendererData.VertexArray->Bind();
+		//RenderCommand::DrawIndexed(s_RendererData.VertexArray);
 	}
 
 	//colored rotated quad
@@ -122,18 +180,18 @@ namespace Dark {
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData->TextureShader->SetFloat4("u_Color", colorRect->color);
-		s_RendererData->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		s_RendererData.TextureShader->SetFloat4("u_Color", colorRect->color);
+		s_RendererData.TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
 		//Order -> TRS(Translation then Rotation then Scale)
 		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth}) * glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
 			* glm::scale(glm::mat4{1.0f}, {colorRect->size, 1.0f}) };
 
-		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
+		s_RendererData.TextureShader->SetMat4("u_Transform", transform);
 
-		s_RendererData->WhiteTexture->Bind();
-		s_RendererData->VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
+		s_RendererData.WhiteTexture->Bind();
+		s_RendererData.VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_RendererData.VertexArray);
 	}
 
 	//textured quad
@@ -147,18 +205,18 @@ namespace Dark {
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
-		s_RendererData->TextureShader->SetFloat("u_TilingFactor", tiling_factor);
+		s_RendererData.TextureShader->SetFloat4("u_Color", tint);
+		s_RendererData.TextureShader->SetFloat("u_TilingFactor", tiling_factor);
 
 		//Order -> TRS(Translation then Rotation then Scale)
 		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{rect->position, depth})
 			* glm::scale(glm::mat4{1.0f}, {rect->size, 1.0f}) };
 
-		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
+		s_RendererData.TextureShader->SetMat4("u_Transform", transform);
 
 		texture->Bind();
-		s_RendererData->VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
+		s_RendererData.VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_RendererData.VertexArray);
 	}
 
 	//textured rotated quad
@@ -171,18 +229,18 @@ namespace Dark {
 	{
 		DARK_PROFILE_FUNCTION();
 
-		s_RendererData->TextureShader->SetFloat4("u_Color", tint);
-		s_RendererData->TextureShader->SetFloat("u_TilingFactor", tiling_factor);
+		s_RendererData.TextureShader->SetFloat4("u_Color", tint);
+		s_RendererData.TextureShader->SetFloat("u_TilingFactor", tiling_factor);
 
 		//Order -> TRS(Translation then Rotation then Scale)
 		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{rect->position, depth}) * glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
 			* glm::scale(glm::mat4{1.0f}, {rect->size, 1.0f}) };
 
-		s_RendererData->TextureShader->SetMat4("u_Transform", transform);
+		s_RendererData.TextureShader->SetMat4("u_Transform", transform);
 
 		texture->Bind();
-		s_RendererData->VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_RendererData->VertexArray);
+		s_RendererData.VertexArray->Bind();
+		RenderCommand::DrawIndexed(s_RendererData.VertexArray);
 	}
 
 

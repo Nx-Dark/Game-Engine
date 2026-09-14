@@ -1,7 +1,5 @@
 #include "SandBox2D.h"
 
-#define SCOPE_PROFILE(name) Dark::ProfilingTimer profTimer##__LINE__(name, [&](SandBox2D::ProfileResult profileResult) { m_ProfileResults.push_back(profileResult); })
-
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), m_CameraController{ 960.0f / 540.0f, 2.0f, 45.0f }
 {
@@ -48,10 +46,12 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 }
 
 {
-	DARK_PROFILE_SCOPE("Render Draw");
-	Dark::Renderer2D::DrawRotatedQuad(m_TexRect, m_Texture, glm::radians(m_Angle), m_TintColor, 10.0f);
+	m_Rect->color = glm::vec4{ 1.0f, 0.4f, 0.1f, 1.0f };
+	m_Rect->position = glm::vec2{ 2.0f, 2.0f };
 	Dark::Renderer2D::DrawQuad(m_Rect);
-	Dark::Renderer2D::DrawRotatedQuad(m_Rect, glm::radians(45.0f));
+	m_Rect->color = glm::vec4{ 0.5f, 0.2f, 0.6f, 1.0f };
+	m_Rect->position = glm::vec2{ -1.0f, -1.0f };
+	Dark::Renderer2D::DrawQuad(m_Rect);
 
 	Dark::Renderer2D::EndScene();
 }

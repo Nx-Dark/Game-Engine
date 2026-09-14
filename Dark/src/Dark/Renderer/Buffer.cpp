@@ -8,7 +8,7 @@
 namespace Dark {
 
 	//Vertex Buffer Create fn Implementation
-	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size) {
+	Ref<VertexBuffer> VertexBuffer::Create(const void* vertices, uint32_t size) {
 
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None: DARK_CORE_ASSERT(false, "RendererAPI::None is not currently Supported!"); return nullptr;
@@ -18,13 +18,36 @@ namespace Dark {
 		DARK_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
+
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size) {
+
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::None: DARK_CORE_ASSERT(false, "RendererAPI::None is not currently Supported!"); return nullptr;
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLVertexBuffer>(size);
+		}
+
+		DARK_CORE_ASSERT(false, "Unknown RendererAPI");
+		return nullptr;
+	}
 	
 	//Index Buffer Create fn Implementation
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size) {
+	Ref<IndexBuffer> IndexBuffer::Create(const void* indices, uint32_t size) {
 
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None: DARK_CORE_ASSERT(false, "RendererAPI::None is not currently Supported!"); return nullptr;
 			case RendererAPI::API::OpenGL: return CreateRef<OpenGLIndexBuffer>( indices, size );
+		}
+
+		DARK_CORE_ASSERT(false, "Unknown RendererAPI");
+		return nullptr;
+
+	}
+
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t size) {
+
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::None: DARK_CORE_ASSERT(false, "RendererAPI::None is not currently Supported!"); return nullptr;
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLIndexBuffer>(size);
 		}
 
 		DARK_CORE_ASSERT(false, "Unknown RendererAPI");

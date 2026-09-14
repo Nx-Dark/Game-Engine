@@ -22,8 +22,8 @@ namespace Dark {
 		s_RendererAPI->Clear(p_Color);
 	}
 
-	void RenderCommand::DrawIndexed(const Ref<VertexArray>& vertexArray)
+	void RenderCommand::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
 	{
-		s_RendererAPI->DrawIndexed(vertexArray);
+		s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 	}
 }

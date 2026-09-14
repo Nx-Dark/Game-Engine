@@ -145,6 +145,9 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\SandBox2D.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\SandBox2D.cpp" />
     <ClCompile Include="src\SandBoxApp.cpp" />
   </ItemGroup>
@@ -152,9 +155,6 @@
     <ProjectReference Include="..\Dark\Dark.vcxproj">
       <Project>{0705847C-F33B-850D-9C28-6B10883E010F}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\SandBox2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

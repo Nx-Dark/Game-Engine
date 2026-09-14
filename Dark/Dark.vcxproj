@@ -161,7 +161,6 @@
     <ClInclude Include="src\Dark\Core\EntryPoint.h" />
     <ClInclude Include="src\Dark\Core\GamePadCodes.h" />
     <ClInclude Include="src\Dark\Core\Input.h" />
-    <ClInclude Include="src\Dark\Debug\InstrumentationProfiler.h" />
     <ClInclude Include="src\Dark\Core\JoyStickCodes.h" />
     <ClInclude Include="src\Dark\Core\KeyCodes.h" />
     <ClInclude Include="src\Dark\Core\Layer.h" />
@@ -170,6 +169,7 @@
     <ClInclude Include="src\Dark\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Dark\Core\Timer.h" />
     <ClInclude Include="src\Dark\Core\Window.h" />
+    <ClInclude Include="src\Dark\Debug\InstrumentationProfiler.h" />
     <ClInclude Include="src\Dark\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Dark\Events\Event.h" />
     <ClInclude Include="src\Dark\Events\KeyEvent.h" />

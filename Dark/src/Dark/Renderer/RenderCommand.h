@@ -16,7 +16,7 @@ namespace Dark {
 
 		static void Clear(const glm::vec4& p_Color);
 
-		static void DrawIndexed(const Ref<VertexArray>& vertexArray);
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0);
 	};
 
 }

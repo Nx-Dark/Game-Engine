@@ -8,7 +8,16 @@ namespace Dark {
 	/////////////////////////////////////////////////////////////////
 	//Opengl vertex buffer implementation from vertexbuffer interface
 	/////////////////////////////////////////////////////////////////
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+	{
+		DARK_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+
+	OpenGLVertexBuffer::OpenGLVertexBuffer(const void* vertices, uint32_t size)
 	{
 		DARK_PROFILE_FUNCTION();
 
@@ -24,12 +33,12 @@ namespace Dark {
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-	void OpenGLVertexBuffer::UpdateData(float* vertices, uint32_t size)
+	void OpenGLVertexBuffer::UploadData(const void* vertices, uint32_t size)
 	{
 		DARK_PROFILE_FUNCTION();
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, vertices);
 	}
 
 	void OpenGLVertexBuffer::Bind() const
@@ -50,7 +59,17 @@ namespace Dark {
 	//opengl index/element buffer implementation from index buffer interface
 	////////////////////////////////////////////////////////////////////////
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t count)
+		: m_Count(count)
+	{
+		DARK_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), nullptr, GL_DYNAMIC_DRAW);
+	}
+
+	OpenGLIndexBuffer::OpenGLIndexBuffer(const void* indices, uint32_t count)
 		: m_Count(count)
 	{
 		DARK_PROFILE_FUNCTION();
@@ -67,12 +86,12 @@ namespace Dark {
 		glDeleteBuffers(1, &m_RendererID);
 	}
 
-	void OpenGLIndexBuffer::UpdateData(uint32_t* vertices, uint32_t size)
+	void OpenGLIndexBuffer::UploadData(const void* indices, uint32_t count)
 	{
 		DARK_PROFILE_FUNCTION();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, count * sizeof(uint32_t), indices);
 	}
 
 	void OpenGLIndexBuffer::Bind() const

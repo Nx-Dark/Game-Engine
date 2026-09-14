@@ -16,6 +16,7 @@ namespace Dark {
 
 		static void BeginScene(const OrthoGraphicCamera& camera);
 		static void EndScene();
+		static void Flush();
 
 		//colored quad
 		static void DrawQuad(const Ref<ColorRect>& colorRect);

@@ -10,11 +10,17 @@
     <Filter Include="src\Dark\Core">
       <UniqueIdentifier>{96C756EC-0288-D222-CBC2-1BA0374217FF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Dark\Debug">
+      <UniqueIdentifier>{74153C77-60E3-2F7D-4977-A0A335E40BE2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Dark\Events">
       <UniqueIdentifier>{A2164962-0EA2-B626-17B3-391B83BD1227}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Dark\ImGui">
       <UniqueIdentifier>{28809A77-144E-8E7D-FDE1-FEA3E94E6AE2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Dark\Physics">
+      <UniqueIdentifier>{F0C5F0DA-DCBE-0F2D-05F1-F4B1F148EF38}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Dark\Renderer">
       <UniqueIdentifier>{E455E40F-506C-E2A5-99E3-6DC70539B32D}</UniqueIdentifier>
@@ -99,6 +105,9 @@
     <ClInclude Include="src\Dark\Core\Window.h">
       <Filter>src\Dark\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dark\Debug\InstrumentationProfiler.h">
+      <Filter>src\Dark\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\Dark\Events\ApplicationEvent.h">
       <Filter>src\Dark\Events</Filter>
     </ClInclude>
@@ -113,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="src\Dark\ImGui\ImGuiLayer.h">
       <Filter>src\Dark\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Physics\Rect.h">
+      <Filter>src\Dark\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\Buffer.h">
       <Filter>src\Dark\Renderer</Filter>
@@ -130,6 +142,9 @@
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\Renderer.h">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Renderer\Renderer2D.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\RendererAPI.h">
@@ -1431,9 +1446,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\Dark\Debug\InstrumentationProfiler.h" />
-    <ClInclude Include="src\Dark\Physics\Rect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Core\Application.cpp">
@@ -1457,6 +1469,9 @@
     <ClCompile Include="src\Dark\ImGui\ImGuiLayer.cpp">
       <Filter>src\Dark\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dark\Physics\Rect.cpp">
+      <Filter>src\Dark\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Dark\Renderer\Buffer.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
@@ -1470,6 +1485,9 @@
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\Renderer\Renderer.cpp">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Renderer\Renderer2D.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\Renderer\RendererAPI.cpp">
@@ -1514,7 +1532,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\Renderer\Renderer2D.cpp" />
-    <ClCompile Include="src\Dark\Physics\Rect.cpp" />
   </ItemGroup>
 </Project>
