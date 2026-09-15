@@ -13,6 +13,8 @@ namespace Dark {
 		virtual void Bind(uint8_t t_Slot = 0) const = 0;
 		virtual void UnBind() const = 0;
 
+		virtual bool operator==(const Texture& other) const = 0;
+
 	};
 
 	class Texture2D : public Texture {

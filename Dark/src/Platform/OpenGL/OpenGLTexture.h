@@ -27,6 +27,11 @@ namespace Dark {
 		virtual void Bind(uint8_t t_Slot = 0) const override;
 		virtual void UnBind() const override;
 
+		inline virtual bool operator==(const Texture& other) const override
+		{
+			return m_RendererID == static_cast<const OpenGLTexture2D&>(other).m_RendererID;
+		}
+
 	};
 
 }

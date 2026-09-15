@@ -18,6 +18,11 @@ void SandBox2D::OnAttach()
 
 	m_TexRect = Dark::CreateRef<Dark::Rect>(
 		glm::vec2{ 1.5f, 0.0f },
+		glm::vec2{ 3.0f, 3.0f }
+	);
+
+	m_TexRect_2 = Dark::CreateRef<Dark::Rect>(
+		glm::vec2{ -5.0f, -5.0f },
 		glm::vec2{ 1.0f, 1.0f }
 	);
 
@@ -53,6 +58,9 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 	m_Rect->position = glm::vec2{ -1.0f, -1.0f };
 	Dark::Renderer2D::DrawQuad(m_Rect);
 
+	Dark::Renderer2D::DrawQuad(m_TexRect, m_Texture, glm::vec4{1.0f}, 10.0f);
+	Dark::Renderer2D::DrawQuad(m_TexRect_2, m_Texture, glm::vec4{ 1.0f }, 2.0f);
+
 	Dark::Renderer2D::EndScene();
 }
 
@@ -69,10 +77,7 @@ void SandBox2D::OnImGuiRender()
 
 	ImGui::Begin(m_Name.c_str());;
 
-		ImGui::InputFloat2("Position", glm::value_ptr(m_TexRect->position));
-		ImGui::InputFloat2("Size", glm::value_ptr(m_TexRect->size));
-		ImGui::ColorEdit4("Tint", glm::value_ptr(m_TintColor));
-		ImGui::InputFloat("Angle", &m_Angle);
+		ImGui::DragFloat2("Texture Pos", &m_TexRect->position.x, 0.05f);
 
-	ImGui::End();
+	ImGui::End(); 
 }

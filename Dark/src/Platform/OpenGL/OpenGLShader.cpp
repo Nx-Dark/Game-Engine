@@ -72,6 +72,13 @@ namespace Dark {
 		SetUniformInt(name, val);
 	}
 
+	void OpenGLShader::SetIntv(const std::string& name, uint32_t count, int* data)
+	{
+		DARK_PROFILE_FUNCTION();
+
+		SetUniformIntv(name, count, data);
+	}
+
 	void OpenGLShader::SetFloat(const std::string& name, float val)
 	{
 		DARK_PROFILE_FUNCTION();
@@ -125,6 +132,12 @@ namespace Dark {
 	{
 		int location{ GetUniformLocation(name) };
 		glUniform1ui(location, value);
+	}
+
+	void OpenGLShader::SetUniformIntv(const std::string& name, uint32_t count, int* data)
+	{
+		int location{ GetUniformLocation(name) };
+		glUniform1iv(location, count, data);
 	}
 
 	//uniform caching
@@ -272,10 +285,3 @@ namespace Dark {
 	}
 
 }
-
-/*
-* Im Quite Sad and all because my dad told me I have no skills and no talent for this computer shit
-* There are kids younger than me who has become successful with AI and comp skills, I told him abt it and asked him to buy me a better pc
-* He said they are all skillful and talentful but im nothing, im worthless, i dont have skills or anything like that. This, i'll never forget this
-* From my own dad who's supposed to support me, has let me down, no matter, it doesn't mean im gonna stop this journey, i'll show them
-*/
