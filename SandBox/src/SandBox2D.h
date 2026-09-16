@@ -11,8 +11,8 @@ private:
 	
 	Dark::Ref<Dark::Texture2D> m_Texture{};
 
-	Dark::Ref<Dark::ColorRect> m_Rect{};
-	Dark::Ref<Dark::Rect> m_TexRect{}, m_TexRect_2{};
+	Dark::ColorRect m_Rect;
+	Dark::Rect m_TexRect, m_TexRect_2;
 
 	glm::vec4 m_TintColor{ 1.0f };
 	float m_Angle{};

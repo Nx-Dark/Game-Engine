@@ -10,21 +10,21 @@ void SandBox2D::OnAttach()
 {
 	DARK_PROFILE_FUNCTION();
 
-	m_Rect = Dark::CreateRef<Dark::ColorRect>(
+	m_Rect = {
 		glm::vec2{ 0.0f, 0.0f },
 		glm::vec2{ 2.0f, 2.0f },
 		glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }
-	);
+	};
 
-	m_TexRect = Dark::CreateRef<Dark::Rect>(
+	m_TexRect = {
 		glm::vec2{ 1.5f, 0.0f },
 		glm::vec2{ 3.0f, 3.0f }
-	);
+	};
 
-	m_TexRect_2 = Dark::CreateRef<Dark::Rect>(
+	m_TexRect_2 = {
 		glm::vec2{ -5.0f, -5.0f },
 		glm::vec2{ 1.0f, 1.0f }
-	);
+	};
 
 	m_Texture = Dark::Texture2D::Create("Assets/Textures/adawong.jpg");
 
@@ -44,25 +44,27 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 
 	m_CameraController.OnUpdate(dt);
 
-{
-	DARK_PROFILE_SCOPE("Render Prep");
-	Dark::RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
-	Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
-}
+	Dark::Renderer2D::ResetStats();
 
-{
-	m_Rect->color = glm::vec4{ 1.0f, 0.4f, 0.1f, 1.0f };
-	m_Rect->position = glm::vec2{ 2.0f, 2.0f };
-	Dark::Renderer2D::DrawQuad(m_Rect);
-	m_Rect->color = glm::vec4{ 0.5f, 0.2f, 0.6f, 1.0f };
-	m_Rect->position = glm::vec2{ -1.0f, -1.0f };
-	Dark::Renderer2D::DrawRotatedQuad(m_Rect, glm::radians(45.0f));
+	Dark::RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
+
+	Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	Dark::Renderer2D::DrawQuad(m_TexRect, m_Texture, glm::vec4{1.0f}, 10.0f);
 	Dark::Renderer2D::DrawRotatedQuad(m_TexRect_2, m_Texture, glm::radians(m_Angle), glm::vec4{ 1.0f }, 2.0f);
 
+	for (float y{-5.0f}; y < 5.0f; y+=0.5f) {
+		for (float x{-5.0f}; x < 5.0f; x+=0.5f) {
+			Dark::ColorRect rect{
+				glm::vec2{float(x), float(y)},
+				glm::vec2{0.45f, 0.45f},
+				glm::vec4{(x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f }
+			};
+			Dark::Renderer2D::DrawQuad(rect, 0.1);
+		}
+	}
+
 	Dark::Renderer2D::EndScene();
-}
 
 }
 
@@ -75,9 +77,18 @@ void SandBox2D::OnImGuiRender()
 {
 	DARK_PROFILE_FUNCTION();
 
-	ImGui::Begin(m_Name.c_str());;
+	ImGui::Begin(m_Name.c_str());
 
-		ImGui::DragFloat2("Texture Pos", &m_TexRect->position.x, 0.05f);
+		auto stats{ Dark::Renderer2D::GetStats() };
+
+		ImGui::Text("Renderer2D Stats: ");	
+		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+		ImGui::Text("Quads: %d", stats.GetQuadCount());
+		ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
+		ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
+		ImGui::Text("Triangles: %d", stats.GetQuadTriangleCount());
+
+		ImGui::DragFloat2("Texture Pos", &m_TexRect.position.x, 0.05f);
 		ImGui::DragFloat("Angle", &m_Angle, 0.1f);
 
 	ImGui::End(); 

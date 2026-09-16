@@ -21,9 +21,9 @@ namespace Dark {
 
 	struct Renderer2DData
 	{
-		const uint32_t MaxQuadCount{ 10000 };
-		const uint32_t MaxVertexCount{ MaxQuadCount * 4 };
-		const uint32_t MaxIndexCount{ MaxQuadCount * 6 };
+		static const uint32_t MaxQuadCount{ 10000 };
+		static const uint32_t MaxVertexCount{ MaxQuadCount * 4 };
+		static const uint32_t MaxIndexCount{ MaxQuadCount * 6 };
 		static const uint32_t MaxTextureSlots{ 32 };
 
 		Ref<VertexArray> VertexArray{};
@@ -40,6 +40,8 @@ namespace Dark {
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots{};
 		uint32_t TextureSlotIndex{ 1 }; //0 -> is used for the whiteTexture
 
+		Renderer2D::Statistics stats;
+
 	};
 
 	//stack instance of the required rendererData
@@ -49,12 +51,12 @@ namespace Dark {
 	static const glm::vec2 s_TexCoordsLUT[4]
 		{ glm::vec2{0.0f, 0.0f}, glm::vec2{1.0f, 0.0f}, glm::vec2{1.0f, 1.0f}, glm::vec2{0.0f, 1.0f} };
 
-	static void CreateQuad(const Ref<ColorRect>& colorRect, const glm::mat4& transform, float textureIndex, float tiling_factor)
+	static void CreateQuad(const ColorRect& colorRect, const glm::mat4& transform, float textureIndex, float tiling_factor)
 	{
 		for (int i{}; i < 4; i++)
 		{
 			s_RendererData.QuadVertexBufferPtr->pos = transform * s_RendererData.QuadVertexPositions[i];
-			s_RendererData.QuadVertexBufferPtr->color = colorRect->color;
+			s_RendererData.QuadVertexBufferPtr->color = colorRect.color;
 			s_RendererData.QuadVertexBufferPtr->texCoords = s_TexCoordsLUT[i];
 			s_RendererData.QuadVertexBufferPtr->texID = textureIndex;
 			s_RendererData.QuadVertexBufferPtr->tilingFactor = tiling_factor;
@@ -62,8 +64,10 @@ namespace Dark {
 		}
 
 		s_RendererData.QuadIndexCount += 6;
+
+		s_RendererData.stats.QuadCount++;
 	}
-	static void CreateQuad(const Ref<Rect>& rect, const glm::mat4& transform, const glm::vec4& tint, float textureIndex, float tiling_factor)
+	static void CreateQuad(const Rect& rect, const glm::mat4& transform, const glm::vec4& tint, float textureIndex, float tiling_factor)
 	{
 		for (int i{}; i < 4; i++)
 		{
@@ -76,6 +80,8 @@ namespace Dark {
 		}
 
 		s_RendererData.QuadIndexCount += 6;
+
+		s_RendererData.stats.QuadCount++;
 	}
 
 	void Renderer2D::Init()
@@ -179,26 +185,44 @@ namespace Dark {
 
 		//Issue the draw call
 		RenderCommand::DrawIndexed(s_RendererData.VertexArray, s_RendererData.QuadIndexCount);
+
+		s_RendererData.stats.DrawCalls++;
+	}
+
+	void Renderer2D::FlushAndReset()
+	{
+		EndScene();
+
+		s_RendererData.QuadIndexCount = 0;
+		s_RendererData.QuadVertexBufferPtr = s_RendererData.QuadVertexBufferBase;
+
+		s_RendererData.TextureSlotIndex = 1;
+
 	}
 
 	//colored quad
-	void Renderer2D::DrawQuad(const Ref<ColorRect>& colorRect)
+	void Renderer2D::DrawQuad(const ColorRect& colorRect)
 	{
 		DARK_PROFILE_FUNCTION();
 
 		DrawQuad(colorRect, 0.0f);
 	}
 
-	void Renderer2D::DrawQuad(const Ref<ColorRect>& colorRect, float depth)
+	void Renderer2D::DrawQuad(const ColorRect& colorRect, float depth)
 	{
 		DARK_PROFILE_FUNCTION();
 
+		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount) 
+		{
+			FlushAndReset();
+		}
+
 		const float textureIndex{ 0.0f };
 		const float tiling_factor{ 1.0f };
-
+		
 		glm::mat4 transform{
-			glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth})
-				* glm::scale(glm::mat4{1.0f}, glm::vec3{colorRect->size.x, colorRect->size.y, 1.0f})
+			glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect.position, depth})
+				* glm::scale(glm::mat4{1.0f}, glm::vec3{colorRect.size.x, colorRect.size.y, 1.0f})
 		};
 
 		CreateQuad(colorRect, transform, textureIndex, tiling_factor);
@@ -208,8 +232,8 @@ namespace Dark {
 		s_RendererData.TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
 		//Order -> TRS(Translation then Rotation then Scale)
-		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth})
-			* glm::scale(glm::mat4{1.0f}, {colorRect->size, 1.0f}) };
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect.position, depth})
+			* glm::scale(glm::mat4{1.0f}, {colorRect.size, 1.0f}) };
 
 		s_RendererData.TextureShader->SetMat4("u_Transform", transform);
 
@@ -221,34 +245,39 @@ namespace Dark {
 	}
 
 	//colored rotated quad
-	void Renderer2D::DrawRotatedQuad(const Ref<ColorRect>& colorRect, float angleInRads)
+	void Renderer2D::DrawRotatedQuad(const ColorRect& colorRect, float angleInRads)
 	{
 
 		DrawRotatedQuad(colorRect, 0.0f, angleInRads);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const Ref<ColorRect>& colorRect, float depth, float angleInRads)
+	void Renderer2D::DrawRotatedQuad(const ColorRect& colorRect, float depth, float angleInRads)
 	{
 		DARK_PROFILE_FUNCTION();
+
+		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
+		{
+			FlushAndReset();
+		}
 
 		float textureIndex{ 0.0f };
 		float tiling_factor{ 1.0f };
 
 		glm::mat4 transform{
-			glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth})
+			glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect.position, depth})
 				* glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
-					* glm::scale(glm::mat4{1.0f}, glm::vec3{colorRect->size.x, colorRect->size.y, 1.0f})
+					* glm::scale(glm::mat4{1.0f}, glm::vec3{colorRect.size.x, colorRect.size.y, 1.0f})
 		};
 
 		CreateQuad(colorRect, transform, textureIndex, tiling_factor);
 
 #if 0
-		s_RendererData.TextureShader->SetFloat4("u_Color", colorRect->color);
+		s_RendererData.TextureShader->SetFloat4("u_Color", colorRect.color);
 		s_RendererData.TextureShader->SetFloat("u_TilingFactor", 1.0f);
 
 		//Order -> TRS(Translation then Rotation then Scale)
-		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect->position, depth}) * glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
-			* glm::scale(glm::mat4{1.0f}, {colorRect->size, 1.0f}) };
+		glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, glm::vec3{colorRect.position, depth}) * glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
+			* glm::scale(glm::mat4{1.0f}, {colorRect.size, 1.0f}) };
 
 		s_RendererData.TextureShader->SetMat4("u_Transform", transform);
 
@@ -260,15 +289,20 @@ namespace Dark {
 	}
 
 	//textured quad
-	void Renderer2D::DrawQuad(const Ref<Rect>& rect, const Ref<Texture2D>& texture, const glm::vec4& tint, float tiling_factor)
+	void Renderer2D::DrawQuad(const Rect& rect, const Ref<Texture2D>& texture, const glm::vec4& tint, float tiling_factor)
 	{
 
 		DrawQuad(rect, 0.0f, texture, tint, tiling_factor);
 	}
 
-	void Renderer2D::DrawQuad(const Ref<Rect>& rect, float depth, const Ref<Texture2D>& texture, const glm::vec4& tint, float tiling_factor)
+	void Renderer2D::DrawQuad(const Rect& rect, float depth, const Ref<Texture2D>& texture, const glm::vec4& tint, float tiling_factor)
 	{
 		DARK_PROFILE_FUNCTION();
+
+		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
+		{
+			FlushAndReset();
+		}
 
 		float textureIndex{ 0.0f };
 
@@ -291,8 +325,8 @@ namespace Dark {
 
 		//Setting Vertex Stuff;
 		glm::mat4 transform{
-			glm::translate(glm::mat4{1.0f}, glm::vec3{rect->position, depth})
-				* glm::scale(glm::mat4{1.0f}, glm::vec3{rect->size.x, rect->size.y, 1.0f})
+			glm::translate(glm::mat4{1.0f}, glm::vec3{rect.position, depth})
+				* glm::scale(glm::mat4{1.0f}, glm::vec3{rect.size.x, rect.size.y, 1.0f})
 		};
 
 		CreateQuad(rect, transform, tint, textureIndex, tiling_factor);
@@ -300,14 +334,19 @@ namespace Dark {
 	}
 
 	//textured rotated quad
-	void Renderer2D::DrawRotatedQuad(const Ref<Rect>& rect, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint, float tiling_factor)
+	void Renderer2D::DrawRotatedQuad(const Rect& rect, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint, float tiling_factor)
 	{
 		DrawRotatedQuad(rect, 0.0f, texture, angleInRads, tint, tiling_factor);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const Ref<Rect>& rect, float depth, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint, float tiling_factor)
+	void Renderer2D::DrawRotatedQuad(const Rect& rect, float depth, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint, float tiling_factor)
 	{
 		DARK_PROFILE_FUNCTION();
+
+		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
+		{
+			FlushAndReset();
+		}
 
 		float textureIndex{ 0.0f };
 
@@ -330,13 +369,23 @@ namespace Dark {
 
 		//Setting Vertex Stuff;
 		glm::mat4 transform{
-			glm::translate(glm::mat4{1.0f}, glm::vec3{rect->position, depth})
+			glm::translate(glm::mat4{1.0f}, glm::vec3{rect.position, depth})
 				* glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f}) 
-					* glm::scale(glm::mat4{1.0f}, glm::vec3{rect->size.x, rect->size.y, 1.0f})
+					* glm::scale(glm::mat4{1.0f}, glm::vec3{rect.size.x, rect.size.y, 1.0f})
 		};
 
 		CreateQuad(rect, transform, tint, textureIndex, tiling_factor);
 
+	}
+
+	void Renderer2D::ResetStats()
+	{
+		memset(&s_RendererData.stats, 0, sizeof(Renderer2D::Statistics));
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		return s_RendererData.stats;
 	}
 
 
