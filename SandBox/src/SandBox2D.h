@@ -1,32 +1,31 @@
 #pragma once
 
-#include "Dark.h"
+#include <Dark.h>
+
+#include "ParticleSystem.h"
 
 class SandBox2D : public Dark::Layer
-{
+{	
 
 private:
-	//camera
-	Dark::OrthoGraphicCameraController m_CameraController;
-	
-	Dark::Ref<Dark::Texture2D> m_Texture{};
 
-	Dark::ColorRect m_Rect;
-	Dark::Rect m_TexRect, m_TexRect_2;
+	ParticleSystem m_ParticleSystem;
+	ParticleProps m_Particle;
 
-	glm::vec4 m_TintColor{ 1.0f };
-	float m_Angle{};
+	Dark::Ref<Dark::Texture2D> m_Texture;
+
+	Dark::OrthoGraphicCameraController m_Camera;
+
 public:
 	SandBox2D();
-	virtual ~SandBox2D() = default;
+	virtual ~SandBox2D();
 
 	void OnAttach() override;
 	void OnDetach() override;
 
 	void OnUpdate(Dark::DeltaTime dt) override;
-
 	void OnEvent(Dark::Event& e) override;
-
+	
 	void OnImGuiRender() override;
 
 };

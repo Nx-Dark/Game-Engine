@@ -6,7 +6,8 @@
 namespace Dark {
 
 	OrthoGraphicCameraController::OrthoGraphicCameraController(float aspectRatio, float camSpeed, float camRotSped, bool camRotation)
-		: m_AspectRatio{ aspectRatio }, m_Camera{ -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, m_ZoomLevel, -m_ZoomLevel },
+		: m_AspectRatio{ aspectRatio }, m_Bounds({ -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }), 
+		m_Camera{ m_Bounds.Left, m_Bounds.Right, m_Bounds.Top, m_Bounds.Bottom },
 		m_CamTranslationSpeed{ camSpeed }, m_CamRotationSpeed{ camRotSped }, m_RotateCamera{ camRotation }
 	{
 
@@ -53,7 +54,8 @@ namespace Dark {
 
 		m_ZoomLevel -= (e.GetYOffset() * 0.25f);
 		m_ZoomLevel = std::clamp(m_ZoomLevel, 0.05f, 10.0f);
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, m_ZoomLevel, -m_ZoomLevel);
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Top, m_Bounds.Bottom);
 
 		return false;
 	}
@@ -64,8 +66,8 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		m_AspectRatio = static_cast<float>(e.GetWidth()) / static_cast<float>(e.GetHeight());
-
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, m_ZoomLevel, -m_ZoomLevel);
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Top, m_Bounds.Bottom);
 
 		return false;
 	}

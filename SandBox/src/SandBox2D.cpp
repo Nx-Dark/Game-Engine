@@ -1,95 +1,91 @@
 #include "SandBox2D.h"
+#include "ParticleSystem.h"
 
 SandBox2D::SandBox2D()
-	: Layer("SandBox2D"), m_CameraController{ 960.0f / 540.0f, 2.0f, 45.0f }
+	: Layer("SandBox2D"), m_Camera(16.0f / 9.0f, 0.1f, 0.1f), m_ParticleSystem{ 5000u }
+{
+}
+
+SandBox2D::~SandBox2D()
 {
 
 }
 
 void SandBox2D::OnAttach()
 {
-	DARK_PROFILE_FUNCTION();
+	m_Particle.Velocity = { 0.5f, 0.5f };
+	m_Particle.VelocityVariation = { 0.2f, 0.1f };
+	m_Particle.colorBegin = { 0.5f, 0.2f, 0.3f, 1.0f };
+	m_Particle.colorEnd = { 0.2, 0.5f, 0.6f, 0.0f };
+	m_Particle.sizeBegin = 0.4f;
+	m_Particle.sizeEnd = 0.05f;
+	m_Particle.sizeVariation = 0.15f;
+	m_Particle.lifeTime = 5.0f;
 
-	m_Rect = {
-		glm::vec2{ 0.0f, 0.0f },
-		glm::vec2{ 2.0f, 2.0f },
-		glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }
-	};
-
-	m_TexRect = {
-		glm::vec2{ 1.5f, 0.0f },
-		glm::vec2{ 3.0f, 3.0f }
-	};
-
-	m_TexRect_2 = {
-		glm::vec2{ -5.0f, -5.0f },
-		glm::vec2{ 1.0f, 1.0f }
-	};
-
-	m_Texture = Dark::Texture2D::Create("Assets/Textures/adawong.jpg");
-
+	m_Texture = Dark::Texture2D::Create("Assets/Textures/bird.png");
 }
 
 void SandBox2D::OnDetach()
 {
-	DARK_PROFILE_FUNCTION();
-
-}
-
-void SandBox2D::OnUpdate(Dark::DeltaTime dt)
-{
-
-	DARK_PROFILE_FUNCTION();
-	
-
-	m_CameraController.OnUpdate(dt);
-
-	Dark::Renderer2D::ResetStats();
-
-	Dark::RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
-
-	Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-	Dark::Renderer2D::DrawQuad(m_TexRect, m_Texture, glm::vec4{1.0f}, 10.0f);
-	Dark::Renderer2D::DrawRotatedQuad(m_TexRect_2, m_Texture, glm::radians(m_Angle), glm::vec4{ 1.0f }, 2.0f);
-
-	for (float y{-5.0f}; y < 5.0f; y+=0.5f) {
-		for (float x{-5.0f}; x < 5.0f; x+=0.5f) {
-			Dark::ColorRect rect{
-				glm::vec2{float(x), float(y)},
-				glm::vec2{0.45f, 0.45f},
-				glm::vec4{(x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f }
-			};
-			Dark::Renderer2D::DrawQuad(rect, 0.1);
-		}
-	}
-
-	Dark::Renderer2D::EndScene();
 
 }
 
 void SandBox2D::OnEvent(Dark::Event& e)
 {
-	m_CameraController.OnEvent(e);
+	m_Camera.OnEvent(e);
+}
+
+void SandBox2D::OnUpdate(Dark::DeltaTime dt)
+{
+
+	//emitting particle based on mouse position and click
+	if (Dark::Input::IsMouseButtonPressed(DK_MOUSE_BUTTON_1)) {
+
+		auto [x, y] { Dark::Input::GetMousePos() };
+		uint32_t width{ Dark::Application::Get().GetWindow().GetWidth() };
+		uint32_t height{ Dark::Application::Get().GetWindow().GetHeight() };
+
+		auto camBounds{ m_Camera.GetBounds() };
+		auto camPos{ m_Camera.GetCamera().GetPosition() };
+
+		x = (x / (float)width) * camBounds.GetWidth() - camBounds.GetWidth() * 0.5f;
+		y = camBounds.GetHeight() * 0.5f - (y / (float)height) * camBounds.GetHeight();
+
+		m_Particle.Position = { x + camPos.x, y + camPos.y };
+
+		for (int i{}; i < 20; i++) {
+			m_ParticleSystem.Emit(m_Particle);
+		}
+
+	}
+
+	//camera Update
+	m_Camera.OnUpdate(dt);
+
+	m_ParticleSystem.OnUpdate(dt);
+
+	Dark::Renderer2D::ResetStats();
+
+	Dark::RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
+
+	Dark::Renderer2D::BeginScene(m_Camera.GetCamera());
+
+	//rendering particles
+	m_ParticleSystem.OnRender();
+
+	Dark::Renderer2D::EndScene();
 }
 
 void SandBox2D::OnImGuiRender()
 {
-	DARK_PROFILE_FUNCTION();
 
-	ImGui::Begin(m_Name.c_str());
+	const auto& stats{ Dark::Renderer2D::GetStats() };
 
-		auto stats{ Dark::Renderer2D::GetStats() };
+	ImGui::Begin("SandBox2D");
+	ImGui::Text("DrawCalls: %d", stats.DrawCalls);
+	ImGui::Text("QuadCount: %d", stats.QuadCount);
+	ImGui::DragFloat2("ParticleVel", &m_Particle.Velocity.x, 0.1f);
+	ImGui::DragFloat2("ParticleVelVar", &m_Particle.VelocityVariation.x, 0.1f);
+	ImGui::End();
 
-		ImGui::Text("Renderer2D Stats: ");	
-		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		ImGui::Text("Quads: %d", stats.GetQuadCount());
-		ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
-		ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
-		ImGui::Text("Triangles: %d", stats.GetQuadTriangleCount());
-
-		ImGui::DragFloat2("Texture Pos", &m_TexRect.position.x, 0.05f);
-		ImGui::DragFloat("Angle", &m_Angle, 0.1f);
-
-	ImGui::End(); 
 }

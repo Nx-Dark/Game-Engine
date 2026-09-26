@@ -1,7 +1,7 @@
 #include <Dark.h>
 #include <Dark/Core/EntryPoint.h>
 
-#include "SandBox2D.h"
+#include "SandBox2D.h""
 
 class SandBox : public Dark::Application
 {
@@ -9,9 +9,7 @@ class SandBox : public Dark::Application
 public:
 	SandBox() 
 	{
-
 		PushLayer(new SandBox2D());
-
 	}
 	~SandBox() 
 	{

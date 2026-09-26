@@ -46,7 +46,6 @@
 #endif
 
 
-
 #ifdef DARK_DEBUG
 	#define DARK_ENABLE_ASSERTS
 #endif

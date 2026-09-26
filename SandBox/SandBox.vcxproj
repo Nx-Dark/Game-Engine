@@ -145,9 +145,13 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\SandBox2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ParticleSystem.cpp" />
+    <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\SandBox2D.cpp" />
     <ClCompile Include="src\SandBoxApp.cpp" />
   </ItemGroup>
