@@ -13,9 +13,11 @@ private:
 	ParticleProps m_Particle;
 
 	Dark::Ref<Dark::Texture2D> m_SpriteSheet;
-	Dark::Ref<Dark::SubTexture2D> m_TrafficLightTexture, m_BarrelTex, m_TreeTex;
+	//Dark::Ref<Dark::SubTexture2D> m_GrassTile_left, m_GrassTile_mid, m_WaterTile_mid;
 
 	Dark::OrthoGraphicCameraController m_Camera;
+
+	std::unordered_map<char, Dark::Ref<Dark::SubTexture2D>> m_TileHashMap;
 
 public:
 	SandBox2D();

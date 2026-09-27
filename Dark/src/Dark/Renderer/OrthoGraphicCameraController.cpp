@@ -47,6 +47,12 @@ namespace Dark {
 
 	}
 
+	void OrthoGraphicCameraController::CalculateView()
+	{
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Top, m_Bounds.Bottom);
+	}
+
 	bool OrthoGraphicCameraController::OnMouseScrolledEvent(MouseScrolledEvent& e)
 	{
 
@@ -54,8 +60,7 @@ namespace Dark {
 
 		m_ZoomLevel -= (e.GetYOffset() * 0.25f);
 		m_ZoomLevel = std::clamp(m_ZoomLevel, 0.05f, 10.0f);
-		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
-		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Top, m_Bounds.Bottom);
+		CalculateView();
 
 		return false;
 	}
@@ -66,8 +71,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		m_AspectRatio = static_cast<float>(e.GetWidth()) / static_cast<float>(e.GetHeight());
-		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
-		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Top, m_Bounds.Bottom);
+		CalculateView();
 
 		return false;
 	}
