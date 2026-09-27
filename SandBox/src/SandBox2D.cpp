@@ -2,7 +2,7 @@
 #include "ParticleSystem.h"
 
 SandBox2D::SandBox2D()
-	: Layer("SandBox2D"), m_Camera(16.0f / 9.0f, 0.1f, 0.1f), m_ParticleSystem{ 5000u }
+	: Layer("SandBox2D"), m_Camera(16.0f / 9.0f, 0.1f, 0.1f), m_ParticleSystem{ 1000u }
 {
 }
 
@@ -17,12 +17,15 @@ void SandBox2D::OnAttach()
 	m_Particle.VelocityVariation = { 0.2f, 0.1f };
 	m_Particle.colorBegin = { 0.5f, 0.2f, 0.3f, 1.0f };
 	m_Particle.colorEnd = { 0.2, 0.5f, 0.6f, 0.0f };
-	m_Particle.sizeBegin = 0.4f;
+	m_Particle.sizeBegin = 0.2f;
 	m_Particle.sizeEnd = 0.05f;
 	m_Particle.sizeVariation = 0.15f;
 	m_Particle.lifeTime = 5.0f;
 
-	m_Texture = Dark::Texture2D::Create("Assets/Textures/bird.png");
+	m_SpriteSheet = Dark::Texture2D::Create("Assets/Game/Textures/tilemap_packed.png");
+	m_TrafficLightTexture = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 4, 2 }, { 16, 16 });
+	m_BarrelTex = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 9, 8 }, { 16, 16 });
+	m_TreeTex = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 17, 8 }, { 16, 16 }, { 1, 2 });
 }
 
 void SandBox2D::OnDetach()
@@ -64,14 +67,19 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 
 	m_ParticleSystem.OnUpdate(dt);
 
+	//Rendering stuff
 	Dark::Renderer2D::ResetStats();
 
-	Dark::RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
+	Dark::RenderCommand::Clear({ 0.5f, 0.0f, 0.0f, 1.0f });
 
 	Dark::Renderer2D::BeginScene(m_Camera.GetCamera());
 
 	//rendering particles
-	m_ParticleSystem.OnRender();
+	m_ParticleSystem.OnRender(m_BarrelTex);
+
+	Dark::Renderer2D::DrawQuad({}, m_TrafficLightTexture);
+	Dark::Renderer2D::DrawQuad({ { 0.7f, 0.0f } }, m_BarrelTex);
+	Dark::Renderer2D::DrawQuad({ { 2.0f, 0.0f }, { 1.0f, 2.0f } }, m_TreeTex);
 
 	Dark::Renderer2D::EndScene();
 }

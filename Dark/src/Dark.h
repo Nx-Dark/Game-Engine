@@ -27,6 +27,7 @@
 #include "Dark/Renderer/Buffer.h"
 #include "Dark/Renderer/Shader.h"
 #include "Dark/Renderer/Texture.h"
+#include "Dark/Renderer/SubTexture.h"
 
 #include "Dark/Renderer/OrthoGraphicCamera.h"
 #include "Dark/Renderer/OrthoGraphicCameraController.h"

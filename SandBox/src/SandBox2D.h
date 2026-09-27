@@ -12,7 +12,8 @@ private:
 	ParticleSystem m_ParticleSystem;
 	ParticleProps m_Particle;
 
-	Dark::Ref<Dark::Texture2D> m_Texture;
+	Dark::Ref<Dark::Texture2D> m_SpriteSheet;
+	Dark::Ref<Dark::SubTexture2D> m_TrafficLightTexture, m_BarrelTex, m_TreeTex;
 
 	Dark::OrthoGraphicCameraController m_Camera;
 

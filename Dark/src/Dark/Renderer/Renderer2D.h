@@ -3,7 +3,8 @@
 #include "Dark/Physics/Rect.h"
 #include "Dark/Renderer/OrthoGraphicCamera.h"
 
-#include "Texture.h"
+#include "Dark/Renderer/Texture.h"
+#include "Dark/Renderer/SubTexture.h"
 
 namespace Dark {
 
@@ -29,8 +30,16 @@ namespace Dark {
 		static void DrawQuad(const Rect& rect, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
 		static void DrawQuad(const Rect& rect, float depth, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
 
-		static void DrawRotatedQuad(const Rect& rect, const Ref<Texture2D>& texture, float angle, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
-		static void DrawRotatedQuad(const Rect& rect, float depth, const Ref<Texture2D>& texture, float angle, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawRotatedQuad(const Rect& rect, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawRotatedQuad(const Rect& rect, float depth, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+
+		//subtextured quad
+		static void DrawQuad(const Rect& rect, const Ref<SubTexture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawQuad(const Rect& rect, float depth, const Ref<SubTexture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+
+		static void DrawRotatedQuad(const Rect& rect, const Ref<SubTexture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawRotatedQuad(const Rect& rect, float depth, const Ref<SubTexture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+
 
 		struct Statistics
 		{

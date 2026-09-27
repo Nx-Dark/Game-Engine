@@ -74,6 +74,27 @@ void ParticleSystem::OnRender(const Dark::Ref<Dark::Texture2D>& texture)
 	}
 }
 
+void ParticleSystem::OnRender(const Dark::Ref<Dark::SubTexture2D>& subTexture)
+{
+	for (auto& particle : m_ParticlePool)
+	{
+		if (!particle.Active)
+			continue;
+
+		float life{ particle.lifeRemaining / particle.lifeTime };
+		glm::vec4 color{ 1.0f, 1.0f, 1.0f, glm::lerp(0.0f, 1.0f, life) };
+
+		float size{ glm::lerp(particle.sizeEnd, particle.sizeBegin, life) };
+
+		Dark::Rect particle_rect{
+			particle.Position,
+			{size, size},
+		};
+
+		Dark::Renderer2D::DrawRotatedQuad(particle_rect, subTexture, particle.Rotation, color);
+	}
+}
+
 void ParticleSystem::Emit(const ParticleProps& particleProps)
 {
 	Particle& particle{ m_ParticlePool[m_ParticlePoolIndex] };

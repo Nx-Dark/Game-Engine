@@ -48,11 +48,12 @@ namespace Dark {
 	static Renderer2DData s_RendererData;
 
 	//creating vertex helper function
-	static const glm::vec2 s_TexCoordsLUT[4]
+	static constexpr glm::vec2 s_TexCoordsLUT[4]
 		{ glm::vec2{0.0f, 0.0f}, glm::vec2{1.0f, 0.0f}, glm::vec2{1.0f, 1.0f}, glm::vec2{0.0f, 1.0f} };
 
 	static void CreateQuad(const ColorRect& colorRect, const glm::mat4& transform, float textureIndex, float tiling_factor)
 	{
+
 		for (int i{}; i < 4; i++)
 		{
 			s_RendererData.QuadVertexBufferPtr->pos = transform * s_RendererData.QuadVertexPositions[i];
@@ -69,11 +70,29 @@ namespace Dark {
 	}
 	static void CreateQuad(const Rect& rect, const glm::mat4& transform, const glm::vec4& tint, float textureIndex, float tiling_factor)
 	{
+
 		for (int i{}; i < 4; i++)
 		{
 			s_RendererData.QuadVertexBufferPtr->pos = transform * s_RendererData.QuadVertexPositions[i];
 			s_RendererData.QuadVertexBufferPtr->color = tint;
 			s_RendererData.QuadVertexBufferPtr->texCoords = s_TexCoordsLUT[i];
+			s_RendererData.QuadVertexBufferPtr->texID = textureIndex;
+			s_RendererData.QuadVertexBufferPtr->tilingFactor = tiling_factor;
+			s_RendererData.QuadVertexBufferPtr++;
+		}
+
+		s_RendererData.QuadIndexCount += 6;
+
+		s_RendererData.stats.QuadCount++;
+	}
+	static void CreateQuad(const Rect& rect, const glm::mat4& transform, const glm::vec4& tint, float textureIndex, const glm::vec2* texCoords, float tiling_factor)
+	{
+
+		for (int i{}; i < 4; i++)
+		{
+			s_RendererData.QuadVertexBufferPtr->pos = transform * s_RendererData.QuadVertexPositions[i];
+			s_RendererData.QuadVertexBufferPtr->color = tint;
+			s_RendererData.QuadVertexBufferPtr->texCoords = texCoords[i];
 			s_RendererData.QuadVertexBufferPtr->texID = textureIndex;
 			s_RendererData.QuadVertexBufferPtr->tilingFactor = tiling_factor;
 			s_RendererData.QuadVertexBufferPtr++;
@@ -306,7 +325,7 @@ namespace Dark {
 
 		float textureIndex{ 0.0f };
 
-		for (uint32_t i{}; i < s_RendererData.TextureSlotIndex; i++)
+		for (uint32_t i{1}; i < s_RendererData.TextureSlotIndex; i++)
 		{
 			if ((*s_RendererData.TextureSlots[i]) == (*texture))
 			{
@@ -375,6 +394,93 @@ namespace Dark {
 		};
 
 		CreateQuad(rect, transform, tint, textureIndex, tiling_factor);
+
+	}
+
+	//sub textured Quad
+	void Renderer2D::DrawQuad(const Rect& rect, const Ref<SubTexture2D>& subtexture, const glm::vec4& tint, float tiling_factor) 
+	{
+		DrawQuad(rect, 0.0f, subtexture, tint, tiling_factor);
+	}
+	void Renderer2D::DrawQuad(const Rect& rect, float depth, const Ref<SubTexture2D>& subtexture, const glm::vec4& tint, float tiling_factor)
+	{
+		DARK_PROFILE_FUNCTION();
+
+		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
+		{
+			FlushAndReset();
+		}
+
+		float textureIndex{ 0.0f };
+
+		for (uint32_t i{}; i < s_RendererData.TextureSlotIndex; i++)
+		{
+			if ((*s_RendererData.TextureSlots[i]) == (*subtexture->GetTexutre()))
+			{
+				textureIndex = static_cast<float>(i);
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			textureIndex = static_cast<float>(s_RendererData.TextureSlotIndex);
+			s_RendererData.TextureSlots[s_RendererData.TextureSlotIndex] = subtexture->GetTexutre();
+			s_RendererData.TextureSlotIndex++;
+			s_RendererData.TextureSlotIndex = std::clamp(s_RendererData.TextureSlotIndex, 1u, 31u);
+		}
+
+		//Setting Vertex Stuff;
+		glm::mat4 transform{
+			glm::translate(glm::mat4{1.0f}, glm::vec3{rect.position, depth})
+				* glm::scale(glm::mat4{1.0f}, glm::vec3{rect.size.x, rect.size.y, 1.0f})
+		};
+
+		CreateQuad(rect, transform, tint, textureIndex, subtexture->GetTexCoords(), tiling_factor);
+
+	}
+
+	//rotated sub textured quad
+	void Renderer2D::DrawRotatedQuad(const Rect& rect, const Ref<SubTexture2D>& subtexture, float angleInRads, const glm::vec4& tint, float tiling_factor)
+	{
+		DrawRotatedQuad(rect, 0.0f, subtexture, angleInRads, tint, tiling_factor);
+	}
+	void Renderer2D::DrawRotatedQuad(const Rect& rect, float depth, const Ref<SubTexture2D>& subtexture, float angleInRads, const glm::vec4& tint, float tiling_factor)
+	{
+		DARK_PROFILE_FUNCTION();
+
+		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
+		{
+			FlushAndReset();
+		}
+
+		float textureIndex{ 0.0f };
+
+		for (uint32_t i{}; i < s_RendererData.TextureSlotIndex; i++)
+		{
+			if ((*s_RendererData.TextureSlots[i]) == (*subtexture->GetTexutre()))
+			{
+				textureIndex = static_cast<float>(i);
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			textureIndex = static_cast<float>(s_RendererData.TextureSlotIndex);
+			s_RendererData.TextureSlots[s_RendererData.TextureSlotIndex] = subtexture->GetTexutre();
+			s_RendererData.TextureSlotIndex++;
+			s_RendererData.TextureSlotIndex = std::clamp(s_RendererData.TextureSlotIndex, 1u, 31u);
+		}
+
+		//Setting Vertex Stuff;
+		glm::mat4 transform{
+			glm::translate(glm::mat4{1.0f}, glm::vec3{rect.position, depth})
+				* glm::rotate(glm::mat4{1.0f}, angleInRads, glm::vec3{0.0f, 0.0f, 1.0f})
+					* glm::scale(glm::mat4{1.0f}, glm::vec3{rect.size.x, rect.size.y, 1.0f})
+		};
+
+		CreateQuad(rect, transform, tint, textureIndex, subtexture->GetTexCoords(), tiling_factor);
 
 	}
 

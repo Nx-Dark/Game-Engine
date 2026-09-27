@@ -39,6 +39,7 @@ public:
 	void OnUpdate(Dark::DeltaTime dt);
 	void OnRender();
 	void OnRender(const Dark::Ref<Dark::Texture2D>& texture);
+	void OnRender(const Dark::Ref<Dark::SubTexture2D>& subtexture);
 
 	void Emit(const ParticleProps& particleProps);
 };
