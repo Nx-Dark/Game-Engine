@@ -32,6 +32,11 @@ namespace Dark {
 			return m_RendererID == static_cast<const OpenGLTexture2D&>(other).m_RendererID;
 		}
 
+		inline virtual uint32_t GetRendererID() const override
+		{
+			return m_RendererID;
+		}
+
 	};
 
 }

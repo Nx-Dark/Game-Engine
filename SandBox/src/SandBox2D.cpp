@@ -123,6 +123,22 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 void SandBox2D::OnImGuiRender()
 {
 
+	static bool dockspaceOpen{ true };
+	static ImGuiDockNodeFlags  DockSpaceFlags = ImGuiDockNodeFlags_None;
+
+	ImGui::DockSpaceOverViewport(0, nullptr, DockSpaceFlags);
+
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("Sys")) {
+
+			if (ImGui::MenuItem("Exit")) Dark::Application::Get().Close();
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+
 	const auto& stats{ Dark::Renderer2D::GetStats() };
 
 	ImGui::Begin("SandBox2D");
@@ -130,6 +146,8 @@ void SandBox2D::OnImGuiRender()
 	ImGui::Text("QuadCount: %d", stats.QuadCount);
 	ImGui::DragFloat2("ParticleVel", &m_Particle.Velocity.x, 0.1f);
 	ImGui::DragFloat2("ParticleVelVar", &m_Particle.VelocityVariation.x, 0.1f);
-	ImGui::End();
 
+	ImGui::Image((void*)m_SpriteSheet->GetRendererID(), ImVec2{ 64.0f, 64.0f });
+
+	ImGui::End();
 }

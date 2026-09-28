@@ -55,6 +55,9 @@ namespace Dark {
 		//function to get the window
 		inline Window& GetWindow() { return *m_Window; }
 
+		//close function
+		inline void Close() { m_Running = false; }
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
