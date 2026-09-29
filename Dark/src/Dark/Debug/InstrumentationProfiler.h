@@ -127,7 +127,7 @@ namespace Dark {
 //profiling macros
 
 #ifdef DARK_DEBUG
-#define DARK_PROFILING 1
+//#define DARK_PROFILING 0
 #endif
 
 #ifdef DARK_PROFILING
