@@ -26,6 +26,7 @@
 #include "Dark/Renderer/VertexArray.h"
 #include "Dark/Renderer/Buffer.h"
 #include "Dark/Renderer/Shader.h"
+#include "Dark/Renderer/Framebuffer.h"
 #include "Dark/Renderer/Texture.h"
 #include "Dark/Renderer/SubTexture.h"
 

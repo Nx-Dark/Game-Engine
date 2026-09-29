@@ -13,7 +13,7 @@ private:
 	ParticleProps m_Particle;
 
 	Dark::Ref<Dark::Texture2D> m_SpriteSheet;
-	//Dark::Ref<Dark::SubTexture2D> m_GrassTile_left, m_GrassTile_mid, m_WaterTile_mid;
+	Dark::Ref<Dark::Framebuffer> m_Framebuffer;
 
 	Dark::OrthoGraphicCameraController m_Camera;
 

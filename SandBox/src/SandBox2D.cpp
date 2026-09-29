@@ -49,6 +49,12 @@ void SandBox2D::OnAttach()
 	m_SpriteSheet = Dark::Texture2D::Create("Assets/Game/Textures/tilemap_packed.png");
 	m_TileHashMap['D'] = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 16 }, { 16, 16 });
 	m_TileHashMap['W'] = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 9, 10 }, { 16, 16 });
+
+	//framebuffer
+	Dark::FramebufferSpecifications fbSpec;
+	fbSpec.Width = Dark::Application::Get().GetWindow().GetWidth();
+	fbSpec.Height = Dark::Application::Get().GetWindow().GetHeight();
+	m_Framebuffer = Dark::Framebuffer::Create(fbSpec);
 }
 
 void SandBox2D::OnDetach()
@@ -93,15 +99,16 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 	//Rendering stuff
 	Dark::Renderer2D::ResetStats();
 
-	Dark::RenderCommand::Clear({ 0.5f, 0.0f, 0.0f, 1.0f });
+	Dark::RenderCommand::Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
 
+	m_Framebuffer->Bind();
+
+	Dark::RenderCommand::Clear({ 0.5f, 0.0f, 0.0f, 1.0f });
+	 
 	Dark::Renderer2D::BeginScene(m_Camera.GetCamera());
 
 	//rendering particles
 	m_ParticleSystem.OnRender();
-
-	//Dark::Renderer2D::DrawQuad({}, m_GrassTile_left);
-	//Dark::Renderer2D::DrawQuad({ {1.0f, 0.0f} }, m_GrassTile_mid);
 
 	for (uint32_t y{}; y < s_TileMapHeight; y++)
 	{
@@ -118,6 +125,8 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 
 	
 	Dark::Renderer2D::EndScene();
+
+	m_Framebuffer->UnBind();
 }
 
 void SandBox2D::OnImGuiRender()
@@ -189,7 +198,7 @@ void SandBox2D::OnImGuiRender()
 		ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
 		ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
 
-		ImGui::Image((void*)m_SpriteSheet->GetRendererID(), ImVec2{ 256.0f, 256.0f });
+		ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), ImVec2{ 960.0f, 540.0f });
 		ImGui::End();
 
 		ImGui::End();
@@ -205,7 +214,7 @@ void SandBox2D::OnImGuiRender()
 		ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
 		ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
 
-		ImGui::Image((void*)m_SpriteSheet->GetRendererID(), ImVec2{256.0f, 256.0f});
+		ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), ImVec2{ 960.0f, 540.0f });
 		ImGui::End();
 	}
 }

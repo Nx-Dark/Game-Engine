@@ -13,19 +13,19 @@ namespace Dark {
 	static uint32_t ShaderDataTypeSize(ShaderDataType type) {
 		switch (type) {
 			case ShaderDataType::None:		return 0;
-			case ShaderDataType::Float:		return sizeof(float);
-			case ShaderDataType::Float2:	return 2 * sizeof(float);
-			case ShaderDataType::Float3:	return 3 * sizeof(float);
-			case ShaderDataType::Float4:	return 4 * sizeof(float);
-			case ShaderDataType::Int:		return sizeof(int);
-			case ShaderDataType::Int2:		return 2 * sizeof(int);
-			case ShaderDataType::Int3:		return 3 * sizeof(int);
-			case ShaderDataType::Int4:		return 4 * sizeof(int);
-			case ShaderDataType::Uint:		return sizeof(uint32_t);
-			case ShaderDataType::Uint2:		return 2 * sizeof(uint32_t);
-			case ShaderDataType::Uint3:		return 3 * sizeof(uint32_t);
-			case ShaderDataType::Uint4:		return 4 * sizeof(uint32_t);
-			case ShaderDataType::Mat3:		return 9 * sizeof(float);
+			case ShaderDataType::Float:		return      sizeof(float);
+			case ShaderDataType::Float2:	return 2  * sizeof(float);
+			case ShaderDataType::Float3:	return 3  * sizeof(float);
+			case ShaderDataType::Float4:	return 4  * sizeof(float);
+			case ShaderDataType::Int:		return      sizeof(int);
+			case ShaderDataType::Int2:		return 2  * sizeof(int);
+			case ShaderDataType::Int3:		return 3  * sizeof(int);
+			case ShaderDataType::Int4:		return 4  * sizeof(int);
+			case ShaderDataType::Uint:		return      sizeof(uint32_t);
+			case ShaderDataType::Uint2:		return 2  * sizeof(uint32_t);
+			case ShaderDataType::Uint3:		return 3  * sizeof(uint32_t);
+			case ShaderDataType::Uint4:		return 4  * sizeof(uint32_t);
+			case ShaderDataType::Mat3:		return 9  * sizeof(float);
 			case ShaderDataType::Mat4:		return 16 * sizeof(float);
 		}
 
