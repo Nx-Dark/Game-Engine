@@ -129,6 +129,9 @@
     <ClInclude Include="src\Dark\Renderer\Buffer.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dark\Renderer\Framebuffer.h">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Dark\Renderer\GraphicsContext.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
@@ -153,6 +156,9 @@
     <ClInclude Include="src\Dark\Renderer\Shader.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dark\Renderer\SubTexture.h">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Dark\Renderer\Texture.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
@@ -163,6 +169,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
@@ -1446,9 +1455,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Renderer\SubTexture.h" />
-    <ClInclude Include="src\Dark\Renderer\Framebuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
+    <ClInclude Include="src\Dark\Audio\AudioMixer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Core\Application.cpp">
@@ -1478,6 +1485,9 @@
     <ClCompile Include="src\Dark\Renderer\Buffer.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dark\Renderer\Framebuffer.cpp">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCamera.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
@@ -1499,6 +1509,9 @@
     <ClCompile Include="src\Dark\Renderer\Shader.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dark\Renderer\SubTexture.cpp">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Dark\Renderer\Texture.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
@@ -1509,6 +1522,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
@@ -1535,8 +1551,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\Renderer\SubTexture.cpp" />
-    <ClCompile Include="src\Dark\Renderer\Framebuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
+    <ClCompile Include="src\Dark\Audio\AudioMixer.cpp" />
   </ItemGroup>
 </Project>

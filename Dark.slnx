@@ -16,5 +16,7 @@
     </Project>
     <Project Path="Dark\vendor\ImGui\ImGui.vcxproj" Id="C0FF640D-2C14-8DBE-F595-301E616989EF">
     </Project>
+    <Project Path="Dark\vendor\miniaudio\MINIAUDIO.vcxproj" Id="C4549F7D-30BF-53F4-79FD-049AE5A63149">
+    </Project>
   </Folder>
 </Solution>

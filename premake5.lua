@@ -24,11 +24,13 @@ IncludeDir["GLAD"] = "Dark/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Dark/vendor/ImGui"
 IncludeDir["glm"] = "Dark/vendor/glm"
 IncludeDir["stb_image"] = "Dark/vendor/stb_image"
+IncludeDir["mini_audio"] = "Dark/vendor/miniaudio/includes"
 
 group "Dependencies"
     include "Dark/vendor/GLFW"
     include "Dark/vendor/GLAD"
     include "Dark/vendor/ImGui"
+    include "Dark/vendor/miniaudio"
 group ""
 
 project "Dark" 
@@ -60,13 +62,15 @@ project "Dark"
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}"
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.mini_audio}"
     }
 
     links {
         "GLFW",
         "GLAD",
         "ImGui",
+        "MINIAUDIO",
         "opengl32.lib"
     }
 

@@ -55,6 +55,9 @@ void SandBox2D::OnAttach()
 	fbSpec.Width = Dark::Application::Get().GetWindow().GetWidth();
 	fbSpec.Height = Dark::Application::Get().GetWindow().GetHeight();
 	m_Framebuffer = Dark::Framebuffer::Create(fbSpec);
+
+	m_Music = Dark::AudioData::Create("Assets/audio/music.mp3", Dark::AudioFlag::FLAG_STREAM);
+	m_Music->PlayAudio();
 }
 
 void SandBox2D::OnDetach()
@@ -90,6 +93,11 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 		}
 
 	}
+
+	static float musicTime{ 0.0f };
+	musicTime += dt;
+
+	if (musicTime >= 10.0f && m_Music->isAudioPlaying()) m_Music->StopAudio();
 
 	//camera Update
 	m_Camera.OnUpdate(dt);

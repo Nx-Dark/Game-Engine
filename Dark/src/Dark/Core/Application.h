@@ -13,6 +13,8 @@
 
 #include "Dark/Renderer/OrthoGraphicCamera.h"
 
+#include "Dark/Audio/AudioMixer.h"
+
 namespace Dark {
 
 	class VertexArray;
@@ -25,14 +27,17 @@ namespace Dark {
 		//static instance of the application to access it from anywhere
 		static Application* s_Instance;
 
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		bool m_Running{true}, m_Minimized{false};
 
 		//layer stack
 		LayerStack m_LayerStack;
 
 		//imgui layer
-		ImGuiLayer* m_ImGuiLayer;
+		ImGuiLayer* m_ImGuiLayer{};
+
+		//audio shit
+		Ref<AudioMixer> m_AudioMixer{};
 
 		//time stuff
 		float m_lastFrameTime{};

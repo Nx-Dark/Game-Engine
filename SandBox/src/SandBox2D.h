@@ -19,6 +19,8 @@ private:
 
 	std::unordered_map<char, Dark::Ref<Dark::SubTexture2D>> m_TileHashMap;
 
+	Dark::Ref<Dark::AudioData> m_Music{};
+
 public:
 	SandBox2D();
 	virtual ~SandBox2D();

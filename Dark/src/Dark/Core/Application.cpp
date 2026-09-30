@@ -34,6 +34,9 @@ namespace Dark {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
+		//creating audio mixer
+		m_AudioMixer = AudioMixer::Create();
+
 		//timer
 		Timer::Init();
 		m_lastFrameTime = Timer::GetElapsedTime();
