@@ -18,6 +18,8 @@ namespace Dark {
 
 		Ref<AudioData> m_Music{};
 
+		glm::vec2 m_ViewportPanelSize{ 1.0f, 1.0f };
+
 	public:
 		UltraEditorLayer();
 		virtual ~UltraEditorLayer();

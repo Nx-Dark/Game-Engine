@@ -2,6 +2,8 @@
 
 #include "Dark/Core/Core.h"
 
+#include <glm/vec2.hpp>
+
 namespace Dark
 {
 
@@ -23,6 +25,11 @@ namespace Dark
 
 		virtual void Bind() = 0;
 		virtual void UnBind() = 0;
+
+		virtual void ReSize(uint32_t _width, uint32_t _height) = 0;
+		virtual const std::pair<uint32_t, uint32_t>& GetSize() const = 0;
+		virtual uint32_t GetSizeX() const = 0;
+		virtual uint32_t GetSizeY() const = 0;
 
 		virtual uint32_t GetColorAttachmentRendererID() const = 0;
 

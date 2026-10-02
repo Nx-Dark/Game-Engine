@@ -38,6 +38,8 @@ namespace Dark {
 		void OnUpdate(DeltaTime dt);
 		void OnEvent(Event& e);
 
+		void OnResize(float width, float height);
+
 		//getters & setters
 		inline OrthoGraphicCamera& GetCamera() { return m_Camera; }
 		inline const OrthoGraphicCamera& GetCamera() const { return m_Camera; }

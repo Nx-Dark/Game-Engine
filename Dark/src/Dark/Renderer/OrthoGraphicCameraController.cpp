@@ -53,6 +53,12 @@ namespace Dark {
 		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Top, m_Bounds.Bottom);
 	}
 
+	void OrthoGraphicCameraController::OnResize(float width, float height)
+	{
+		m_AspectRatio = width / height;
+		CalculateView();
+	}
+
 	bool OrthoGraphicCameraController::OnMouseScrolledEvent(MouseScrolledEvent& e)
 	{
 

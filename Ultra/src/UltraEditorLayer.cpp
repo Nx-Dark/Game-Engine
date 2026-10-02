@@ -171,9 +171,21 @@ namespace Dark {
 			ImGui::Text("Quads: %d", stats.QuadCount);
 			ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
 			ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
-
-			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), ImVec2{ 960.0f, 540.0f }, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
 			ImGui::End();
+
+			//viewport and framebuffer bullshit
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
+			ImGui::Begin("Viewport");
+				ImVec2 viewportPanelSize{ ImGui::GetContentRegionAvail() };
+				if (m_ViewportPanelSize != *((glm::vec2*)&viewportPanelSize)) {
+					m_ViewportPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
+					m_Framebuffer->ReSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+					m_Camera.OnResize(m_ViewportPanelSize.x, m_ViewportPanelSize.y);
+				}
+				DARK_CLIENT_WARN("ViewPort: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
+				ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0.0f, 1.0f }, { 1.0f, 0.0f });
+			ImGui::End();
+			ImGui::PopStyleVar();
 
 			ImGui::End();
 		}
@@ -188,7 +200,7 @@ namespace Dark {
 			ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
 			ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
 
-			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), ImVec2{ 960.0f, 540.0f }, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
+			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), { m_ViewportPanelSize.x, m_ViewportPanelSize.y }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
 			ImGui::End();
 		}
 	}

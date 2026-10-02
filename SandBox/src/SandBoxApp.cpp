@@ -7,7 +7,7 @@ class SandBox : public Dark::Application
 {
 
 public:
-	SandBox() 
+	SandBox(const std::string& appName, uint32_t width, uint32_t height) 
 	{
 		PushLayer(new SandBox2D());
 	}
@@ -20,6 +20,6 @@ public:
 
 Dark::Application* Dark::CreateApplication() 
 {
-	return new SandBox();
+	return new SandBox("Game", 960u, 540u);
 
 }
