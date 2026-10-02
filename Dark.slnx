@@ -7,7 +7,9 @@
   </Configurations>
   <Project Path="Dark\Dark.vcxproj" Id="0705847C-F33B-850D-9C28-6B10883E010F">
   </Project>
-  <Project Path="Sandbox\Sandbox.vcxproj" Id="F4C124E3-60A1-A37E-69B9-2E55D5170AE0" DefaultStartup="true">
+  <Project Path="Sandbox\Sandbox.vcxproj" Id="F4C124E3-60A1-A37E-69B9-2E55D5170AE0">
+  </Project>
+  <Project Path="Ultra\Ultra.vcxproj" Id="6D583E0E-D96C-66BF-A2EE-091F0EC262F0" DefaultStartup="true">
   </Project>
   <Folder Name="/Dependencies/">
     <Project Path="Dark\vendor\GLAD\GLAD.vcxproj" Id="5D4A857C-4981-860D-F26D-6C10DE83020F">

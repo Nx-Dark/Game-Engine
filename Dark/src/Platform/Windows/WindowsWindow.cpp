@@ -18,10 +18,6 @@ namespace Dark {
 		DARK_CORE_ERROR("GLFW ERROR ({0}) : {1}", error_code, description);
 	}
 
-	Scope<Window> Window::Create(const WindowProps& props) {
-		return CreateScope<WindowsWindow>(props);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProps& props) {
 		DARK_PROFILE_FUNCTION();
 
@@ -163,8 +159,8 @@ namespace Dark {
 	}
 
 	void WindowsWindow::ShutDown() {
-		//TODO: glfwTerminate() on shutdown
 		glfwDestroyWindow(m_Window);
+		glfwTerminate();
 	}
 
 	void WindowsWindow::OnUpdate() {

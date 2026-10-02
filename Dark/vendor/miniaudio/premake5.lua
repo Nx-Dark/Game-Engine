@@ -15,7 +15,6 @@ project "MINIAUDIO"
         "includes"
     }
 
-
     filter "system:windows"
         systemversion "latest"
 

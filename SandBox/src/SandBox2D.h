@@ -13,7 +13,6 @@ private:
 	ParticleProps m_Particle;
 
 	Dark::Ref<Dark::Texture2D> m_SpriteSheet;
-	Dark::Ref<Dark::Framebuffer> m_Framebuffer;
 
 	Dark::OrthoGraphicCameraController m_Camera;
 

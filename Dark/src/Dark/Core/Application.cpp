@@ -15,7 +15,7 @@
 namespace Dark {
 	Application* Application::s_Instance{ nullptr };
 
-	Application::Application()
+	Application::Application(const std::string& appName, uint32_t width, uint32_t height)
 	{
 		DARK_PROFILE_FUNCTION();
 
@@ -23,7 +23,7 @@ namespace Dark {
 		s_Instance = this;
 
 		//creating window
-		m_Window = Window::Create();
+		m_Window = Window::Create({appName, width, height});
 		m_Window->SetEventCallBackFn(DARK_BIND_EVENT_FN(Application::OnEvent));
 		m_Window->SetVsync(true);
 

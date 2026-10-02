@@ -34,7 +34,7 @@ namespace Dark
 		//attaching the color texture attachment to the framebuffer
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachment, 0);
 
-		//depth attachments
+		//depth stencil attachments
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthStencilAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_DepthStencilAttachment);
 		glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, m_Specifications.Width, m_Specifications.Height);

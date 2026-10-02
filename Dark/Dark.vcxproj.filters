@@ -7,6 +7,9 @@
     <Filter Include="src\Dark">
       <UniqueIdentifier>{7E241DCF-6AF1-77DA-930A-66827F36AD68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Dark\Audio">
+      <UniqueIdentifier>{FF980E77-EB66-027D-D4FA-72A3C067DEE1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Dark\Core">
       <UniqueIdentifier>{96C756EC-0288-D222-CBC2-1BA0374217FF}</UniqueIdentifier>
     </Filter>
@@ -62,6 +65,9 @@
   <ItemGroup>
     <ClInclude Include="src\Dark.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Audio\AudioMixer.h">
+      <Filter>src\Dark\Audio</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Core\Application.h">
       <Filter>src\Dark\Core</Filter>
@@ -1455,9 +1461,11 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Audio\AudioMixer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Dark\Audio\AudioMixer.cpp">
+      <Filter>src\Dark\Audio</Filter>
+    </ClCompile>
     <ClCompile Include="src\Dark\Core\Application.cpp">
       <Filter>src\Dark\Core</Filter>
     </ClCompile>
@@ -1551,6 +1559,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\Audio\AudioMixer.cpp" />
+    <ClCompile Include="src\Dark\Core\Window.cpp" />
   </ItemGroup>
 </Project>

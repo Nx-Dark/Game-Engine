@@ -628,6 +628,7 @@
     <ClCompile Include="src\Dark\Core\Layer.cpp" />
     <ClCompile Include="src\Dark\Core\LayerStack.cpp" />
     <ClCompile Include="src\Dark\Core\Log.cpp" />
+    <ClCompile Include="src\Dark\Core\Window.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Dark\Physics\Rect.cpp" />

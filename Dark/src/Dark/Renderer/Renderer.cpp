@@ -39,6 +39,11 @@ namespace Dark {
 
 	}
 
+	void Renderer::Clear(const glm::vec4& clearColor)
+	{
+		RenderCommand::Clear(clearColor);
+	}
+
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Bind();

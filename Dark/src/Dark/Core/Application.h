@@ -43,7 +43,7 @@ namespace Dark {
 		float m_lastFrameTime{};
 	public:
 
-		Application();
+		Application(const std::string& appName = "Dark-Engine", uint32_t width = 960u, uint32_t height = 540u);
 		virtual ~Application();
 
 		void Run();
