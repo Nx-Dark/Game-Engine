@@ -14,6 +14,7 @@ namespace Dark {
 
 	private:
 
+		bool m_AllowEvents{false};
 		float m_Time{};
 	
 	public:
@@ -23,11 +24,13 @@ namespace Dark {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Event& e) override;
 
 		//begin and end ImGuiWindow rendering
 		void Begin();
 		void End();
 
+		inline void AllowEvents(bool _allow) { m_AllowEvents = _allow; }
 	};
 
 }

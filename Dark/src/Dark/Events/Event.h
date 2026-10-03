@@ -40,8 +40,8 @@ namespace Dark {
 
 		friend class EventDispatcher;
 
-	protected:
-		bool m_Handled{};
+	public:
+		bool Handled{};
 
 	public:
 		virtual ~Event() = default;
@@ -55,8 +55,6 @@ namespace Dark {
 		inline bool IsInCategory(EventCategory category) {
 			return GetCategoryFlags() & category;
 		}
-
-		inline bool Handled() const{ return m_Handled; }
 
 	};
 	
@@ -72,7 +70,7 @@ namespace Dark {
 		bool Dispatch(const F& func) {
 
 			if (m_Event.GetEventType() == T::GetStaticType()) {
-				m_Event.m_Handled = func(static_cast<T&>(m_Event));
+				m_Event.Handled = func(static_cast<T&>(m_Event));
 				return true;
 			}
 

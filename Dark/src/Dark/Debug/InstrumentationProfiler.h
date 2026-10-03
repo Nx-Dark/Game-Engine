@@ -115,6 +115,7 @@ namespace Dark {
             Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID });
 
             m_Stopped = true;
+
         }
     private:
         const char* m_Name;

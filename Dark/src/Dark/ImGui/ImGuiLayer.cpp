@@ -108,4 +108,14 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 	}
+
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		if (!m_AllowEvents) {
+			//not allowing or blocking the events from passing through this imgui layer;
+			ImGuiIO io{ ImGui::GetIO() };
+			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
+	}
 }

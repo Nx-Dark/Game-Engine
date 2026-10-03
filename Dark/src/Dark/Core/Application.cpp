@@ -111,8 +111,9 @@ namespace Dark {
 
 		//layer event handling
 		for (auto it{ m_LayerStack.rbegin() }; it != m_LayerStack.rend(); it++) {
+			if (e.Handled) 
+				break;
 			(*it)->OnEvent(e);
-			if (e.Handled()) break;
 		}
 
 	}

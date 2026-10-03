@@ -17,11 +17,6 @@
 
 namespace Dark {
 
-	class VertexArray;
-	class VertexBuffer;
-	class IndexBuffer;
-	class Shader;
-
 	class DARK_API Application {
 
 		//static instance of the application to access it from anywhere
@@ -56,6 +51,9 @@ namespace Dark {
 		void PushOverlay(Layer* layer);
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* layer);
+
+		//get imguilayer
+		inline ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		//function to get the window
 		inline Window& GetWindow() { return *m_Window; }

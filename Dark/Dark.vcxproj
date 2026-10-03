@@ -197,7 +197,6 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\dpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -624,7 +623,6 @@
   <ItemGroup>
     <ClCompile Include="src\Dark\Audio\AudioMixer.cpp" />
     <ClCompile Include="src\Dark\Core\Application.cpp" />
-    <ClCompile Include="src\Dark\Core\Input.cpp" />
     <ClCompile Include="src\Dark\Core\Layer.cpp" />
     <ClCompile Include="src\Dark\Core\LayerStack.cpp" />
     <ClCompile Include="src\Dark\Core\Log.cpp" />
