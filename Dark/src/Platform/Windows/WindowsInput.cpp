@@ -1,5 +1,6 @@
 #include "dpch.h"
-#include "WindowsInput.h"
+
+#include "Dark/Core/Input.h"
 
 #include "Dark/Core/Application.h"
 
@@ -7,35 +8,33 @@
 
 namespace Dark {
 
-	Input* Input::s_Instance{ new WindowsInput() };
-
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
+	bool Input::IsKeyPressed(int keycode)
 	{
 		auto window{ static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow()) };
 		auto state{ glfwGetKey(window, keycode) };
 		return state == DK_PRESS || state == DK_REPEAT;
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		auto window{ static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow()) };
 		auto state{ glfwGetMouseButton(window, button) };
 		return state == DK_PRESS;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePosImpl() {
+	std::pair<float, float> Input::GetMousePos() {
 		auto window{ static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow()) };
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 		return { static_cast<float>(xPos), static_cast<float>(yPos) };
 	}
 
-	float WindowsInput::GetMouseXImpl() {
+	float Input::GetMouseX() {
 		auto [x, y] {GetMousePos()};
 		return x;
 	}
 
-	float WindowsInput::GetMouseYImpl() {
+	float Input::GetMouseY() {
 		auto [x, y] {GetMousePos()};
 		return y;
 	}
