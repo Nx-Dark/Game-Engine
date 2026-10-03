@@ -44,6 +44,7 @@ namespace Dark {
 		bool m_Handled{};
 
 	public:
+		virtual ~Event() = default;
 
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
@@ -59,11 +60,8 @@ namespace Dark {
 
 	};
 	
-	//Event dispatcher, for the engine only!
-	class EventDispatcher {
-
-		//template <typename T>
-		//using EventFn = std::function<bool(T&)>;
+	//Event Dispatcher
+	class DARK_API EventDispatcher {
 
 		Event& m_Event;
 
