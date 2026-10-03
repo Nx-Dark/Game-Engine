@@ -15,6 +15,8 @@ namespace Dark {
 
 		OpenGLContext(GLFWwindow* winHandle);
 
+		virtual ~OpenGLContext();
+
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 

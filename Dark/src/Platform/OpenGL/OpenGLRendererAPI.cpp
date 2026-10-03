@@ -3,6 +3,11 @@
 
 namespace Dark {
 
+	OpenGLRendererAPI::~OpenGLRendererAPI()
+	{
+
+	}
+
 	void OpenGLRendererAPI::Init()
 	{
 		glEnable(GL_BLEND);

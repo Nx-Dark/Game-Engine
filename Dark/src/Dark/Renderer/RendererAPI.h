@@ -23,6 +23,8 @@ namespace Dark {
 		static API s_API;
 
 	public:
+		virtual ~RendererAPI() = default;
+
 		virtual void Init() = 0;
 
 		virtual void SetViewport(int x, int y, int w, int h) = 0;

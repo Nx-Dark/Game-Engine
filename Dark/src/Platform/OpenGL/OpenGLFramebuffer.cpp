@@ -86,7 +86,7 @@ namespace Dark
 		Invalidate();
 	}
 
-	const std::pair<uint32_t, uint32_t>& OpenGLFramebuffer::GetSize() const
+	const std::pair<uint32_t, uint32_t> OpenGLFramebuffer::GetSize() const
 	{
 		return { m_Specifications.Width, m_Specifications.Height };
 	}

@@ -9,6 +9,8 @@ namespace Dark {
 	class OpenGLRendererAPI : public RendererAPI
 	{
 	public:
+		virtual ~OpenGLRendererAPI();
+
 		virtual void Init() override;
 		virtual void SetViewport(int x, int y, int w, int h) override;
 		virtual void Clear(const glm::vec4& p_Color) override;

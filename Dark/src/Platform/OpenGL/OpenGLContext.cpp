@@ -14,6 +14,11 @@ namespace Dark {
 
 	}
 
+	OpenGLContext::~OpenGLContext()
+	{
+
+	}
+
 
 	void OpenGLContext::Init() {
 		glfwMakeContextCurrent(m_WinHandle);
