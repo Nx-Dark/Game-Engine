@@ -6,6 +6,8 @@
 namespace Dark
 {
 
+	static const uint32_t s_MaxFramebufferSize{ 8192 };
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecifications& spec)
 		: m_Specifications{ spec }
 	{
@@ -79,6 +81,11 @@ namespace Dark
 
 	void OpenGLFramebuffer::ReSize(uint32_t _width, uint32_t _height)
 	{
+		if (_width == 0 || _height == 0 || _width > s_MaxFramebufferSize || _height > s_MaxFramebufferSize) {
+			DARK_CORE_ERROR("Attempted to Resize Framebuffer to ({0}, {1})", _width, _height);
+			return;
+		}
+
 		m_Specifications.Width = _width;
 		m_Specifications.Height = _height;
 

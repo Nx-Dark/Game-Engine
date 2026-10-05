@@ -40,6 +40,12 @@
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\EnTT">
+      <UniqueIdentifier>{7DF066C1-E9A5-DFB6-729A-D98DDE4ED6BA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\EnTT\include">
+      <UniqueIdentifier>{F044A74C-5CA6-845A-E513-CB0C5174BB19}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor\glm">
       <UniqueIdentifier>{829FC5A8-6E57-07F6-D75E-E051C335A2E6}</UniqueIdentifier>
     </Filter>
@@ -197,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="src\dpch.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\EnTT\include\ecs_entt.hpp">
+      <Filter>vendor\EnTT\include</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
@@ -1475,6 +1484,9 @@
     <ClCompile Include="src\Dark\Core\Log.cpp">
       <Filter>src\Dark\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dark\Core\Window.cpp">
+      <Filter>src\Dark\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Dark\ImGui\ImGuiBuild.cpp">
       <Filter>src\Dark\ImGui</Filter>
     </ClCompile>
@@ -1553,6 +1565,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\Core\Window.cpp" />
   </ItemGroup>
 </Project>

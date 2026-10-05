@@ -33,7 +33,7 @@ namespace Dark {
 
 
 	public:
-		OrthoGraphicCameraController(float aspectRatio, float camSpeed, float camRotSpeed, bool camRotation = false);
+		OrthoGraphicCameraController(float aspectRatio, float camSpeed, float camRotSpeed = 0.1f, bool camRotation = false);
 
 		void OnUpdate(DeltaTime dt);
 		void OnEvent(Event& e);

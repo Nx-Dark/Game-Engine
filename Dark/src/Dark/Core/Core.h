@@ -8,6 +8,24 @@
 		#error "X86 windows Not Supported!"
 	#endif
 
+#elif defined(__APPLE__) || (__MACH__)
+	#include <TargetConditionals.h>
+
+	#if TARGET_IPHONE_SIMULATOR == 1
+		#error "IOS Simulator is not Supported For Now"
+	#elif TARGET_OS_IPHONE == 1
+		#define DARK_PLATFORM_IOS
+		#error "IOS is Not Supported For Now"
+	#elif TARGET_OS_MAC == 1
+		#define DARK_PLATFORM_MACOS
+		#error "MACOS is Not Supported For Now"
+	#else
+		#error "Unknown Platform"
+	#endif
+
+#elif defined(__ANDROID__)
+	#define DARK_PLATFORM_ANDROID
+	#error "Android not Supported For Now"
 #elif defined(__linux__)
 	#define DARK_PLATFORM_LINUX
 	#error "Linux not Supported For Now"
@@ -26,6 +44,17 @@
 			#define DARK_API __declspec(dllimport)
 		#endif
 	#else 
+		#define DARK_API
+	#endif
+
+#elif DARK_PLATFORM_ANDROID
+	#ifdef DARK_DYNAMIC_LINK
+		#ifdef DARK_BUILD_DLL
+			#define DARK_API
+		#else
+			#define DARK_API
+		#endif
+	#else
 		#define DARK_API
 	#endif
 
@@ -48,8 +77,18 @@
 
 #ifdef DARK_DEBUG
 	#define DARK_ENABLE_ASSERTS
+
+	#if defined(DARK_PLATFORM_WINDOWS)
+		#define DARK_DEBUGBREAK() __debugbreak()
+	#elif defined(DARK_PLATFORM_LINUX)
+		#include <signal.h>
+		#define DARK_DEBUGBREAK() raise(SIGTRAP)
+	#else
+		#error "Platform Doesn't Support DebugBreak yet!"
+	#endif
 #endif
 
+//TODO: Make DARK_CORE and DARK_CLIENT ASSERT macro to accept no additional arguments except condition and still assert!
 #ifdef DARK_ENABLE_ASSERTS
 	#define DARK_CORE_ASSERT(x, ...) { if(!(x)) {DARK_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
 	#define DARK_CLIENT_ASSERT(x, ...) { if(!(x)) { DARK_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}

@@ -24,7 +24,7 @@ namespace Dark {
 		
 		inline void ResetRotation() { m_Rotation = 0.0f; }
 		inline void SetRotation(float rotation) { m_Rotation = rotation; RecalcViewMatrix(); }
-		inline float GetRotation() { return m_Rotation; }
+		inline float GetRotation() const { return m_Rotation; }
 
 		//getters for the matrices
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }

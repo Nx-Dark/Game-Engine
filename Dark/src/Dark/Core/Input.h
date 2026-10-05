@@ -14,8 +14,10 @@ namespace Dark {
 
 	public:
 
-		static bool IsKeyPressed(int keycode);
-		static bool IsMouseButtonPressed(int button);
+		static bool IsKeyPressed(KeyCode keycode);
+		static bool IsMouseButtonPressed(MouseCode button);
+		static bool IsGamePadButtonPressed(GamePadCode padcode);
+		static bool IsJoyStickButtonPressed(JoyStickCode joycode);
 		static std::pair<float, float> GetMousePos();
 		static float GetMouseX();
 		static float GetMouseY();

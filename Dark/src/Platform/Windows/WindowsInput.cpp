@@ -8,18 +8,28 @@
 
 namespace Dark {
 
-	bool Input::IsKeyPressed(int keycode)
+	bool Input::IsKeyPressed(KeyCode keycode)
 	{
 		auto window{ static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow()) };
-		auto state{ glfwGetKey(window, keycode) };
-		return state == DK_PRESS || state == DK_REPEAT;
+		auto state{ glfwGetKey(window, (int)keycode) };
+		return state == (int)DK_PRESS || state == (int)DK_REPEAT;
 	}
 
-	bool Input::IsMouseButtonPressed(int button)
+	bool Input::IsMouseButtonPressed(MouseCode button)
 	{
 		auto window{ static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow()) };
-		auto state{ glfwGetMouseButton(window, button) };
-		return state == DK_PRESS;
+		auto state{ glfwGetMouseButton(window, (int)button) };
+		return state == (int)DK_PRESS;
+	}
+
+	bool Input::IsGamePadButtonPressed(GamePadCode padcode)
+	{
+		return false;
+	}
+
+	bool Input::IsJoyStickButtonPressed(JoyStickCode joycode)
+	{
+		return false;
 	}
 
 	std::pair<float, float> Input::GetMousePos() {

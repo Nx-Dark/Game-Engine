@@ -1,39 +1,68 @@
 #pragma once
 
-#define DK_GAMEPAD_BUTTON_A               0
-#define DK_GAMEPAD_BUTTON_B               1
-#define DK_GAMEPAD_BUTTON_X               2
-#define DK_GAMEPAD_BUTTON_Y               3
-#define DK_GAMEPAD_BUTTON_LEFT_BUMPER     4
-#define DK_GAMEPAD_BUTTON_RIGHT_BUMPER    5
-#define DK_GAMEPAD_BUTTON_BACK            6
-#define DK_GAMEPAD_BUTTON_START           7
-#define DK_GAMEPAD_BUTTON_GUIDE           8
-#define DK_GAMEPAD_BUTTON_LEFT_THUMB      9
-#define DK_GAMEPAD_BUTTON_RIGHT_THUMB     10
-#define DK_GAMEPAD_BUTTON_DPAD_UP         11
-#define DK_GAMEPAD_BUTTON_DPAD_RIGHT      12
-#define DK_GAMEPAD_BUTTON_DPAD_DOWN       13
-#define DK_GAMEPAD_BUTTON_DPAD_LEFT       14
-#define DK_GAMEPAD_BUTTON_LAST            DK_GAMEPAD_BUTTON_DPAD_LEFT
+namespace Dark {
+	enum class GamePadCode : uint8_t
+	{
+		GAMEPAD_BUTTON_A            =    0 ,
+		GAMEPAD_BUTTON_B            =    1 ,
+		GAMEPAD_BUTTON_X            =    2 ,
+		GAMEPAD_BUTTON_Y            =    3 ,
+		GAMEPAD_BUTTON_LEFT_BUMPER  =    4 ,
+		GAMEPAD_BUTTON_RIGHT_BUMPER =    5 ,
+		GAMEPAD_BUTTON_BACK         =    6 ,
+		GAMEPAD_BUTTON_START        =    7 ,
+		GAMEPAD_BUTTON_GUIDE        =    8 ,
+		GAMEPAD_BUTTON_LEFT_THUMB   =    9 ,
+		GAMEPAD_BUTTON_RIGHT_THUMB  =    10,
+		GAMEPAD_BUTTON_DPAD_UP      =    11,
+		GAMEPAD_BUTTON_DPAD_RIGHT   =    12,
+		GAMEPAD_BUTTON_DPAD_DOWN    =    13,
+		GAMEPAD_BUTTON_DPAD_LEFT    =    14,
+		GAMEPAD_BUTTON_LAST         =    GAMEPAD_BUTTON_DPAD_LEFT,
 
-#define DK_GAMEPAD_BUTTON_CROSS       DK_GAMEPAD_BUTTON_A
-#define DK_GAMEPAD_BUTTON_CIRCLE      DK_GAMEPAD_BUTTON_B
-#define DK_GAMEPAD_BUTTON_SQUARE      DK_GAMEPAD_BUTTON_X
-#define DK_GAMEPAD_BUTTON_TRIANGLE    DK_GAMEPAD_BUTTON_Y
-/*! @} */
+		GAMEPAD_BUTTON_CROSS        = GAMEPAD_BUTTON_A,
+		GAMEPAD_BUTTON_CIRCLE       = GAMEPAD_BUTTON_B,
+		GAMEPAD_BUTTON_SQUARE       = GAMEPAD_BUTTON_X,
+		GAMEPAD_BUTTON_TRIANGLE     = GAMEPAD_BUTTON_Y,
 
-/*! @defgroup gamepad_axes Gamepad axes
- *  @brief Gamepad axes.
- *
- *  See @ref gamepad for how these are used.
- *
- *  @ingroup input
- *  @{ */
-#define DK_GAMEPAD_AXIS_LEFT_X        0
-#define DK_GAMEPAD_AXIS_LEFT_Y        1
-#define DK_GAMEPAD_AXIS_RIGHT_X       2
-#define DK_GAMEPAD_AXIS_RIGHT_Y       3
-#define DK_GAMEPAD_AXIS_LEFT_TRIGGER  4
-#define DK_GAMEPAD_AXIS_RIGHT_TRIGGER 5
-#define DK_GAMEPAD_AXIS_LAST          DK_GAMEPAD_AXIS_RIGHT_TRIGGER
+
+		GAMEPAD_AXIS_LEFT_X        = 0,
+		GAMEPAD_AXIS_LEFT_Y        = 1,
+		GAMEPAD_AXIS_RIGHT_X       = 2,
+		GAMEPAD_AXIS_RIGHT_Y       = 3,
+		GAMEPAD_AXIS_LEFT_TRIGGER  = 4,
+		GAMEPAD_AXIS_RIGHT_TRIGGER = 5,
+		GAMEPAD_AXIS_LAST          = GAMEPAD_AXIS_RIGHT_TRIGGER
+	};
+}
+
+#define DK_GAMEPAD_BUTTON_A             ::Dark::GamePadCode::GAMEPAD_BUTTON_A           
+#define DK_GAMEPAD_BUTTON_B             ::Dark::GamePadCode::GAMEPAD_BUTTON_B           
+#define DK_GAMEPAD_BUTTON_X             ::Dark::GamePadCode::GAMEPAD_BUTTON_X           
+#define DK_GAMEPAD_BUTTON_Y             ::Dark::GamePadCode::GAMEPAD_BUTTON_Y           
+#define DK_GAMEPAD_BUTTON_LEFT_BUMPER   ::Dark::GamePadCode::GAMEPAD_BUTTON_LEFT_BUMPER 
+#define DK_GAMEPAD_BUTTON_RIGHT_BUMPER  ::Dark::GamePadCode::GAMEPAD_BUTTON_RIGHT_BUMPER
+#define DK_GAMEPAD_BUTTON_BACK          ::Dark::GamePadCode::GAMEPAD_BUTTON_BACK        
+#define DK_GAMEPAD_BUTTON_START         ::Dark::GamePadCode::GAMEPAD_BUTTON_START       
+#define DK_GAMEPAD_BUTTON_GUIDE         ::Dark::GamePadCode::GAMEPAD_BUTTON_GUIDE       
+#define DK_GAMEPAD_BUTTON_LEFT_THUMB    ::Dark::GamePadCode::GAMEPAD_BUTTON_LEFT_THUMB  
+#define DK_GAMEPAD_BUTTON_RIGHT_THUMB   ::Dark::GamePadCode::GAMEPAD_BUTTON_RIGHT_THUMB 
+#define DK_GAMEPAD_BUTTON_DPAD_UP       ::Dark::GamePadCode::GAMEPAD_BUTTON_DPAD_UP     
+#define DK_GAMEPAD_BUTTON_DPAD_RIGHT    ::Dark::GamePadCode::GAMEPAD_BUTTON_DPAD_RIGHT  
+#define DK_GAMEPAD_BUTTON_DPAD_DOWN     ::Dark::GamePadCode::GAMEPAD_BUTTON_DPAD_DOWN   
+#define DK_GAMEPAD_BUTTON_DPAD_LEFT     ::Dark::GamePadCode::GAMEPAD_BUTTON_DPAD_LEFT   
+#define DK_GAMEPAD_BUTTON_LAST          ::Dark::GamePadCode::GAMEPAD_BUTTON_LAST        
+
+#define DK_GAMEPAD_BUTTON_CROSS       ::Dark::GamePadCode::GAMEPAD_BUTTON_CROSS   
+#define DK_GAMEPAD_BUTTON_CIRCLE      ::Dark::GamePadCode::GAMEPAD_BUTTON_CIRCLE  
+#define DK_GAMEPAD_BUTTON_SQUARE      ::Dark::GamePadCode::GAMEPAD_BUTTON_SQUARE  
+#define DK_GAMEPAD_BUTTON_TRIANGLE    ::Dark::GamePadCode::GAMEPAD_BUTTON_TRIANGLE
+
+
+#define DK_GAMEPAD_AXIS_LEFT_X        ::Dark::GamePadCode::GAMEPAD_AXIS_LEFT_X       
+#define DK_GAMEPAD_AXIS_LEFT_Y        ::Dark::GamePadCode::GAMEPAD_AXIS_LEFT_Y       
+#define DK_GAMEPAD_AXIS_RIGHT_X       ::Dark::GamePadCode::GAMEPAD_AXIS_RIGHT_X      
+#define DK_GAMEPAD_AXIS_RIGHT_Y       ::Dark::GamePadCode::GAMEPAD_AXIS_RIGHT_Y      
+#define DK_GAMEPAD_AXIS_LEFT_TRIGGER  ::Dark::GamePadCode::GAMEPAD_AXIS_LEFT_TRIGGER 
+#define DK_GAMEPAD_AXIS_RIGHT_TRIGGER ::Dark::GamePadCode::GAMEPAD_AXIS_RIGHT_TRIGGER
+#define DK_GAMEPAD_AXIS_LAST          ::Dark::GamePadCode::GAMEPAD_AXIS_LAST         

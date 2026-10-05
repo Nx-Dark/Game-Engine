@@ -2,10 +2,6 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#ifdef DARK_PLATFORM_WINDOWS
-#include <Windows.h>
-#endif
-
 #include <iostream>
 #include <functional>
 #include <utility>
@@ -13,11 +9,6 @@
 #include <memory>
 #include <chrono>
 #include <filesystem>
-
-#include "Dark/Core/Log.h"
-#include "Dark/Core/Core.h"
-
-#include "Dark/Debug/InstrumentationProfiler.h"
 
 #include <stack>
 #include <queue>
@@ -31,3 +22,12 @@
 #include <sstream>
 #include <fstream>
 #include <cstdint>
+
+#include "Dark/Core/Log.h"
+#include "Dark/Core/Core.h"
+
+#include "Dark/Debug/InstrumentationProfiler.h"
+
+#ifdef DARK_PLATFORM_WINDOWS
+	#include <Windows.h>
+#endif

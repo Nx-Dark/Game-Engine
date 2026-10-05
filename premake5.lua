@@ -25,12 +25,13 @@ IncludeDir["ImGui"] = "Dark/vendor/ImGui"
 IncludeDir["glm"] = "Dark/vendor/glm"
 IncludeDir["stb_image"] = "Dark/vendor/stb_image"
 IncludeDir["mini_audio"] = "Dark/vendor/miniaudio/includes"
+IncludeDir["ecs_entt"] = "Dark/vendor/EnTT/include"
 
 group "Dependencies"
-    includeexternal "Dark/vendor/GLFW"
-    includeexternal "Dark/vendor/GLAD"
-    includeexternal "Dark/vendor/ImGui"
-    includeexternal "Dark/vendor/miniaudio"
+    include "Dark/vendor/GLFW"
+    include "Dark/vendor/ImGui"
+    include "Dark/vendor/GLAD"
+    include "Dark/vendor/miniaudio"
 group ""
 
 project "Dark" 
@@ -49,10 +50,11 @@ project "Dark"
     files {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-        "%{prj.name}/vendor/stb_image/**.h",
-        "%{prj.name}/vendor/stb_image/**.cpp",
+        "%{prj.name}/vendor/stb_image/stb_image.h",
+        "%{prj.name}/vendor/stb_image/stb_image.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
-        "%{prj.name}/vendor/glm/glm/**.inl"
+        "%{prj.name}/vendor/glm/glm/**.inl",
+        "%{prj.name}/vendor/EnTT/include/ecs_entt.hpp"
     }
 
     includedirs {
@@ -63,7 +65,8 @@ project "Dark"
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
-        "%{IncludeDir.mini_audio}"
+        "%{IncludeDir.mini_audio}",
+        "%{IncludeDir.ecs_entt}"
     }
 
     links {
@@ -81,7 +84,6 @@ project "Dark"
 
         defines {
             "DARK_PLATFORM_WINDOWS",
-            "DARK_BUILD_DLL",
             "_GLFW_WIN32",
             "GLFW_INCLUDE_NONE"
         }
@@ -127,7 +129,8 @@ project "Ultra" -- Engine Editor
         "Dark/vendor/spdlog/include",
         "Dark/src",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.ImGui}"
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ecs_entt}"
     }
 
     links {
@@ -181,7 +184,8 @@ project "Sandbox"
         "Dark/vendor/spdlog/include",
         "Dark/src",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.ImGui}"
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ecs_entt}"
     }
 
     links {
