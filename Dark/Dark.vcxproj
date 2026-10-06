@@ -176,7 +176,6 @@
     <ClInclude Include="src\Dark\Events\KeyEvent.h" />
     <ClInclude Include="src\Dark\Events\MouseEvent.h" />
     <ClInclude Include="src\Dark\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Dark\Physics\Rect.h" />
     <ClInclude Include="src\Dark\Renderer\Buffer.h" />
     <ClInclude Include="src\Dark\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Dark\Renderer\GraphicsContext.h" />
@@ -190,6 +189,7 @@
     <ClInclude Include="src\Dark\Renderer\SubTexture.h" />
     <ClInclude Include="src\Dark\Renderer\Texture.h" />
     <ClInclude Include="src\Dark\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Dark\Scene\Components.h" />
     <ClInclude Include="src\Dark\Scene\Scene.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -631,7 +631,6 @@
     <ClCompile Include="src\Dark\Core\Window.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Dark\Physics\Rect.cpp" />
     <ClCompile Include="src\Dark\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Dark\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCamera.cpp" />

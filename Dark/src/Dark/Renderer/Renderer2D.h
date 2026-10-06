@@ -1,6 +1,5 @@
 
 #include "Dark/Core/Core.h"
-#include "Dark/Physics/Rect.h"
 #include "Dark/Renderer/OrthoGraphicCamera.h"
 
 #include "Dark/Renderer/Texture.h"
@@ -19,26 +18,31 @@ namespace Dark {
 		static void EndScene();
 		static void Flush();
 
-		//colored quad
-		static void DrawQuad(const ColorRect& colorRect);
-		static void DrawQuad(const ColorRect& colorRect, float depth);
+		//drawing with a transform
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+		static void DrawQuad(const glm::mat4& transform, Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawQuad(const glm::mat4& transform, Ref<SubTexture2D>& subTexture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
 
-		static void DrawRotatedQuad(const ColorRect& colorRect, float angleInRads);
-		static void DrawRotatedQuad(const ColorRect& colorRect, float depth, float angleInRads);
+		//colored quad
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
+
+		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, float angleInRads);
+		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float angleInRads);
 
 		//textured quad
-		static void DrawQuad(const Rect& rect, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
-		static void DrawQuad(const Rect& rect, float depth, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
 
-		static void DrawRotatedQuad(const Rect& rect, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
-		static void DrawRotatedQuad(const Rect& rect, float depth, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
 
 		//subtextured quad
-		static void DrawQuad(const Rect& rect, const Ref<SubTexture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
-		static void DrawQuad(const Rect& rect, float depth, const Ref<SubTexture2D>& texture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
 
-		static void DrawRotatedQuad(const Rect& rect, const Ref<SubTexture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
-		static void DrawRotatedQuad(const Rect& rect, float depth, const Ref<SubTexture2D>& texture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
+		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float angleInRads, const glm::vec4& tint = glm::vec4{ 1.0f }, float tiling_factor = 1.0f);
 
 
 		struct Statistics

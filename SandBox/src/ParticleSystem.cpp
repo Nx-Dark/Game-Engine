@@ -65,12 +65,7 @@ void ParticleSystem::OnRender(const Dark::Ref<Dark::Texture2D>& texture)
 
 		float size{ glm::lerp(particle.sizeEnd, particle.sizeBegin, life) };
 
-		Dark::Rect particle_rect{
-			particle.Position,
-			{size, size},
-		};
-
-		Dark::Renderer2D::DrawRotatedQuad(particle_rect, texture, particle.Rotation, color);
+		Dark::Renderer2D::DrawRotatedQuad(particle.Position, {size, size}, texture, particle.Rotation, color);
 	}
 }
 
@@ -86,12 +81,7 @@ void ParticleSystem::OnRender(const Dark::Ref<Dark::SubTexture2D>& subTexture)
 
 		float size{ glm::lerp(particle.sizeEnd, particle.sizeBegin, life) };
 
-		Dark::Rect particle_rect{
-			particle.Position,
-			{size, size},
-		};
-
-		Dark::Renderer2D::DrawRotatedQuad(particle_rect, subTexture, particle.Rotation, color);
+		Dark::Renderer2D::DrawRotatedQuad(particle.Position, {size, size}, subTexture, particle.Rotation, color);
 	}
 }
 

@@ -13,8 +13,6 @@
 #include "Dark/Core/Timer.h"
 #include "Dark/Core/DeltaTime.h"
 
-//----Physics--------------------------------
-#include "Dark/Physics/Rect.h"
 //-------------------------------------------
 
 //----Renderer---------------------------------
@@ -32,6 +30,10 @@
 
 #include "Dark/Renderer/OrthoGraphicCamera.h"
 #include "Dark/Renderer/OrthoGraphicCameraController.h"
+
+//--Entity Component System and Scene--
+#include "Dark/Scene/Scene.h"
+#include "Dark/Scene/Components.h"
 
 //audio
 #include "Dark/Audio/AudioMixer.h"
