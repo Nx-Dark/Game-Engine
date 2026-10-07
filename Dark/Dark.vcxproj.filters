@@ -1466,6 +1466,7 @@
     </ClInclude>
     <ClInclude Include="src\Dark\Scene\Scene.h" />
     <ClInclude Include="src\Dark\Scene\Components.h" />
+    <ClInclude Include="src\Dark\Scene\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Audio\AudioMixer.cpp">
@@ -1562,5 +1563,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\Scene\Scene.cpp" />
+    <ClCompile Include="src\Dark\Scene\Entity.cpp" />
   </ItemGroup>
 </Project>

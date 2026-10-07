@@ -34,6 +34,7 @@
 //--Entity Component System and Scene--
 #include "Dark/Scene/Scene.h"
 #include "Dark/Scene/Components.h"
+#include "Dark/Scene/Entity.h"
 
 //audio
 #include "Dark/Audio/AudioMixer.h"

@@ -18,6 +18,10 @@ namespace Dark {
 
 		Ref<AudioData> m_Music{};
 
+		Entity m_SquareEntity{};
+		
+		Ref<Scene> m_ActiveScene{};
+
 		bool m_ViewportFocused{};
 		bool m_ViewportHovered{};
 		glm::vec2 m_ViewportPanelSize{ 1.0f, 1.0f };

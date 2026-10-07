@@ -118,7 +118,7 @@ void SandBox2D::OnUpdate(Dark::DeltaTime dt)
 
 			if (m_TileHashMap.contains(tileC))
 			{
-				Dark::Renderer2D::DrawQuad({ {x - s_TileMapWidth / 2.0f,  s_TileMapHeight - y - s_TileMapHeight / 2.0f} }, m_TileHashMap[tileC]);
+				Dark::Renderer2D::DrawQuad({ x - s_TileMapWidth / 2.0f,  s_TileMapHeight - y - s_TileMapHeight / 2.0f }, { 1.0f, 1.0f }, m_TileHashMap[tileC]);
 			}
 		}
 	}

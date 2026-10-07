@@ -190,6 +190,7 @@
     <ClInclude Include="src\Dark\Renderer\Texture.h" />
     <ClInclude Include="src\Dark\Renderer\VertexArray.h" />
     <ClInclude Include="src\Dark\Scene\Components.h" />
+    <ClInclude Include="src\Dark\Scene\Entity.h" />
     <ClInclude Include="src\Dark\Scene\Scene.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -643,6 +644,7 @@
     <ClCompile Include="src\Dark\Renderer\SubTexture.cpp" />
     <ClCompile Include="src\Dark\Renderer\Texture.cpp" />
     <ClCompile Include="src\Dark\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Dark\Scene\Entity.cpp" />
     <ClCompile Include="src\Dark\Scene\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />

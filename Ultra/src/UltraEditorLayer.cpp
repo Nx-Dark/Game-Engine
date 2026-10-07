@@ -53,6 +53,12 @@ namespace Dark {
 
 		m_Music = Dark::AudioData::Create("Assets/audio/music.mp3", Dark::AudioFlag::FLAG_STREAM);
 		//m_Music->PlayAudio();
+
+		m_ActiveScene = CreateRef<Scene>();
+
+		m_SquareEntity = m_ActiveScene->CreateEntity("Orange Square");
+		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.5f, 0.0f, 1.0f });
+
 	}
 
 	void UltraEditorLayer::OnDetach()
@@ -68,14 +74,10 @@ namespace Dark {
 	void UltraEditorLayer::OnUpdate(Dark::DeltaTime dt)
 	{
 
-		static float musicTime{ 0.0f };
-		musicTime += dt;
-
-		if (musicTime >= 10.0f && m_Music->isAudioPlaying()) m_Music->StopAudio();
-
 		//camera Update
 		if(m_ViewportFocused)
 			m_CameraController.OnUpdate(dt);
+
 
 		//Rendering stuff
 		Dark::Renderer2D::ResetStats();
@@ -86,18 +88,8 @@ namespace Dark {
 
 		Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		for (uint32_t y{}; y < s_TileMapHeight; y++)
-		{
-			for (uint32_t x{}; x < s_TileMapWidth; x++)
-			{
-				const char tileC{ s_TileMap[(y * s_TileMapWidth) + x] };
-
-				if (m_TileHashMap.contains(tileC))
-				{
-					Dark::Renderer2D::DrawQuad({ {x - s_TileMapWidth / 2.0f,  s_TileMapHeight - y - s_TileMapHeight / 2.0f} }, m_TileHashMap[tileC]);
-				}
-			}
-		}
+		// Updatting and Rendering the Scene
+		m_ActiveScene->OnUpdate(dt);
 
 		Dark::Renderer2D::EndScene();
 
@@ -168,7 +160,14 @@ namespace Dark {
 			ImGui::Text("Quads: %d", stats.QuadCount);
 			ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
 			ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
+
+			ImGui::Separator();
+
+			ImGui::Text(m_SquareEntity.GetComponents<TagComponent>().Tag.c_str());
+			ImGui::ColorEdit4("Color: ", glm::value_ptr(m_SquareEntity.GetComponents<SpriteRendererComponent>().Color));
+
 		ImGui::End();
+		
 
 		//viewport and framebuffer bullshit
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });

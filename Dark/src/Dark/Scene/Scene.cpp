@@ -1,5 +1,6 @@
 #include "dpch.h"
 #include "Scene.h"
+#include "Entity.h"
 
 #include <glm/glm.hpp>
 
@@ -11,19 +12,13 @@ namespace Dark
 {
 
 	Scene::Scene()
-	{
-
-
+	{	
+		
 	}
 
 	Scene::~Scene()
 	{
-
-	}
-
-	entt::entity Scene::CreateEntity()
-	{
-		return m_Registry.create();
+		
 	}
 
 	void Scene::OnUpdate(DeltaTime dt)
@@ -31,10 +26,20 @@ namespace Dark
 		auto group{ m_Registry.group<TransformComponent, SpriteRendererComponent>() };
 		for (entt::entity entity : group)
 		{
-			auto [transform, sprtieRenderer] { group.get<TransformComponent, SpriteRendererComponent>(entity) };
+			auto&& [transform, sprtieRenderer] { group.get<TransformComponent, SpriteRendererComponent>(entity) };
 
 			Renderer2D::DrawQuad(transform, sprtieRenderer.Color);
 		}
+	}
+	
+	//Creating the 
+	Entity Scene::CreateEntity(const std::string& name)
+	{
+		Entity e{ m_Registry.create(), this };
+		e.AddComponent<TransformComponent>();
+		TagComponent& tag{ e.AddComponent<TagComponent>() };
+		tag.Tag = name.empty() ? "Entity" : name;
+		return e;
 	}
 
 }
