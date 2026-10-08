@@ -11,7 +11,7 @@ namespace Dark
 	{
 	private:
 
-		entt::entity m_Handle{0};
+		entt::entity m_Handle{entt::null};
 
 		Scene* m_SceneRef{ nullptr };
 
@@ -39,6 +39,8 @@ namespace Dark
 		decltype(auto) TryGetComponents();
 
 		inline entt::entity GetEntityHandle() { return m_Handle; }
+
+		inline operator bool() { return m_Handle != entt::null; }
 
 	};
 

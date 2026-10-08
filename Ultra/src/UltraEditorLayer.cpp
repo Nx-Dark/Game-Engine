@@ -59,6 +59,12 @@ namespace Dark {
 		m_SquareEntity = m_ActiveScene->CreateEntity("Orange Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.5f, 0.0f, 1.0f });
 
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f)).Primary = m_PrimaryCamera;
+
+		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
+		m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f)).Primary = !m_PrimaryCamera;
+
 	}
 
 	void UltraEditorLayer::OnDetach()
@@ -74,6 +80,15 @@ namespace Dark {
 	void UltraEditorLayer::OnUpdate(Dark::DeltaTime dt)
 	{
 
+		//resizing the framebuffer
+		if (auto frameBufferSpec{ m_Framebuffer->GetSpecifications() };
+			m_ViewportPanelSize.x != 0.0f && m_ViewportPanelSize.y != 0.0f
+			&& (frameBufferSpec.Width != m_ViewportPanelSize.x || frameBufferSpec.Height != m_ViewportPanelSize.y))
+		{
+			m_Framebuffer->ReSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+			m_CameraController.OnResize(m_ViewportPanelSize.x, m_ViewportPanelSize.y);
+		}
+
 		//camera Update
 		if(m_ViewportFocused)
 			m_CameraController.OnUpdate(dt);
@@ -86,12 +101,12 @@ namespace Dark {
 
 		Dark::Renderer::Clear({ 0.1f, 0.1f, 0.1f, 1.0f });
 
-		Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		//Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		// Updatting and Rendering the Scene
 		m_ActiveScene->OnUpdate(dt);
 
-		Dark::Renderer2D::EndScene();
+		//Dark::Renderer2D::EndScene();
 
 		m_Framebuffer->UnBind();
 	}
@@ -161,10 +176,23 @@ namespace Dark {
 			ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
 			ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
 
-			ImGui::Separator();
+			if (m_SquareEntity)
+			{
 
-			ImGui::Text(m_SquareEntity.GetComponents<TagComponent>().Tag.c_str());
-			ImGui::ColorEdit4("Color: ", glm::value_ptr(m_SquareEntity.GetComponents<SpriteRendererComponent>().Color));
+				ImGui::Separator();
+
+				ImGui::Text(m_SquareEntity.GetComponents<TagComponent>().Tag.c_str());
+				ImGui::ColorEdit4("Color: ", glm::value_ptr(m_SquareEntity.GetComponents<SpriteRendererComponent>().Color));
+
+			}
+
+			ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponents<TransformComponent>().Transform[3]));
+
+			if (ImGui::Checkbox("Main Camera", &m_PrimaryCamera))
+			{
+				m_CameraEntity.GetComponents<CameraComponent>().Primary = m_PrimaryCamera;
+				m_SecondCamera.GetComponents<CameraComponent>().Primary = !m_PrimaryCamera;
+			}
 
 		ImGui::End();
 		
@@ -180,11 +208,8 @@ namespace Dark {
 
 			ImVec2 viewportPanelSize{ ImGui::GetContentRegionAvail() };
 
-			if (m_ViewportPanelSize != glm::vec2{ viewportPanelSize.x, viewportPanelSize.y }
-			&& viewportPanelSize.x > 0.0f && viewportPanelSize.y > 0.0f) {
+			if (m_ViewportPanelSize != glm::vec2{ viewportPanelSize.x, viewportPanelSize.y }) {
 				m_ViewportPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
-				m_Framebuffer->ReSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
-				m_CameraController.OnResize(m_ViewportPanelSize.x, m_ViewportPanelSize.y);
 			}
 
 			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0.0f, 1.0f }, { 1.0f, 0.0f });

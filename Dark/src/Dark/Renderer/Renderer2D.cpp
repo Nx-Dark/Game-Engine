@@ -219,6 +219,21 @@ namespace Dark {
 
 	}
 
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		DARK_PROFILE_FUNCTION();
+
+		glm::mat4 viewProj{ camera.GetProjection() * glm::inverse(transform) };
+
+		s_RendererData.TextureShader->Bind();
+		s_RendererData.TextureShader->SetMat4("u_ProjectionView", viewProj);
+
+		s_RendererData.QuadIndexCount = 0;
+		s_RendererData.QuadVertexBufferPtr = s_RendererData.QuadVertexBufferBase;
+
+		s_RendererData.TextureSlotIndex = 1;
+	}
+
 	void Renderer2D::BeginScene(const OrthoGraphicCamera& camera)
 	{
 		DARK_PROFILE_FUNCTION();

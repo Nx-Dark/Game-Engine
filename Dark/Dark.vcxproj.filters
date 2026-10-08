@@ -1467,6 +1467,7 @@
     <ClInclude Include="src\Dark\Scene\Scene.h" />
     <ClInclude Include="src\Dark\Scene\Components.h" />
     <ClInclude Include="src\Dark\Scene\Entity.h" />
+    <ClInclude Include="src\Dark\Renderer\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Audio\AudioMixer.cpp">

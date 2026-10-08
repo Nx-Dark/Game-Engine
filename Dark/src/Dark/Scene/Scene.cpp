@@ -23,12 +23,41 @@ namespace Dark
 
 	void Scene::OnUpdate(DeltaTime dt)
 	{
-		auto group{ m_Registry.group<TransformComponent, SpriteRendererComponent>() };
-		for (entt::entity entity : group)
-		{
-			auto&& [transform, sprtieRenderer] { group.get<TransformComponent, SpriteRendererComponent>(entity) };
 
-			Renderer2D::DrawQuad(transform, sprtieRenderer.Color);
+		//rendering the scene
+		Camera* mainCamera{ nullptr };
+		glm::mat4* cameraTransform{ nullptr };
+		{
+			auto view { m_Registry.view<TransformComponent, CameraComponent>() };
+			for (auto entity : view)
+			{
+				auto [transform, camera] { view.get<TransformComponent, CameraComponent>(entity) };
+
+				if (camera.Primary)
+				{
+					mainCamera = &camera.Camera;
+					cameraTransform = &transform.Transform;
+					break;
+				}
+
+			}
+		}
+
+		if (mainCamera && cameraTransform)
+		{
+			{
+				Renderer2D::BeginScene(*mainCamera, *cameraTransform);
+
+				auto group{ m_Registry.group<TransformComponent, SpriteRendererComponent>() };
+				for (auto entity : group)
+				{
+					auto [transform, spriteRenderer] { group.get<TransformComponent, SpriteRendererComponent>(entity) };
+
+					Renderer2D::DrawQuad(transform, spriteRenderer.Color);
+				}
+
+				Renderer2D::EndScene();
+			}
 		}
 	}
 	
@@ -42,4 +71,7 @@ namespace Dark
 		return e;
 	}
 
+	//entt::registry::view<>() is faster for single components
+	//entt::registry::group<>() is faster for multiple component
+	
 }

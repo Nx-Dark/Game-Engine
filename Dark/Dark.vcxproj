@@ -177,6 +177,7 @@
     <ClInclude Include="src\Dark\Events\MouseEvent.h" />
     <ClInclude Include="src\Dark\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Dark\Renderer\Buffer.h" />
+    <ClInclude Include="src\Dark\Renderer\Camera.h" />
     <ClInclude Include="src\Dark\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Dark\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Dark\Renderer\OrthoGraphicCamera.h" />

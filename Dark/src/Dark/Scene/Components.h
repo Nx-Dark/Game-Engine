@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "Dark/Renderer/Camera.h"
 
 namespace Dark {
 
@@ -35,13 +36,25 @@ namespace Dark {
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
-			: Color{ color } {
-		}
+			: Color{ color } { }
 
 		inline operator glm::vec4& () { return Color; }
 		inline operator const glm::vec4& () const { return Color; }
 	};
 
+	struct CameraComponent
+	{
+		Camera Camera;
+		bool Primary{ true }; //TODO: Move this to Scene
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const glm::mat4& projection)
+			: Camera{ projection } { }
+
+		inline operator const glm::mat4& () const { return Camera.GetProjection(); };
+
+	};
 
 
 }

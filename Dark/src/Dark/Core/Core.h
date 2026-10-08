@@ -99,7 +99,7 @@
 
 #define BIT(x) (1 << x)
 
-#define DARK_BIND_EVENT_FN(function) std::bind(&function, this, std::placeholders::_1)
+#define DARK_BIND_EVENT_FN(function) [this]<typename... Args>(Args&&... args) -> decltype(auto) { return this->function(std::forward<Args>(args)...); }
 
 namespace Dark {
 
