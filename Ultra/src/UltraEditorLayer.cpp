@@ -60,10 +60,11 @@ namespace Dark {
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.5f, 0.0f, 1.0f });
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
-		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f)).Primary = m_PrimaryCamera;
+		m_CameraEntity.AddComponent<CameraComponent>().Primary = m_PrimaryCamera;
 
 		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
-		m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f)).Primary = !m_PrimaryCamera;
+		m_SecondCamera.AddComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+		m_SecondCamera.GetComponents<CameraComponent>().Camera.SetOrthographicSize(2.0f);
 
 	}
 
@@ -80,13 +81,16 @@ namespace Dark {
 	void UltraEditorLayer::OnUpdate(Dark::DeltaTime dt)
 	{
 
-		//resizing the framebuffer
+		//resizing the framebuffer and the viewport panel
 		if (auto frameBufferSpec{ m_Framebuffer->GetSpecifications() };
 			m_ViewportPanelSize.x != 0.0f && m_ViewportPanelSize.y != 0.0f
 			&& (frameBufferSpec.Width != m_ViewportPanelSize.x || frameBufferSpec.Height != m_ViewportPanelSize.y))
 		{
 			m_Framebuffer->ReSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
 			m_CameraController.OnResize(m_ViewportPanelSize.x, m_ViewportPanelSize.y);
+
+			//resizing the viewport of the current active scene;
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
 		}
 
 		//camera Update
@@ -193,6 +197,14 @@ namespace Dark {
 				m_CameraEntity.GetComponents<CameraComponent>().Primary = m_PrimaryCamera;
 				m_SecondCamera.GetComponents<CameraComponent>().Primary = !m_PrimaryCamera;
 			}
+
+			{
+				auto& camera{ m_SecondCamera.GetComponents<CameraComponent>().Camera };
+				float orthoSize{ camera.GetOrthographicSize() };
+				if (ImGui::DragFloat("CameraB OrthoSize: ", &orthoSize, 0.5f))
+					camera.SetOrthographicSize(orthoSize);
+
+			} 
 
 		ImGui::End();
 		

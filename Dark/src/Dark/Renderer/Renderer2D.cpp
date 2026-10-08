@@ -219,7 +219,7 @@ namespace Dark {
 
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform) //this transform is the view matrix which defines the camera's oreintation
 	{
 		DARK_PROFILE_FUNCTION();
 

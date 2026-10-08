@@ -1468,6 +1468,7 @@
     <ClInclude Include="src\Dark\Scene\Components.h" />
     <ClInclude Include="src\Dark\Scene\Entity.h" />
     <ClInclude Include="src\Dark\Renderer\Camera.h" />
+    <ClInclude Include="src\Dark\Scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Audio\AudioMixer.cpp">
@@ -1565,5 +1566,6 @@
     </ClCompile>
     <ClCompile Include="src\Dark\Scene\Scene.cpp" />
     <ClCompile Include="src\Dark\Scene\Entity.cpp" />
+    <ClCompile Include="src\Dark\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

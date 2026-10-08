@@ -193,6 +193,7 @@
     <ClInclude Include="src\Dark\Scene\Components.h" />
     <ClInclude Include="src\Dark\Scene\Entity.h" />
     <ClInclude Include="src\Dark\Scene\Scene.h" />
+    <ClInclude Include="src\Dark\Scene\SceneCamera.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
@@ -647,6 +648,7 @@
     <ClCompile Include="src\Dark\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Dark\Scene\Entity.cpp" />
     <ClCompile Include="src\Dark\Scene\Scene.cpp" />
+    <ClCompile Include="src\Dark\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />

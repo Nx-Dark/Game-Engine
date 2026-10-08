@@ -21,6 +21,24 @@ namespace Dark
 		
 	}
 
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		//setting the projection of the non fixed aspect ratio camera components
+		{
+			auto view{ m_Registry.view<CameraComponent>() };
+			for (auto entity : view)
+			{
+				auto& cameraComp{ view.get<CameraComponent>(entity) };
+				if (!cameraComp.FixedAspectRatio) {
+					cameraComp.Camera.SetViewportSize(width, height);
+				}
+			}
+		}
+	}
+
 	void Scene::OnUpdate(DeltaTime dt)
 	{
 

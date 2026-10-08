@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "Dark/Renderer/Camera.h"
+#include "Dark/Scene/SceneCamera.h"
 
 namespace Dark {
 
@@ -44,15 +44,12 @@ namespace Dark {
 
 	struct CameraComponent
 	{
-		Camera Camera;
+		SceneCamera Camera;
 		bool Primary{ true }; //TODO: Move this to Scene
+		bool FixedAspectRatio{ false };
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& projection)
-			: Camera{ projection } { }
-
-		inline operator const glm::mat4& () const { return Camera.GetProjection(); };
 
 	};
 
