@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 #include "Dark/Scene/SceneCamera.h"
+#include "Dark/Scene/ScriptableEntity.h"
+#include "Dark/Core/DeltaTime.h"
 
 namespace Dark {
 
@@ -51,6 +53,32 @@ namespace Dark {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 
+	};
+
+	//script component
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* Instance{ nullptr };
+
+		//function pointers to the corresponding functions
+		std::function<void()> InstantiateFunction{};
+		std::function<void()> DestroyInstanceFunction{};
+
+		std::function<void(ScriptableEntity*)> OnCreateFunction{};
+		std::function<void(ScriptableEntity*)> OnDestroyFunction{};
+		std::function<void(ScriptableEntity*, DeltaTime)> OnUpdateFunction{};
+
+		//this T type is going to be at the core an ScriptableEntity
+		template<typename T>
+		void Bind()
+		{
+			InstantiateFunction = [&]() { Instance = new T(); };
+			DestroyInstanceFunction = [&]() { delete ((T*)Instance); Instance = nullptr; };
+
+			OnCreateFunction = [](ScriptableEntity* instance) { ((T*)instance)->OnCreate(); };
+			OnDestroyFunction = [](ScriptableEntity* instance) { ((T*)instance)->OnDestroy(); };
+			OnUpdateFunction = [](ScriptableEntity* instance, DeltaTime dt) { ((T*)instance)->OnUpdate(dt); };
+		}
 	};
 
 

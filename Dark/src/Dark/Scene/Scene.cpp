@@ -42,6 +42,20 @@ namespace Dark
 	void Scene::OnUpdate(DeltaTime dt)
 	{
 
+		//updating the scripts
+		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+		{
+			if (!nsc.Instance)
+			{
+				nsc.InstantiateFunction();
+				nsc.Instance->m_Entity = Entity{ entity, this };
+				nsc.OnCreateFunction(nsc.Instance);
+			}
+
+			nsc.OnUpdateFunction(nsc.Instance, dt);
+
+		});
+
 		//rendering the scene
 		Camera* mainCamera{ nullptr };
 		glm::mat4* cameraTransform{ nullptr };
@@ -61,6 +75,7 @@ namespace Dark
 			}
 		}
 
+		//rendering the scene
 		if (mainCamera && cameraTransform)
 		{
 			{

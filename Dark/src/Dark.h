@@ -35,6 +35,7 @@
 #include "Dark/Scene/Scene.h"
 #include "Dark/Scene/Components.h"
 #include "Dark/Scene/Entity.h"
+#include "Dark/Scene/ScriptableEntity.h"
 
 //audio
 #include "Dark/Audio/AudioMixer.h"
