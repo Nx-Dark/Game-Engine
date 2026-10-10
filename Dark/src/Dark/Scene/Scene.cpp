@@ -45,14 +45,15 @@ namespace Dark
 		//updating the scripts
 		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 		{
+			//TODO: Move the instantiation of the scripts to OnSceneCreate during runtime, rn we dont have a runtime
 			if (!nsc.Instance)
 			{
-				nsc.InstantiateFunction();
+				nsc.Instance = nsc.InstantiateScript();
 				nsc.Instance->m_Entity = Entity{ entity, this };
-				nsc.OnCreateFunction(nsc.Instance);
+				nsc.Instance->OnCreate();
 			}
 
-			nsc.OnUpdateFunction(nsc.Instance, dt);
+			nsc.Instance->OnUpdate(dt);
 
 		});
 

@@ -14,7 +14,15 @@ namespace Dark
 
 		friend class Scene;
 
+	protected:
+
+		virtual void OnCreate() {}
+		virtual void OnDestroy() {}
+		virtual void OnUpdate(DeltaTime dt) {}
+
 	public:
+
+		virtual ~ScriptableEntity() {}
 
 		template<typename... T>
 		inline bool HasAllofComponent()
