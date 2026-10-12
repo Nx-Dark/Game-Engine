@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Dark.h>
+#include "Dark.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Dark {
 
@@ -28,6 +29,9 @@ namespace Dark {
 		bool m_ViewportFocused{};
 		bool m_ViewportHovered{};
 		glm::vec2 m_ViewportPanelSize{ 1.0f, 1.0f };
+
+		//panels
+		SceneHierarchyPanel m_SceneHierarchyPanel{};
 
 	public:
 		UltraEditorLayer();

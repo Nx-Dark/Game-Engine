@@ -66,6 +66,57 @@ namespace Dark {
 		m_SecondCamera.AddComponent<CameraComponent>().Primary = !m_PrimaryCamera;
 		m_SecondCamera.GetComponents<CameraComponent>().Camera.SetOrthographicSize(2.0f);
 
+		class CameraController : public ScriptableEntity
+		{
+
+		public:
+			virtual void OnCreate() override
+			{
+				DARK_CORE_WARN("CameraController Script Instantiated!");
+			}
+
+			virtual void OnDestroy() override
+			{
+			}
+
+			virtual void OnUpdate(DeltaTime dt) override
+			{
+
+				auto& transform{ GetComponents<TransformComponent>().Transform };
+				const float speed{ 5.0f };
+
+				auto& camComp{ GetComponents<CameraComponent>() };
+
+				if (camComp.Primary) {
+
+					if (Input::IsKeyPressed(KeyCode::KEY_A))
+					{
+						transform[3][0] -= speed * dt;
+					}
+					if (Input::IsKeyPressed(KeyCode::KEY_D))
+					{
+						transform[3][0] += speed * dt;
+					}
+					if (Input::IsKeyPressed(KeyCode::KEY_W))
+					{
+						transform[3][1] += speed * dt;
+					}
+					if (Input::IsKeyPressed(KeyCode::KEY_S))
+					{
+						transform[3][1] -= speed * dt;
+					}
+
+				}
+
+			}
+		};
+
+		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		//panels
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
 	}
 
 	void UltraEditorLayer::OnDetach()
@@ -140,7 +191,7 @@ namespace Dark {
 			window_flags |= ImGuiWindowFlags_NoBackground;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("DockSpace", &dockspaceOpen, window_flags);
+		ImGui::Begin("DockSpace", &dockspaceOpen, window_flags); //begining dockspace
 		ImGui::PopStyleVar();
 
 		if (opt_fullscreen)
@@ -229,6 +280,10 @@ namespace Dark {
 		ImGui::End();
 		ImGui::PopStyleVar();
 
+		//scene hierarchy panel
+		m_SceneHierarchyPanel.OnImGuiRender();
+
+		//End of dockspace
 		ImGui::End();
 	}
 }
