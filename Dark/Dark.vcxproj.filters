@@ -22,11 +22,11 @@
     <Filter Include="src\Dark\ImGui">
       <UniqueIdentifier>{28809A77-144E-8E7D-FDE1-FEA3E94E6AE2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Dark\Physics">
-      <UniqueIdentifier>{F0C5F0DA-DCBE-0F2D-05F1-F4B1F148EF38}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Dark\Renderer">
       <UniqueIdentifier>{E455E40F-506C-E2A5-99E3-6DC70539B32D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Dark\Scene">
+      <UniqueIdentifier>{1B784A78-0746-3E7E-F0D9-AEA4DC461AE3}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
@@ -138,6 +138,9 @@
     <ClInclude Include="src\Dark\Renderer\Buffer.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dark\Renderer\Camera.h">
+      <Filter>src\Dark\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Dark\Renderer\Framebuffer.h">
       <Filter>src\Dark\Renderer</Filter>
     </ClInclude>
@@ -173,6 +176,21 @@
     </ClInclude>
     <ClInclude Include="src\Dark\Renderer\VertexArray.h">
       <Filter>src\Dark\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Scene\Components.h">
+      <Filter>src\Dark\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Scene\Entity.h">
+      <Filter>src\Dark\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Scene\Scene.h">
+      <Filter>src\Dark\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Scene\SceneCamera.h">
+      <Filter>src\Dark\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Scene\ScriptableEntity.h">
+      <Filter>src\Dark\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1464,12 +1482,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Scene\Scene.h" />
-    <ClInclude Include="src\Dark\Scene\Components.h" />
-    <ClInclude Include="src\Dark\Scene\Entity.h" />
-    <ClInclude Include="src\Dark\Renderer\Camera.h" />
-    <ClInclude Include="src\Dark\Scene\SceneCamera.h" />
-    <ClInclude Include="src\Dark\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Audio\AudioMixer.cpp">
@@ -1532,6 +1544,15 @@
     <ClCompile Include="src\Dark\Renderer\VertexArray.cpp">
       <Filter>src\Dark\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Dark\Scene\Entity.cpp">
+      <Filter>src\Dark\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Scene\Scene.cpp">
+      <Filter>src\Dark\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Scene\SceneCamera.cpp">
+      <Filter>src\Dark\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1565,8 +1586,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dark\Scene\Scene.cpp" />
-    <ClCompile Include="src\Dark\Scene\Entity.cpp" />
-    <ClCompile Include="src\Dark\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>
