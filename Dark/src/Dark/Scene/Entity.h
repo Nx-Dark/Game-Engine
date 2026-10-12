@@ -40,7 +40,11 @@ namespace Dark
 
 		inline entt::entity GetEntityHandle() { return m_Handle; }
 
-		inline operator bool() { return m_Handle != entt::null; }
+		inline operator bool() const { return m_Handle != entt::null; }
+		inline operator uint32_t() const { return (uint32_t)m_Handle; }
+
+		inline bool operator==(const Entity& other) const { return m_Handle == other.m_Handle && m_SceneRef == other.m_SceneRef; }
+		inline bool operator!=(const Entity& other) const { return !(*this == other); }
 
 	};
 

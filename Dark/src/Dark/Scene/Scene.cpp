@@ -60,38 +60,33 @@ namespace Dark
 		//rendering the scene
 		Camera* mainCamera{ nullptr };
 		glm::mat4* cameraTransform{ nullptr };
+		auto view{ m_Registry.view<TransformComponent, CameraComponent>() };
+		for (const auto entity : view)
 		{
-			auto view { m_Registry.view<TransformComponent, CameraComponent>() };
-			for (auto entity : view)
+			auto [transform, camera] { m_Registry.get<TransformComponent, CameraComponent>(entity) };
+
+			if (camera.Primary)
 			{
-				auto [transform, camera] { view.get<TransformComponent, CameraComponent>(entity) };
-
-				if (camera.Primary)
-				{
-					mainCamera = &camera.Camera;
-					cameraTransform = &transform.Transform;
-					break;
-				}
-
+				mainCamera = &camera.Camera;
+				cameraTransform = &transform.Transform;
+				break;
 			}
+
 		}
 
 		//rendering the scene
 		if (mainCamera && cameraTransform)
 		{
+			Renderer2D::BeginScene(*mainCamera, *cameraTransform);
+
+			m_Registry.group<TransformComponent, SpriteRendererComponent>().each([](const auto entity, auto& tc, auto& src) 
 			{
-				Renderer2D::BeginScene(*mainCamera, *cameraTransform);
+					
+				Renderer2D::DrawQuad(tc.Transform, src.Color);
 
-				auto group{ m_Registry.group<TransformComponent, SpriteRendererComponent>() };
-				for (auto entity : group)
-				{
-					auto [transform, spriteRenderer] { group.get<TransformComponent, SpriteRendererComponent>(entity) };
+			});
 
-					Renderer2D::DrawQuad(transform, spriteRenderer.Color);
-				}
-
-				Renderer2D::EndScene();
-			}
+			Renderer2D::EndScene();
 		}
 	}
 	
