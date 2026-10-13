@@ -224,29 +224,13 @@ namespace Dark {
 			ImGui::EndMenuBar();
 		}
 
-		ImGui::Begin("Settings");
+		ImGui::Begin("Stats");
 			auto stats = Dark::Renderer2D::GetStats();
-			ImGui::Text("Renderer2D Stats:");
+			ImGui::Text("Stats:");
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 			ImGui::Text("Quads: %d", stats.QuadCount);
 			ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
 			ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
-
-			if (m_SquareEntity)
-			{
-
-				ImGui::Separator();
-
-				ImGui::Text(m_SquareEntity.GetComponents<TagComponent>().Tag.c_str());
-				ImGui::ColorEdit4("Color: ", glm::value_ptr(m_SquareEntity.GetComponents<SpriteRendererComponent>().Color));
-
-			}
-
-			if (ImGui::Checkbox("Main Camera", &m_PrimaryCamera))
-			{
-				m_CameraEntity.GetComponents<CameraComponent>().Primary = m_PrimaryCamera;
-				m_SecondCamera.GetComponents<CameraComponent>().Primary = !m_PrimaryCamera;
-			}
 
 		ImGui::End();
 		

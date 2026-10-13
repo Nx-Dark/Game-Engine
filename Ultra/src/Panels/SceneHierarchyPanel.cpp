@@ -200,6 +200,23 @@ namespace Dark
 			ImGui::Separator();
 			ImGui::Spacing();
 		}
+
+		if (entity.HasAnyofComponent<SpriteRendererComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+			{
+
+				auto& spriteRenderer{ entity.GetComponents<SpriteRendererComponent>() };
+				ImGui::ColorEdit4("Color", glm::value_ptr(spriteRenderer.Color));
+
+				//pop
+				ImGui::TreePop();
+
+			}
+
+			ImGui::Separator();
+		}
+
 	}
 
 }
