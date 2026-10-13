@@ -14,6 +14,8 @@ namespace Dark
 	class DARK_API Scene
 	{
 
+	public:
+
 	private:
 
 		//container where Entity ID's and the Componenet data is stored!;

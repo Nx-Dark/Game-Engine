@@ -49,6 +49,7 @@ namespace Dark {
 		SceneCamera Camera;
 		bool Primary{ true }; //TODO: Move this to Scene
 		bool FixedAspectRatio{ false };
+		float Speed{ 1.0f };
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;

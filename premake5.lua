@@ -107,7 +107,7 @@ project "Dark"
     filter "configurations:Dist"
         defines "DARK_DIST"
         runtime "Release"
-        optimize "on"
+        optimize "Full"
         incrementallink "off"
 
 project "Ultra" -- Engine Editor

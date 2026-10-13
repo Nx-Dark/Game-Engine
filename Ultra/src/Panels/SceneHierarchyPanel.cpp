@@ -64,25 +64,12 @@ namespace Dark
 			m_EntitySelection = entity;
 		}
 
-		if (treeNodeExpanded)
-		{
-
-			ImGuiTreeNodeFlags flags{
-				ImGuiTreeNodeFlags_OpenOnArrow
-			};
-
-			bool treeNodeExpanded{ ImGui::TreeNodeEx((void*)7850987243, flags, "%s", tag.c_str()) };
-
-			if (treeNodeExpanded)
-				ImGui::TreePop();
-
-			ImGui::TreePop();
-		}
-
 	}
 
+	//helper function to draw the components of currently selected entity in the properties panel
 	void SceneHierarchyPanel::DrawEntityComponents(Entity entity)
 	{
+		//tag component
 		if (entity.HasAnyofComponent<TagComponent>())
 		{
 			auto& tag{ entity.GetComponents<TagComponent>().Tag };
@@ -99,6 +86,7 @@ namespace Dark
 			ImGui::Spacing();
 		}
 
+		//transform component(TODO: Add rotation, Scaling and stuff);
 		if (entity.HasAnyofComponent<TransformComponent>())
 		{
 
@@ -111,6 +99,106 @@ namespace Dark
 				ImGui::TreePop();
 
 			}
+
+			ImGui::Separator();
+			ImGui::Spacing();
+		}
+
+		//camera component
+		if (entity.HasAnyofComponent<CameraComponent>())
+		{
+
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			{
+
+				auto& cameraComponent{ entity.GetComponents<CameraComponent>() };
+				auto& camera{ cameraComponent.Camera };
+
+				static const char* ProjectionTypeStrings[]{ "Orthographic", "Perspective" };
+				const char* currentProjectionTypeString{ ProjectionTypeStrings[(int)camera.GetProjectionType()] };
+
+				//primary camera toggle
+				ImGui::Checkbox("Primary", &cameraComponent.Primary);
+				//fixed aspect ratio
+				ImGui::Checkbox("FixedAspectRatio", &cameraComponent.FixedAspectRatio);
+
+				if (ImGui::BeginCombo("Projection", currentProjectionTypeString)) {
+
+					for (int i{}; i < 2; i++)
+					{
+						bool isSelected{ currentProjectionTypeString == ProjectionTypeStrings[i] };
+
+						if (ImGui::Selectable(ProjectionTypeStrings[i], isSelected))
+						{
+							currentProjectionTypeString == ProjectionTypeStrings[i];
+							camera.SetProjectionType((SceneCamera::ProjectionType)i);
+						}
+
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+
+					ImGui::EndCombo();
+				}
+
+				//orthographics or perspective camera components(means the projection parameters)
+				switch (camera.GetProjectionType())
+				{
+					case SceneCamera::ProjectionType::Orthographic: 
+					{
+
+						float size{ camera.GetOrthographicSize() };
+						float speed{ cameraComponent.Speed };
+						float nearClip{ camera.GetOrthographicNearClip() };
+						float farClip{ camera.GetOrthographicFarClip() };
+
+						if (ImGui::DragFloat("Size", &size, 0.1f))
+							camera.SetOrthographicSize(size);
+
+						if (ImGui::DragFloat("Speed", &speed, 0.1f, 0.0f))
+							cameraComponent.Speed = speed;
+
+						if (ImGui::DragFloat("NearClip", &nearClip, 0.05f))
+							camera.SetOrthographicNearClip(nearClip);
+
+						if (ImGui::DragFloat("FarClip", &farClip, 0.05f))
+							camera.SetOrthographicFarClip(farClip);
+
+						break;
+					};
+
+					case SceneCamera::ProjectionType::Perspective: 
+					{
+						float fovy{ glm::degrees(camera.GetPerspectiveVerticalFov()) };
+						float speed{ cameraComponent.Speed };
+						float nearClip{ camera.GetPerspectiveNearClip() };
+						float farClip{ camera.GetPerspectiveFarClip() };
+
+						if(ImGui::DragFloat("Speed", &speed, 0.1f))
+							cameraComponent.Speed = speed;
+
+						if (ImGui::DragFloat("Fov", &fovy, 1.0f, 0.0f, 180.0f))
+							camera.SetPerspectiveVerticalFov(glm::radians(fovy));
+
+						if (ImGui::DragFloat("NearClip", &nearClip, 0.1f))
+							camera.SetPerspectiveNearClip(nearClip);
+
+						if (ImGui::DragFloat("FarClip", &farClip, 0.1f))
+							camera.SetPerspectiveFarClip(farClip);
+
+						break;
+					};
+
+				}
+
+				//pop
+				ImGui::TreePop();
+
+			}
+
+			ImGui::Separator();
+			ImGui::Spacing();
 		}
 	}
 

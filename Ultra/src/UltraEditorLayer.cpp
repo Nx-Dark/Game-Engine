@@ -54,15 +54,20 @@ namespace Dark {
 		m_Music = Dark::AudioData::Create("Assets/audio/music.mp3", Dark::AudioFlag::FLAG_STREAM);
 		//m_Music->PlayAudio();
 
+		//active scene
 		m_ActiveScene = CreateRef<Scene>();
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Orange Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.5f, 0.0f, 1.0f });
 
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		auto greenSquare{ m_ActiveScene->CreateEntity("Green Square") };
+		greenSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.05f, 1.0f, 0.05f, 1.0f });
+
+		//camera entity and camera component
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera A");
 		m_CameraEntity.AddComponent<CameraComponent>().Primary = m_PrimaryCamera;
 
-		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
+		m_SecondCamera = m_ActiveScene->CreateEntity("Camera B");
 		m_SecondCamera.AddComponent<CameraComponent>().Primary = !m_PrimaryCamera;
 		m_SecondCamera.GetComponents<CameraComponent>().Camera.SetOrthographicSize(2.0f);
 
@@ -83,9 +88,9 @@ namespace Dark {
 			{
 
 				auto& transform{ GetComponents<TransformComponent>().Transform };
-				const float speed{ 5.0f };
 
 				auto& camComp{ GetComponents<CameraComponent>() };
+				float speed{ camComp.Speed };
 
 				if (camComp.Primary) {
 
@@ -156,12 +161,8 @@ namespace Dark {
 
 		Dark::Renderer::Clear({ 0.1f, 0.1f, 0.1f, 1.0f });
 
-		//Dark::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
 		// Updatting and Rendering the Scene
 		m_ActiveScene->OnUpdate(dt);
-
-		//Dark::Renderer2D::EndScene();
 
 		m_Framebuffer->UnBind();
 	}
@@ -241,21 +242,11 @@ namespace Dark {
 
 			}
 
-			ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponents<TransformComponent>().Transform[3]));
-
 			if (ImGui::Checkbox("Main Camera", &m_PrimaryCamera))
 			{
 				m_CameraEntity.GetComponents<CameraComponent>().Primary = m_PrimaryCamera;
 				m_SecondCamera.GetComponents<CameraComponent>().Primary = !m_PrimaryCamera;
 			}
-
-			{
-				auto& camera{ m_SecondCamera.GetComponents<CameraComponent>().Camera };
-				float orthoSize{ camera.GetOrthographicSize() };
-				if (ImGui::DragFloat("CameraB OrthoSize: ", &orthoSize, 0.5f))
-					camera.SetOrthographicSize(orthoSize);
-
-			} 
 
 		ImGui::End();
 		

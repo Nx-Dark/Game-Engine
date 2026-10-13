@@ -10,6 +10,7 @@ namespace Dark
 	{
 	protected:
 
+		//can be perspective or orthographic, doesn't matter;
 		glm::mat4 m_Projection{1.0f};
 
 	public:
