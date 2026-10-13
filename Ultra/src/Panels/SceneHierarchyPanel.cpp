@@ -92,8 +92,17 @@ namespace Dark
 
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform")) 
 			{
-				auto& transform{ entity.GetComponents<TransformComponent>().Transform };
-				ImGui::DragFloat3("Translate", glm::value_ptr(transform[3]), 0.05f);
+				auto& tc{ entity.GetComponents<TransformComponent>() };
+
+				auto& translation{ tc.Translation };
+				ImGui::DragFloat3("Translate", glm::value_ptr(translation), 0.05f);
+
+				glm::vec3 rotation{ glm::degrees(tc.Rotation) };
+				if (ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 0.5f))
+					tc.Rotation = glm::radians(rotation);
+
+				auto& scale{ tc.Scale };
+				ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.05f);
 
 				//pop
 				ImGui::TreePop();

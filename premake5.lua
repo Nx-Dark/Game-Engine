@@ -85,7 +85,8 @@ project "Dark"
         defines {
             "DARK_PLATFORM_WINDOWS",
             "_GLFW_WIN32",
-            "GLFW_INCLUDE_NONE"
+            "GLFW_INCLUDE_NONE",
+            "GLM_ENABLE_EXPERIMENTAL"
         }
 
     filter "configurations:Debug"
@@ -141,7 +142,8 @@ project "Ultra" -- Engine Editor
         systemversion "latest"
 
         defines {
-            "DARK_PLATFORM_WINDOWS"
+            "DARK_PLATFORM_WINDOWS",
+            "GLM_ENABLE_EXPERIMENTAL"
         }
 
     filter "configurations:Debug"
@@ -196,7 +198,8 @@ project "Sandbox"
         systemversion "latest"
 
         defines {
-            "DARK_PLATFORM_WINDOWS"
+            "DARK_PLATFORM_WINDOWS",
+            "GLM_ENABLE_EXPERIMENTAL"
         }
 
     filter "configurations:Debug"

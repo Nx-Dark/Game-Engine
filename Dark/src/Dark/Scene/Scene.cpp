@@ -54,9 +54,9 @@ namespace Dark
 
 		});
 
-		//rendering the scene
+		//Retreving the camera and the camera transform
 		Camera* mainCamera{ nullptr };
-		glm::mat4* cameraTransform{ nullptr };
+		glm::mat4 cameraTransform{};
 		auto view{ m_Registry.view<TransformComponent, CameraComponent>() };
 		for (const auto entity : view)
 		{
@@ -65,21 +65,21 @@ namespace Dark
 			if (camera.Primary)
 			{
 				mainCamera = &camera.Camera;
-				cameraTransform = &transform.Transform;
+				cameraTransform = transform.GetTransform();
 				break;
 			}
 
 		}
 
 		//rendering the scene
-		if (mainCamera && cameraTransform)
+		if (mainCamera)
 		{
-			Renderer2D::BeginScene(*mainCamera, *cameraTransform);
+			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
 			m_Registry.group<TransformComponent, SpriteRendererComponent>().each([](const auto entity, auto& tc, auto& src) 
 			{
 					
-				Renderer2D::DrawQuad(tc.Transform, src.Color);
+				Renderer2D::DrawQuad(tc.GetTransform(), src.Color);
 
 			});
 

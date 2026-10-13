@@ -1,6 +1,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include "Dark/Scene/SceneCamera.h"
 #include "Dark/Scene/ScriptableEntity.h"
 #include "Dark/Core/DeltaTime.h"
@@ -20,15 +23,37 @@ namespace Dark {
 
 	struct TransformComponent
 	{
-		glm::mat4 Transform{ 1.0f };
+		glm::vec3 Translation{ 0.0f };
+		glm::vec3 Rotation{ 0.0f };
+		glm::vec3 Scale{ 1.0f };
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::mat4& _mat)
-			: Transform{ _mat } { }
+		TransformComponent(const glm::vec3& _translation)
+			: Translation{ _translation } { }
 
-		inline operator glm::mat4& () { return Transform; }
-		inline operator const glm::mat4& () const { return Transform; }
+		inline glm::mat4 GetTransform() const
+		{
+			//glm::mat4 rotation{
+			//	glm::rotate(glm::mat4{1.0f}, Rotation.x, {1, 0, 0})
+			//	* glm::rotate(glm::mat4{1.0f}, Rotation.y, {0, 1, 0})
+			//	 * glm::rotate(glm::mat4{1.0f}, Rotation.z, {0, 0, 1})
+			//};
+
+			//return glm::translate(glm::mat4{ 1.0f }, Translation)
+			//	* rotation
+			//	 * glm::scale(glm::mat4{ 1.0f }, Scale);
+
+			//
+
+			//glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, Translation) };
+			//transform *= glm::eulerAngleYXZ(Rotation.y, Rotation.x, Rotation.z);
+			//return glm::scale(transform, Scale);
+
+			glm::mat4 transform{ glm::translate(glm::mat4{1.0f}, Translation) };
+			transform *= glm::mat4{ glm::quat(Rotation) };
+			return glm::scale(transform, Scale);
+		}
 	};
 
 	struct SpriteRendererComponent
@@ -47,9 +72,9 @@ namespace Dark {
 	struct CameraComponent
 	{
 		SceneCamera Camera;
-		bool Primary{ true }; //TODO: Move this to Scene
+		bool Primary{ false }; //TODO: Move this to Scene
 		bool FixedAspectRatio{ false };
-		float Speed{ 1.0f };
+		float Speed{ 2.0f };
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
@@ -72,7 +97,6 @@ namespace Dark {
 		{
 			InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
 			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
-
 		}
 	};
 

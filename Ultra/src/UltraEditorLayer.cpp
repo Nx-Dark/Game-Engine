@@ -57,20 +57,20 @@ namespace Dark {
 		//active scene
 		m_ActiveScene = CreateRef<Scene>();
 
-		m_SquareEntity = m_ActiveScene->CreateEntity("Orange Square");
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.5f, 0.0f, 1.0f });
+		auto squareEntity = m_ActiveScene->CreateEntity("Orange Square");
+		squareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.5f, 0.0f, 1.0f });
 
 		auto greenSquare{ m_ActiveScene->CreateEntity("Green Square") };
 		greenSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.05f, 1.0f, 0.05f, 1.0f });
 
 		//camera entity and camera component
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera A");
-		m_CameraEntity.AddComponent<CameraComponent>().Primary = m_PrimaryCamera;
+		auto cameraA{ m_ActiveScene->CreateEntity("Camera A") };
+		cameraA.AddComponent<CameraComponent>().Primary = true;
+		
+		auto cameraB = m_ActiveScene->CreateEntity("Camera B");
+		cameraB.AddComponent<CameraComponent>();
 
-		m_SecondCamera = m_ActiveScene->CreateEntity("Camera B");
-		m_SecondCamera.AddComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-		m_SecondCamera.GetComponents<CameraComponent>().Camera.SetOrthographicSize(2.0f);
-
+		//camera controller script
 		class CameraController : public ScriptableEntity
 		{
 
@@ -87,37 +87,63 @@ namespace Dark {
 			virtual void OnUpdate(DeltaTime dt) override
 			{
 
-				auto& transform{ GetComponents<TransformComponent>().Transform };
-
 				auto& camComp{ GetComponents<CameraComponent>() };
-				float speed{ camComp.Speed };
 
 				if (camComp.Primary) {
 
-					if (Input::IsKeyPressed(KeyCode::KEY_A))
-					{
-						transform[3][0] -= speed * dt;
-					}
-					if (Input::IsKeyPressed(KeyCode::KEY_D))
-					{
-						transform[3][0] += speed * dt;
-					}
-					if (Input::IsKeyPressed(KeyCode::KEY_W))
-					{
-						transform[3][1] += speed * dt;
-					}
-					if (Input::IsKeyPressed(KeyCode::KEY_S))
-					{
-						transform[3][1] -= speed * dt;
-					}
+					auto& translation{ GetComponents<TransformComponent>().Translation };
+					float speed{ camComp.Speed };
 
+					if (Input::IsKeyPressed(KeyCode::KEY_A))
+						translation.x -= speed * dt;
+
+					if (Input::IsKeyPressed(KeyCode::KEY_D))
+						translation.x += speed * dt;
+
+					if (Input::IsKeyPressed(KeyCode::KEY_SPACE))
+						translation.y += speed * dt;
+
+					if (Input::IsKeyPressed(KeyCode::KEY_LEFT_SHIFT))
+						translation.y -= speed * dt;
+
+					if (Input::IsKeyPressed(KeyCode::KEY_W))
+						translation.z -= speed * dt;
+					
+					if (Input::IsKeyPressed(KeyCode::KEY_S))
+						translation.z += speed * dt;
 				}
 
 			}
 		};
 
-		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		class SquareScript : public ScriptableEntity
+		{
+		private:
+
+		public:
+
+			virtual void OnCreate() override
+			{
+
+			}
+
+			virtual void OnDestroy() override
+			{
+
+			}
+
+			virtual void OnUpdate(DeltaTime dt) override
+			{
+				auto& rotation{ GetComponents<TransformComponent>().Rotation };
+
+				rotation.y += dt;
+			}
+		};
+
+		cameraA.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		cameraB.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		squareEntity.AddComponent<NativeScriptComponent>().Bind<SquareScript>();
 
 		//panels
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
