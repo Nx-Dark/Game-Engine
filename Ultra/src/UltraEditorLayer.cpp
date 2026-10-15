@@ -91,6 +91,7 @@ namespace Dark {
 
 				if (camComp.Primary) {
 
+					auto& camera{ camComp.Camera };
 					auto& translation{ GetComponents<TransformComponent>().Translation };
 					float speed{ camComp.Speed };
 
@@ -100,17 +101,23 @@ namespace Dark {
 					if (Input::IsKeyPressed(KeyCode::KEY_D))
 						translation.x += speed * dt;
 
-					if (Input::IsKeyPressed(KeyCode::KEY_SPACE))
-						translation.y += speed * dt;
+					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective ? Input::IsKeyPressed(KeyCode::KEY_SPACE) : 
+						Input::IsKeyPressed(KeyCode::KEY_W))
+							translation.y += speed * dt;
 
-					if (Input::IsKeyPressed(KeyCode::KEY_LEFT_SHIFT))
-						translation.y -= speed * dt;
+					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective ? Input::IsKeyPressed(KeyCode::KEY_LEFT_SHIFT) :
+						Input::IsKeyPressed(KeyCode::KEY_S))
+							translation.y -= speed * dt;
 
-					if (Input::IsKeyPressed(KeyCode::KEY_W))
-						translation.z -= speed * dt;
-					
-					if (Input::IsKeyPressed(KeyCode::KEY_S))
-						translation.z += speed * dt;
+					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
+					{
+						if (Input::IsKeyPressed(KeyCode::KEY_W))
+							translation.z -= speed * dt;
+
+						if (Input::IsKeyPressed(KeyCode::KEY_S))
+							translation.z += speed * dt;
+					}
+
 				}
 
 			}

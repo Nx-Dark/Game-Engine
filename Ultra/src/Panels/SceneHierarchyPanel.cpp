@@ -66,6 +66,72 @@ namespace Dark
 
 	}
 
+	//helper static function for this translation unit to draw vec3 components cleanly
+	static bool DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	{
+
+		bool state{};
+
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 0, 0 });
+
+		float lineHeight{ GImGui->FontSize + GImGui->Style.FramePadding.y * 2.0f };
+		ImVec2 buttonSize{ lineHeight + 3.0f, lineHeight };
+
+		//X component
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		if (ImGui::Button("X", buttonSize))
+			{ values.x = resetValue; state = true; }
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		if (ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f")) state = true;
+		ImGui::PopItemWidth();
+
+		ImGui::SameLine();
+
+		//y component
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.8f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.9f, 0.2f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.8f, 0.15f, 1.0f });
+		if (ImGui::Button("Y", buttonSize))
+			{ values.y = resetValue; state = true; }
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		if(ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f")) state = true;
+		ImGui::PopItemWidth();
+
+		ImGui::SameLine();
+
+		//z component
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.15f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.2f, 0.9f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.15f, 0.8f, 1.0f });
+		if (ImGui::Button("Z", buttonSize))
+			{ values.z = resetValue; state = true; }
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine();
+		if (ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f")) state = true;;
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+
+		//reset the columns per row since imgui is heavuily state based
+		ImGui::Columns(1); 
+
+		ImGui::PopID();
+
+		return state;
+	}
+
 	//helper function to draw the components of currently selected entity in the properties panel
 	void SceneHierarchyPanel::DrawEntityComponents(Entity entity)
 	{
@@ -94,15 +160,13 @@ namespace Dark
 			{
 				auto& tc{ entity.GetComponents<TransformComponent>() };
 
-				auto& translation{ tc.Translation };
-				ImGui::DragFloat3("Translate", glm::value_ptr(translation), 0.05f);
+				DrawVec3Control("Translate", tc.Translation);
 
 				glm::vec3 rotation{ glm::degrees(tc.Rotation) };
-				if (ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 0.5f))
+				if (DrawVec3Control("Rotate", rotation))
 					tc.Rotation = glm::radians(rotation);
 
-				auto& scale{ tc.Scale };
-				ImGui::DragFloat3("Scale", glm::value_ptr(scale), 0.05f);
+				DrawVec3Control("Scale", tc.Scale, 1.0f);
 
 				//pop
 				ImGui::TreePop();
