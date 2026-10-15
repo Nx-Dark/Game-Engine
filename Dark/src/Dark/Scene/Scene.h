@@ -36,7 +36,10 @@ namespace Dark
 
 		//creating entity in the current active scene;
 		Entity CreateEntity(const std::string& name = std::string{});
+		void DestroyEntity(Entity entity);
 
+	private:
+		void OnCameraComponentAdded(entt::registry& registry, entt::entity entity);
 	};
 
 }

@@ -26,12 +26,20 @@ namespace Dark
 
 		});
 
-
 		//deseleting entities
 		if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsWindowHovered())
 			m_EntitySelection = { };
 		//--------------------
 			
+		//creating entities live(right click on a blank space in scene hierarchy panel)
+		if (ImGui::BeginPopupContextWindow(0, (ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_NoOpenOverExistingPopup)))
+		{
+			//creating the entity
+			if(ImGui::MenuItem("Create Empty Entity"))
+				m_Context->CreateEntity("Empty Entity");
+
+			ImGui::EndPopup();
+		}
 
 		ImGui::End();
 
@@ -42,6 +50,27 @@ namespace Dark
 		if (m_EntitySelection)
 		{
 			DrawEntityComponents(m_EntitySelection);
+
+			//creating components for the currently selected entity
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("AddComponent");
+
+			if (ImGui::BeginPopup("AddComponent"))
+			{
+				if (ImGui::MenuItem("Camera"))
+				{
+					m_EntitySelection.AddComponent<CameraComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::MenuItem("Sprite Renderer"))
+				{
+					m_EntitySelection.AddComponent<SpriteRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
 		}
 
 		ImGui::End();
@@ -50,6 +79,7 @@ namespace Dark
 	//helper function to draw an entity node in the scene hierarchy panel
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
+
 		auto& tag{ entity.GetComponents<TagComponent>().Tag };
 		
 		ImGuiTreeNodeFlags flags{
@@ -64,6 +94,38 @@ namespace Dark
 			m_EntitySelection = entity;
 		}
 
+
+		bool isEntityTobeDestroyed{};
+		if (ImGui::BeginPopupContextItem(0, (ImGuiPopupFlags_MouseButtonRight))) 
+		{
+
+			if (ImGui::MenuItem("Destroy Entity"))
+				isEntityTobeDestroyed = true;
+
+			ImGui::EndPopup();
+		}
+
+
+		if (treeNodeExpanded) 
+		{
+			ImGuiTreeNodeFlags flags{
+			((m_EntitySelection == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow
+			};
+
+			bool treeNodeExpanded{ ImGui::TreeNodeEx((void*)23028742, flags, "%s", tag.c_str()) };
+
+			if (treeNodeExpanded)
+				ImGui::TreePop();
+
+			ImGui::TreePop();
+		}
+
+		if (isEntityTobeDestroyed) {
+			if (m_EntitySelection == entity)
+				m_EntitySelection = {};
+
+			m_Context->DestroyEntity(entity);
+		}
 	}
 
 	//helper static function for this translation unit to draw vec3 components cleanly
@@ -152,11 +214,22 @@ namespace Dark
 			ImGui::Spacing();
 		}
 
+		const ImGuiTreeNodeFlags treeNodeFlags{ ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowOverlap };
 		//transform component(TODO: Add rotation, Scaling and stuff);
 		if (entity.HasAnyofComponent<TransformComponent>())
 		{
+			bool open{ ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, "Transform") };
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button(":", ImVec2{ 20, 15 }))
+				ImGui::OpenPopup("ComponentSettings");
 
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform")) 
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
 			{
 				auto& tc{ entity.GetComponents<TransformComponent>() };
 
@@ -180,8 +253,22 @@ namespace Dark
 		//camera component
 		if (entity.HasAnyofComponent<CameraComponent>())
 		{
+			bool deleteComponent{};
+			bool open{ ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), treeNodeFlags, "Camera") };
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button(":", ImVec2{ 20, 15 }))
+				ImGui::OpenPopup("ComponentSettings");
 
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+
+				if (ImGui::MenuItem("Remove Component"))
+					deleteComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
 			{
 
 				auto& cameraComponent{ entity.GetComponents<CameraComponent>() };
@@ -270,13 +357,34 @@ namespace Dark
 
 			}
 
+			//deferred component removal
+			if (deleteComponent)
+				entity.RemoveComponent<CameraComponent>();
+
 			ImGui::Separator();
 			ImGui::Spacing();
 		}
 
+		//sprite Renderer Component
 		if (entity.HasAnyofComponent<SpriteRendererComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+
+			bool deleteComponent{};
+			bool open{ ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), treeNodeFlags, "Sprite Renderer") };
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button(":", ImVec2{ 20, 15 }))
+				ImGui::OpenPopup("ComponentSettings");
+
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+
+				if (ImGui::MenuItem("Remove Component"))
+					deleteComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
 			{
 
 				auto& spriteRenderer{ entity.GetComponents<SpriteRendererComponent>() };
@@ -287,7 +395,12 @@ namespace Dark
 
 			}
 
+			//deferred component removal
+			if (deleteComponent)
+				entity.RemoveComponent<SpriteRendererComponent>();
+
 			ImGui::Separator();
+			ImGui::Spacing();
 		}
 
 	}

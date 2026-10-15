@@ -3,6 +3,7 @@
 #include "Entity.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtx/matrix_query.hpp>
 
 #include "Dark/Scene/Components.h"
 
@@ -13,7 +14,8 @@ namespace Dark
 
 	Scene::Scene()
 	{	
-		
+		//when a cameracomponent is created, the viewport of it should be set the same as the viewport of the scene
+		m_Registry.on_construct<CameraComponent>().connect<&Scene::OnCameraComponentAdded>(*this);
 	}
 
 	Scene::~Scene()
@@ -72,7 +74,8 @@ namespace Dark
 		}
 
 		//rendering the scene
-		if (mainCamera)
+		static float epsilon{ 0.00001f };
+		if (mainCamera && !(glm::isNull(cameraTransform, epsilon)))
 		{
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
@@ -95,6 +98,18 @@ namespace Dark
 		TagComponent& tag{ e.AddComponent<TagComponent>() };
 		tag.Tag = name.empty() ? "Entity" : name;
 		return e;
+	}
+
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_Registry.destroy(entity);
+	}
+
+	//whenever camera component gets created in the entt registry, this function gets called
+	void Scene::OnCameraComponentAdded(entt::registry& registry, entt::entity entity)
+	{
+		auto& component{ registry.get<CameraComponent>(entity) };
+		component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
 	}
 
 	//entt::registry::view<>() is faster for single components

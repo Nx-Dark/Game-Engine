@@ -25,9 +25,7 @@ namespace Dark {
 	};
 
 	UltraEditorLayer::UltraEditorLayer()
-		: Layer("UltraEditorLayer"), m_CameraController(
-			(float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(),
-			0.1f)
+		: Layer("UltraEditorLayer")
 	{
 	}
 
@@ -38,8 +36,6 @@ namespace Dark {
 
 	void UltraEditorLayer::OnAttach()
 	{
-
-		m_CameraController.SetZoomLevel(2.0f);
 
 		m_SpriteSheet = Dark::Texture2D::Create("Assets/Textures/tilemap_packed.png");
 		m_TileHashMap['D'] = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 16 }, { 16, 16 });
@@ -164,7 +160,7 @@ namespace Dark {
 
 	void UltraEditorLayer::OnEvent(Dark::Event& e)
 	{
-		m_CameraController.OnEvent(e);
+		
 	}
 
 	void UltraEditorLayer::OnUpdate(Dark::DeltaTime dt)
@@ -176,16 +172,10 @@ namespace Dark {
 			&& (frameBufferSpec.Width != m_ViewportPanelSize.x || frameBufferSpec.Height != m_ViewportPanelSize.y))
 		{
 			m_Framebuffer->ReSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
-			m_CameraController.OnResize(m_ViewportPanelSize.x, m_ViewportPanelSize.y);
 
 			//resizing the viewport of the current active scene;
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
 		}
-
-		//camera Update
-		if(m_ViewportFocused)
-			m_CameraController.OnUpdate(dt);
-
 
 		//Rendering stuff
 		Dark::Renderer2D::ResetStats();
@@ -248,12 +238,6 @@ namespace Dark {
 				ImGui::EndMenu();
 			}
 
-				auto stats = Dark::Renderer2D::GetStats();
-				ImGui::Text("Renderer2D Stats:");
-				ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-				ImGui::Text("Quads: %d", stats.QuadCount);
-				ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
-				ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
 			ImGui::EndMenuBar();
 		}
 
