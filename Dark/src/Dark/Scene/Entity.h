@@ -65,8 +65,9 @@ namespace Dark
 	T& Entity::AddComponent(Args&&... args)
 	{
 		DARK_CORE_ASSERT(!(HasAllofComponent<T>() || HasAnyofComponent<T>()), "Entity Already Has the Component!");
-
-		return m_SceneRef->m_Registry.emplace<T>(m_Handle, std::forward<Args>(args)...);
+		T& component{ m_SceneRef->m_Registry.emplace<T>(m_Handle, std::forward<Args>(args)...) };
+		m_SceneRef->OnComponentAdded<T>(*this, component);
+		return component;
 	}
 
 	template<typename T>

@@ -86,6 +86,8 @@ namespace Dark
 			((m_EntitySelection == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow
 		};
 
+		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
+
 		bool treeNodeExpanded{ ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, "%s", tag.c_str()) };
 
 		//it checks if the last item is clicked or selected
@@ -108,9 +110,7 @@ namespace Dark
 
 		if (treeNodeExpanded) 
 		{
-			ImGuiTreeNodeFlags flags{
-			((m_EntitySelection == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow
-			};
+			ImGuiTreeNodeFlags flags{ ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth };
 
 			bool treeNodeExpanded{ ImGui::TreeNodeEx((void*)23028742, flags, "%s", tag.c_str()) };
 
@@ -132,6 +132,9 @@ namespace Dark
 	static bool DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
 	{
 
+		ImGuiIO& io{ ImGui::GetIO() };
+		auto opensansBoldFont{ io.Fonts->Fonts[std::to_underlying(ImGuiLayer::FontType::OpenSansBold)]};
+
 		bool state{};
 
 		ImGui::PushID(label.c_str());
@@ -151,8 +154,10 @@ namespace Dark
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+		ImGui::PushFont(opensansBoldFont);
 		if (ImGui::Button("X", buttonSize))
 			{ values.x = resetValue; state = true; }
+		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
 		if (ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f")) state = true;
@@ -164,8 +169,10 @@ namespace Dark
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.8f, 0.15f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.9f, 0.2f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.8f, 0.15f, 1.0f });
+		ImGui::PushFont(opensansBoldFont);
 		if (ImGui::Button("Y", buttonSize))
 			{ values.y = resetValue; state = true; }
+		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
 		if(ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f")) state = true;
@@ -177,8 +184,10 @@ namespace Dark
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.15f, 0.8f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.2f, 0.9f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.15f, 0.8f, 1.0f });
+		ImGui::PushFont(opensansBoldFont);
 		if (ImGui::Button("Z", buttonSize))
 			{ values.z = resetValue; state = true; }
+		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
 		if (ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f")) state = true;;

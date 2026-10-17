@@ -39,7 +39,8 @@ namespace Dark
 		void DestroyEntity(Entity entity);
 
 	private:
-		void OnCameraComponentAdded(entt::registry& registry, entt::entity entity);
+		template<typename T>
+		void OnComponentAdded(Entity entity, T& component);
 	};
 
 }

@@ -10,7 +10,6 @@
 
 //TEMPORARY
 #include <GLFW/glfw3.h>
-#include <glad/glad.h>
 
 namespace Dark {
 
@@ -36,6 +35,9 @@ namespace Dark {
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\OpenSans\\static\\OpenSans-Regular.ttf", 15.0f); //FontType::OpenSansRegular
+		io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\OpenSans\\static\\OpenSans-Bold.ttf", 15.0f); //FontType::OpenSansBold
 
 		ImGui::StyleColorsDark();
 	

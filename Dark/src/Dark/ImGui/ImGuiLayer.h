@@ -12,6 +12,11 @@ namespace Dark {
 
 	class DARK_API ImGuiLayer : public Layer {
 
+	public:
+		enum class FontType : uint32_t {
+			OpenSansRegular = 0, OpenSansBold = 1
+		};
+
 	private:
 
 		bool m_AllowEvents{false};

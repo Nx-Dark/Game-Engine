@@ -14,8 +14,7 @@ namespace Dark
 
 	Scene::Scene()
 	{	
-		//when a cameracomponent is created, the viewport of it should be set the same as the viewport of the scene
-		m_Registry.on_construct<CameraComponent>().connect<&Scene::OnCameraComponentAdded>(*this);
+		
 	}
 
 	Scene::~Scene()
@@ -106,10 +105,40 @@ namespace Dark
 	}
 
 	//whenever camera component gets created in the entt registry, this function gets called
-	void Scene::OnCameraComponentAdded(entt::registry& registry, entt::entity entity)
+	template<typename T>
+	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
-		auto& component{ registry.get<CameraComponent>(entity) };
+		static_assert(false);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+	{
 		component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+	{
+
 	}
 
 	//entt::registry::view<>() is faster for single components

@@ -219,6 +219,22 @@ namespace Dark {
 
 	}
 
+	void Renderer2D::StartBatch()
+	{
+
+		s_RendererData.QuadIndexCount = 0;
+		s_RendererData.QuadVertexBufferPtr = s_RendererData.QuadVertexBufferBase;
+
+		s_RendererData.TextureSlotIndex = 1;
+
+	}
+
+	void Renderer2D::NextBatch()
+	{
+		Flush();
+		StartBatch();
+	}
+
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform) //this transform is the view matrix which defines the camera's oreintation
 	{
 		DARK_PROFILE_FUNCTION();
@@ -250,15 +266,20 @@ namespace Dark {
 	void Renderer2D::EndScene()
 	{
 		DARK_PROFILE_FUNCTION();
-		
-		uint32_t dataSize = (uint8_t*)s_RendererData.QuadVertexBufferPtr - (uint8_t*)s_RendererData.QuadVertexBufferBase;
-		s_RendererData.VertexBuffer->UploadData(s_RendererData.QuadVertexBufferBase, dataSize);
 
 		Flush();
 	}
 
 	void Renderer2D::Flush()
 	{
+
+		if (s_RendererData.QuadIndexCount == 0) 
+			return; //return, no stuff to render on the screen;
+
+		//calculating the size of the data
+		uint32_t dataSize = (uint8_t*)s_RendererData.QuadVertexBufferPtr - (uint8_t*)s_RendererData.QuadVertexBufferBase;
+		s_RendererData.VertexBuffer->UploadData(s_RendererData.QuadVertexBufferBase, dataSize);
+
 		//bind all the active textures(upto 32)
 		for (uint32_t i{}; i < s_RendererData.TextureSlotIndex; i++)
 			s_RendererData.TextureSlots[i]->Bind(i);
@@ -269,26 +290,13 @@ namespace Dark {
 		s_RendererData.stats.DrawCalls++;
 	}
 
-	void Renderer2D::FlushAndReset()
-	{
-		EndScene();
-
-		s_RendererData.QuadIndexCount = 0;
-		s_RendererData.QuadVertexBufferPtr = s_RendererData.QuadVertexBufferBase;
-
-		s_RendererData.TextureSlotIndex = 1;
-
-	}
-
 	//transformed quad
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 		CreateQuad(color, transform);
 	}
@@ -299,9 +307,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 		CreateQuad(transform, texture, tint, tiling_factor);
 	}
@@ -312,9 +318,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 
 		CreateQuad(transform, subTexture, tint, tiling_factor);
@@ -332,10 +336,8 @@ namespace Dark {
 	{
 		DARK_PROFILE_FUNCTION();
 
-		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount) 
-		{
-			FlushAndReset();
-		}
+		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
+			NextBatch();
 		
 		glm::mat4 transform{
 			glm::translate(glm::mat4{1.0f}, position)
@@ -358,9 +360,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 		glm::mat4 transform{
 			glm::translate(glm::mat4{1.0f}, position)
@@ -384,9 +384,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 
 		//Setting Vertex Stuff;
@@ -410,9 +408,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 		//Setting Vertex Stuff;
 		glm::mat4 transform{
@@ -435,9 +431,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 		//Setting Vertex Stuff;
 		glm::mat4 transform{
@@ -459,9 +453,7 @@ namespace Dark {
 		DARK_PROFILE_FUNCTION();
 
 		if (s_RendererData.QuadIndexCount >= Renderer2DData::MaxIndexCount)
-		{
-			FlushAndReset();
-		}
+			NextBatch();
 
 		//Setting Vertex Stuff;
 		glm::mat4 transform{

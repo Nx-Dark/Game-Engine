@@ -53,16 +53,17 @@ namespace Dark {
 			uint32_t QuadCount{};
 
 			uint32_t GetQuadCount() { return QuadCount; }
-			uint32_t GetQuadVertexCount() { return QuadCount * 4; };
-			uint32_t GetQuadIndexCount() { return QuadCount * 6; };
-			uint32_t GetQuadTriangleCount() { return QuadCount * 2; };
+			uint32_t GetQuadVertexCount() { return QuadCount * 4; }
+			uint32_t GetQuadIndexCount() { return QuadCount * 6; }
+			uint32_t GetQuadTriangleCount() { return QuadCount * 2; }
 		};
 
 		static void ResetStats();
 		static Statistics GetStats();
 
 	private:
-		static void FlushAndReset();
+		static void StartBatch();
+		static void NextBatch();
 	};
 
 
