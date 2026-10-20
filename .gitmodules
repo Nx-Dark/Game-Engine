@@ -16,3 +16,6 @@
 [submodule "Dark/vendor/ImGui/imgui"]
 	path = Dark/vendor/ImGui/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Dark/vendor/yaml-cpp"]
+	path = Dark/vendor/yaml-cpp
+	url = https://github.com/TheCherno/yaml-cpp.git
