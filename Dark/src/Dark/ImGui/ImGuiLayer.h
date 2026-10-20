@@ -36,6 +36,9 @@ namespace Dark {
 		void End();
 
 		inline void AllowEvents(bool _allow) { m_AllowEvents = _allow; }
+
+		//theme and shit
+		void SetDarkThemeColors();
 	};
 
 }

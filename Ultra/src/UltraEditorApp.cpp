@@ -23,7 +23,7 @@ namespace Dark {
 
 	Dark::Application* Dark::CreateApplication()
 	{
-		return new UltraEditor("DarkEngine-UltraEditor", 1280, 720);
+		return new UltraEditor("UltraEditor", 1280, 720);
 
 	}
 }

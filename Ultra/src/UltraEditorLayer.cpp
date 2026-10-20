@@ -1,28 +1,8 @@
 #include "UltraEditorLayer.h"
 
-namespace Dark {
+#include "Dark/Scene/SceneSerializer.h"
 
-	static const uint32_t s_TileMapWidth{ 24 };
-	static const uint32_t s_TileMapHeight{ 16 };
-	static const char* s_TileMap
-	{
-	"WWWWWWWWWDDDDDWWWWWWWWWW"
-	"WWWWWWWDDDDDDDDDWWWWWWWW"
-	"WWWWWDDDDDDDDDDDDDWWWWWW"
-	"WWWDDDDDDDDDDDDDDDDDWWWW"
-	"WDDDDDDDDDDDDDWWWDDDWWWW"
-	"WWWDDDDDDDDDDDWWWDDDWWWW"
-	"WWWWWDDDDDDDDDDDDDDWWWWW"
-	"WWWWWWWDDDDDDDDDDDDWWWWW"
-	"WWWWWWWDDDDDDWWDDDDWWWWW"
-	"WWWWWWWWWDDDDWWDDDWWWWWW"
-	"WWWWWWWWWWWDDDDDDWWWWWWW"
-	"WWWWWWWWWWWWWDDDDWWWWWWW"
-	"WWWWWWWWWWWWWWWWWWWWWWWW"
-	"WWWWWWWWWWWWWWWWWWWWWWWW"
-	"WWWWWWWWWWWWWWWWWWWWWWWW"
-	"WWWWWWWWWWWWWWWWWWWWWWWW"
-	};
+namespace Dark {
 
 	UltraEditorLayer::UltraEditorLayer()
 		: Layer("UltraEditorLayer")
@@ -37,22 +17,16 @@ namespace Dark {
 	void UltraEditorLayer::OnAttach()
 	{
 
-		m_SpriteSheet = Dark::Texture2D::Create("Assets/Textures/tilemap_packed.png");
-		m_TileHashMap['D'] = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 16 }, { 16, 16 });
-		m_TileHashMap['W'] = Dark::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 9, 10 }, { 16, 16 });
-
 		//framebuffer
 		Dark::FramebufferSpecifications fbSpec;
 		fbSpec.Width = Dark::Application::Get().GetWindow().GetWidth();
 		fbSpec.Height = Dark::Application::Get().GetWindow().GetHeight();
 		m_Framebuffer = Dark::Framebuffer::Create(fbSpec);
 
-		m_Music = Dark::AudioData::Create("Assets/audio/music.mp3", Dark::AudioFlag::FLAG_STREAM);
-		//m_Music->PlayAudio();
-
 		//active scene
 		m_ActiveScene = CreateRef<Scene>();
 
+#if 0
 		auto squareEntity = m_ActiveScene->CreateEntity("Orange Square");
 		squareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.5f, 0.0f, 1.0f });
 
@@ -83,35 +57,39 @@ namespace Dark {
 			virtual void OnUpdate(DeltaTime dt) override
 			{
 
-				auto& camComp{ GetComponents<CameraComponent>() };
+				if (HasAnyofComponent<CameraComponent>())
+				{
+					auto& camComp{ GetComponents<CameraComponent>() };
 
-				if (camComp.Primary) {
+					if (camComp.Primary) {
 
-					auto& camera{ camComp.Camera };
-					auto& translation{ GetComponents<TransformComponent>().Translation };
-					float speed{ camComp.Speed };
+						auto& camera{ camComp.Camera };
+						auto& translation{ GetComponents<TransformComponent>().Translation };
+						float speed{ camComp.Speed };
 
-					if (Input::IsKeyPressed(KeyCode::KEY_A))
-						translation.x -= speed * dt;
+						if (Input::IsKeyPressed(KeyCode::KEY_A))
+							translation.x -= speed * dt;
 
-					if (Input::IsKeyPressed(KeyCode::KEY_D))
-						translation.x += speed * dt;
+						if (Input::IsKeyPressed(KeyCode::KEY_D))
+							translation.x += speed * dt;
 
-					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective ? Input::IsKeyPressed(KeyCode::KEY_SPACE) : 
-						Input::IsKeyPressed(KeyCode::KEY_W))
+						if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective ? Input::IsKeyPressed(KeyCode::KEY_SPACE) :
+							Input::IsKeyPressed(KeyCode::KEY_W))
 							translation.y += speed * dt;
 
-					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective ? Input::IsKeyPressed(KeyCode::KEY_LEFT_SHIFT) :
-						Input::IsKeyPressed(KeyCode::KEY_S))
+						if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective ? Input::IsKeyPressed(KeyCode::KEY_LEFT_SHIFT) :
+							Input::IsKeyPressed(KeyCode::KEY_S))
 							translation.y -= speed * dt;
 
-					if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
-					{
-						if (Input::IsKeyPressed(KeyCode::KEY_W))
-							translation.z -= speed * dt;
+						if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
+						{
+							if (Input::IsKeyPressed(KeyCode::KEY_W))
+								translation.z -= speed * dt;
 
-						if (Input::IsKeyPressed(KeyCode::KEY_S))
-							translation.z += speed * dt;
+							if (Input::IsKeyPressed(KeyCode::KEY_S))
+								translation.z += speed * dt;
+						}
+
 					}
 
 				}
@@ -147,6 +125,7 @@ namespace Dark {
 		cameraB.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 		squareEntity.AddComponent<NativeScriptComponent>().Bind<SquareScript>();
+#endif
 
 		//panels
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
@@ -222,19 +201,36 @@ namespace Dark {
 			ImGui::PopStyleVar(2);
 
 		// DockSpace
-		ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO& io{ ImGui::GetIO() };
+		ImGuiStyle& style{ ImGui::GetStyle() };
+		float minWinSizeX{ style.WindowMinSize.x };
+		style.WindowMinSize.x = 200.0f;
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 		}
 
+		style.WindowMinSize.x = minWinSizeX;
+
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
 
+				if (ImGui::MenuItem("Serialize")) {
+					SceneSerializer serializer{ m_ActiveScene };
+					serializer.Serialize("Assets/Scenes/scene_1.dscn");
+				}
+
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					SceneSerializer serializer{ m_ActiveScene };
+					serializer.Deserialize("Assets/Scenes/scene_1.dscn");
+				}
+
 				if (ImGui::MenuItem("Exit")) Dark::Application::Get().Close();
+
 				ImGui::EndMenu();
 			}
 

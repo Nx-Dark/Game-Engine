@@ -9,14 +9,9 @@ namespace Dark {
 	{
 
 	private:
-
-		Ref<Texture2D> m_SpriteSheet;
-		Ref<Framebuffer> m_Framebuffer;
-
-		std::unordered_map<char, Ref<SubTexture2D>> m_TileHashMap;
-
-		Ref<AudioData> m_Music{};
 		
+		Ref<Framebuffer> m_Framebuffer{};
+
 		Ref<Scene> m_ActiveScene{};
 
 		bool m_ViewportFocused{};

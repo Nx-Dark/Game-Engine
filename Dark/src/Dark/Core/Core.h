@@ -88,14 +88,8 @@
 	#endif
 #endif
 
-//TODO: Make DARK_CORE and DARK_CLIENT ASSERT macro to accept no additional arguments except condition and still assert!
-#ifdef DARK_ENABLE_ASSERTS
-	#define DARK_CORE_ASSERT(x, ...) { if(!(x)) {DARK_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
-	#define DARK_CLIENT_ASSERT(x, ...) { if(!(x)) { DARK_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); }}
-#else
-	#define DARK_CORE_ASSERT(x, ...)
-	#define DARK_CLIENT_ASSERT(x, ...)
-#endif
+#define DARK_EXPAND_MACRO(x) x
+#define DARK_STRINGIFY_MACRO(x) #x
 
 #define BIT(x) (1 << x)
 
@@ -119,3 +113,6 @@ namespace Dark {
 		return std::make_unique<T>(std::forward<Args>(args)...);
 	}
 }
+
+#include "Dark/Core/Log.h"
+#include "Dark/Core/Assert.h"

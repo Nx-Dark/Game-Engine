@@ -76,12 +76,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>dpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;DARK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;YAML_CPP_STATIC_DEFINE;DARK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp23</LanguageStandard>
@@ -102,14 +102,14 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>dpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;DARK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;YAML_CPP_STATIC_DEFINE;DARK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
@@ -130,14 +130,14 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>dpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;DARK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;YAML_CPP_STATIC_DEFINE;DARK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
@@ -157,6 +157,7 @@
     <ClInclude Include="src\Dark.h" />
     <ClInclude Include="src\Dark\Audio\AudioMixer.h" />
     <ClInclude Include="src\Dark\Core\Application.h" />
+    <ClInclude Include="src\Dark\Core\Assert.h" />
     <ClInclude Include="src\Dark\Core\Core.h" />
     <ClInclude Include="src\Dark\Core\DeltaTime.h" />
     <ClInclude Include="src\Dark\Core\EntryPoint.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\Dark\Scene\Entity.h" />
     <ClInclude Include="src\Dark\Scene\Scene.h" />
     <ClInclude Include="src\Dark\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Dark\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Dark\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -650,6 +652,7 @@
     <ClCompile Include="src\Dark\Scene\Entity.cpp" />
     <ClCompile Include="src\Dark\Scene\Scene.cpp" />
     <ClCompile Include="src\Dark\Scene\SceneCamera.cpp" />
+    <ClCompile Include="src\Dark\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
@@ -676,6 +679,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\miniaudio\MINIAUDIO.vcxproj">
       <Project>{C4549F7D-30BF-53F4-79FD-049AE5A63149}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\yaml-cpp\YAMLCPP.vcxproj">
+      <Project>{9B40FA63-0720-79FF-1038-04D67C96DF60}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

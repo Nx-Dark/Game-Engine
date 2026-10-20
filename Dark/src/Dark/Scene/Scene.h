@@ -26,6 +26,7 @@ namespace Dark
 		//setting entity as the friend class so it can access Scene's member variables;
 		friend class Entity;
 		friend class SceneHierarchyPanel;
+		friend class SceneSerializer;
 
 	public:
 		Scene();

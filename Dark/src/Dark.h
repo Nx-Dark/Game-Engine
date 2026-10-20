@@ -6,8 +6,9 @@
 
 #include "Dark/Core/Application.h"
 #include "Dark/Core/Input.h"
-#include "Dark/Core/Log.h"
 #include "Dark/Core/Core.h"
+#include "Dark/Core/Log.h"
+#include "Dark/Core/Assert.h"
 #include "Dark/Core/Layer.h"
 
 #include "Dark/Core/Timer.h"

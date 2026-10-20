@@ -9,7 +9,12 @@
 #include <memory>
 #include <chrono>
 #include <filesystem>
+#include <sstream>
+#include <fstream>
+#include <istream>
+#include <cstdint>
 
+//data structures
 #include <stack>
 #include <queue>
 #include <vector>
@@ -19,9 +24,6 @@
 #include <unordered_set>
 #include <array>
 #include <string>
-#include <sstream>
-#include <fstream>
-#include <cstdint>
 
 #include "Dark/Core/Log.h"
 #include "Dark/Core/Core.h"

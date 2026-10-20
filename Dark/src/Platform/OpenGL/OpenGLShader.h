@@ -12,7 +12,7 @@ namespace Dark {
 
 		std::string m_Name{};
 
-		//hashing(caching uniforms
+		//hashing(caching uniforms)
 		std::unordered_map<std::string, int> m_CachedUniforms{};
 
 	public:

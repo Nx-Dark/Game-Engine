@@ -78,6 +78,9 @@
     <ClInclude Include="src\Dark\Core\Application.h">
       <Filter>src\Dark\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Dark\Core\Assert.h">
+      <Filter>src\Dark\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Dark\Core\Core.h">
       <Filter>src\Dark\Core</Filter>
     </ClInclude>
@@ -187,6 +190,9 @@
       <Filter>src\Dark\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Scene\SceneCamera.h">
+      <Filter>src\Dark\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Scene\SceneSerializer.h">
       <Filter>src\Dark\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Dark\Scene\ScriptableEntity.h">
@@ -1551,6 +1557,9 @@
       <Filter>src\Dark\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Dark\Scene\SceneCamera.cpp">
+      <Filter>src\Dark\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dark\Scene\SceneSerializer.cpp">
       <Filter>src\Dark\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
