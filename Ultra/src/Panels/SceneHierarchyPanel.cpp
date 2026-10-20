@@ -11,6 +11,7 @@ namespace Dark
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
 	{
 		m_Context = context;
+		m_EntitySelection = { };
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()

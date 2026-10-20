@@ -19,7 +19,7 @@ namespace Dark
 
 	Scene::~Scene()
 	{
-		
+		m_Registry.clear();
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
@@ -57,7 +57,7 @@ namespace Dark
 
 		//Retreving the camera and the camera transform
 		Camera* mainCamera{ nullptr };
-		glm::mat4 cameraTransform{};
+		glm::mat4 cameraTransform{ 1.0f };
 		auto view{ m_Registry.view<TransformComponent, CameraComponent>() };
 		for (const auto entity : view)
 		{
@@ -73,8 +73,7 @@ namespace Dark
 		}
 
 		//rendering the scene
-		static float epsilon{ 0.00001f };
-		if (mainCamera && !(glm::isNull(cameraTransform, epsilon)))
+		if (mainCamera)
 		{
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 
@@ -104,7 +103,7 @@ namespace Dark
 		m_Registry.destroy(entity);
 	}
 
-	//whenever camera component gets created in the entt registry, this function gets called
+
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
@@ -129,6 +128,7 @@ namespace Dark
 
 	}
 
+	//whenever camera component gets created in the entt registry, this function gets called
 	template<>
 	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
 	{

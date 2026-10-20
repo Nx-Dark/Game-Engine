@@ -33,6 +33,12 @@ namespace Dark {
 
 		void OnImGuiRender() override;
 
+	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void NewSceneFile();
+		void OpenSceneFile();
+		void SaveSceneFileAs();
 	};
 
 }

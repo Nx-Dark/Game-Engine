@@ -2,14 +2,16 @@
 
 #include "Event.h"
 
+#include "Dark/Core/KeyCodes.h"
+
 namespace Dark {
 
 	class DARK_API KeyEvent : public Event {
 
 	protected:
-		int m_KeyCode{};
+		KeyCode m_KeyCode{};
 
-		KeyEvent(int keycode)
+		KeyEvent(KeyCode keycode)
 			: m_KeyCode(keycode) {
 
 		}
@@ -17,7 +19,7 @@ namespace Dark {
 	public:
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput);
 
-		inline int GetKeyCode() const { return m_KeyCode; }
+		inline KeyCode GetKeyCode() const { return m_KeyCode; }
 
 	};
 
@@ -26,7 +28,7 @@ namespace Dark {
 		int m_RepeatCount{};
 
 	public:
-		KeyPressedEvent(int KeyCode, int repeatCount)
+		KeyPressedEvent(KeyCode KeyCode, int repeatCount)
 			: KeyEvent(KeyCode), m_RepeatCount(repeatCount) { }
 
 		inline int GetRepeatCount() const { return m_RepeatCount; }
@@ -34,7 +36,7 @@ namespace Dark {
 		std::string ToString() const override {
 			std::stringstream ss;
 			 
-			ss << "KeyPressedEvent: " << m_KeyCode << "(Repeats: " << m_RepeatCount << ")";
+			ss << "KeyPressedEvent: " << (int)m_KeyCode << "(Repeats: " << m_RepeatCount << ")";
 
 			return ss.str();
 		}
@@ -46,13 +48,13 @@ namespace Dark {
 	class DARK_API KeyReleasedEvent : public KeyEvent {
 
 	public:
-		KeyReleasedEvent(int KeyCode)
+		KeyReleasedEvent(KeyCode KeyCode)
 			: KeyEvent(KeyCode) { }
 
 		std::string ToString() const override{
 			std::stringstream ss;
 
-			ss << "KeyReleasedEvent: " << m_KeyCode;
+			ss << "KeyReleasedEvent: " << (int)m_KeyCode;
 
 			return ss.str();
 		}
@@ -64,13 +66,13 @@ namespace Dark {
 	class DARK_API KeyTypedEvent : public KeyEvent {
 
 	public:
-		KeyTypedEvent(int keycode)
+		KeyTypedEvent(KeyCode keycode)
 			: KeyEvent(keycode) { }
 
 		std::string ToString() const override {
 			std::stringstream ss;
 
-			ss << "KeyPressedEvent: " << m_KeyCode;
+			ss << "KeyPressedEvent: " << (int)m_KeyCode;
 
 			return ss.str();
 		}

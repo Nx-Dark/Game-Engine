@@ -137,11 +137,6 @@ namespace Dark {
 
 	}
 
-	void UltraEditorLayer::OnEvent(Dark::Event& e)
-	{
-		
-	}
-
 	void UltraEditorLayer::OnUpdate(Dark::DeltaTime dt)
 	{
 
@@ -156,8 +151,7 @@ namespace Dark {
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
 		}
 
-		//Rendering stuff
-		Dark::Renderer2D::ResetStats();
+		//Dark::Renderer2D::ResetStats();
 
 		m_Framebuffer->Bind();
 
@@ -217,17 +211,15 @@ namespace Dark {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+					NewSceneFile();
 
-				if (ImGui::MenuItem("Serialize")) {
-					SceneSerializer serializer{ m_ActiveScene };
-					serializer.Serialize("Assets/Scenes/scene_1.dscn");
-				}
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenSceneFile();
 
-				if (ImGui::MenuItem("Deserialize"))
-				{
-					SceneSerializer serializer{ m_ActiveScene };
-					serializer.Deserialize("Assets/Scenes/scene_1.dscn");
-				}
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					SaveSceneFileAs();
+
 
 				if (ImGui::MenuItem("Exit")) Dark::Application::Get().Close();
 
@@ -237,15 +229,15 @@ namespace Dark {
 			ImGui::EndMenuBar();
 		}
 
-		ImGui::Begin("Stats");
-			auto stats = Dark::Renderer2D::GetStats();
-			ImGui::Text("Stats:");
-			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-			ImGui::Text("Quads: %d", stats.QuadCount);
-			ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
-			ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
+		//ImGui::Begin("Stats");
+		//	auto stats = Dark::Renderer2D::GetStats();
+		//	ImGui::Text("Stats:");
+		//	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+		//	ImGui::Text("Quads: %d", stats.QuadCount);
+		//	ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
+		//	ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
 
-		ImGui::End();
+		//ImGui::End();
 		
 
 		//viewport and framebuffer bullshit
@@ -273,5 +265,87 @@ namespace Dark {
 
 		//End of dockspace
 		ImGui::End();
+	}
+
+	//events
+	void UltraEditorLayer::OnEvent(Dark::Event& e)
+	{
+		EventDispatcher dispatcher{ e };
+
+		dispatcher.Dispatch<KeyPressedEvent>(DARK_BIND_EVENT_FN(UltraEditorLayer::OnKeyPressed));
+	}
+
+	bool UltraEditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool control{ Input::IsKeyPressed(KeyCode::KEY_LEFT_CONTROL) || Input::IsKeyPressed(KeyCode::KEY_RIGHT_CONTROL) };
+		bool shift{ Input::IsKeyPressed(KeyCode::KEY_LEFT_SHIFT) || Input::IsKeyPressed(KeyCode::KEY_RIGHT_SHIFT) };
+
+		switch (e.GetKeyCode())
+		{
+
+			case KeyCode::KEY_N:
+			{
+				if (control)
+					NewSceneFile();
+
+				break;
+			}
+
+			case KeyCode::KEY_O:
+			{
+				if (control)
+					OpenSceneFile();
+
+				break;
+			}
+
+			case KeyCode::KEY_S:
+			{
+				if (control && shift)
+					SaveSceneFileAs();
+
+				break;
+			}
+		}
+
+		return false;
+	}
+
+	//loading and saving scene helpers;
+	void UltraEditorLayer::NewSceneFile()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+
+	void UltraEditorLayer::OpenSceneFile()
+	{
+		std::string filePath{ FileDialogs::OpenFile("Dark Scene (*.dscn)\0*.dscn\0") };
+
+		if (!filePath.empty())
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+			SceneSerializer serializer{ m_ActiveScene };
+			serializer.Deserialize(filePath);
+		}
+	}
+
+	void UltraEditorLayer::SaveSceneFileAs()
+	{
+		std::string filePath{ FileDialogs::SaveFile("Dark Scene (*.dscn)\0*.dscn\0") };
+
+		if (!filePath.empty())
+		{
+			SceneSerializer serializer{ m_ActiveScene };
+			serializer.Serialize(filePath);
+		}
 	}
 }

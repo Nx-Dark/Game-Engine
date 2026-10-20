@@ -93,17 +93,17 @@ namespace Dark {
 
 			switch (action) {
 				case GLFW_PRESS: {
-					KeyPressedEvent event(key, 0);
+					KeyPressedEvent event((KeyCode)key, 0);
 					data.CallBackFn(event);
 					break;
 				}
 				case GLFW_RELEASE: {
-					KeyReleasedEvent event(key);
+					KeyReleasedEvent event((KeyCode)key);
 					data.CallBackFn(event);
 					break;
 				}
 				case GLFW_REPEAT: {
-					KeyPressedEvent event(key, 1);
+					KeyPressedEvent event((KeyCode)key, 1);
 					data.CallBackFn(event);
 					break;
 				}
@@ -115,7 +115,7 @@ namespace Dark {
 
 			WindowData& data{ *(WindowData*)(glfwGetWindowUserPointer(window)) };
 
-			KeyTypedEvent event(character);
+			KeyTypedEvent event((KeyCode)character);
 			data.CallBackFn(event);
 
 		});
