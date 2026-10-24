@@ -33,7 +33,8 @@ namespace Dark
 
 		//movement stuff
 		float m_MoveSpeed{ 5.0f };
-		float m_RotateSpeed{ 0.04f };
+		float m_RotateSpeed{ 4.0f };
+		float m_ZoomSpeed{ 5.0f }; //5degrees per scroll is the speed;
 
 		glm::vec2 m_LastMousePos{};
 
@@ -64,6 +65,8 @@ namespace Dark
 		inline float GetMoveSpeed() const { return m_MoveSpeed; }
 		inline void SetRotateSpeed(float val) { m_RotateSpeed = val; }
 		inline float GetRotateSpeed() const { return m_RotateSpeed; }
+		inline void SetZoomSpeed(float val) { m_ZoomSpeed = val; }
+		inline float GetZoomSpeed() const { return m_ZoomSpeed; }
 
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMat; }
 		inline glm::mat4 GetViewProjMatrix() const { return m_Projection * m_ViewMat; }

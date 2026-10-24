@@ -33,8 +33,6 @@ namespace Dark
 
 	void EditorCamera::OnUpdate(DeltaTime dt)
 	{
-
-
 		const glm::vec2& curMousePos { Input::GetMouseX(), Input::GetMouseY() };
 		glm::vec2 mouseDelta{ (curMousePos - m_LastMousePos) * 0.1f };
 		m_LastMousePos = curMousePos;
@@ -67,6 +65,7 @@ namespace Dark
 	void EditorCamera::Move(DeltaTime dt, const glm::vec2& mouseDelta)
 	{
 		const float m_speed{ m_MoveSpeed * dt };
+		const float r_speed{ glm::radians(m_RotateSpeed) };
 
 		glm::vec3 direction{};
 
@@ -86,8 +85,8 @@ namespace Dark
 		m_Position += ((glm::length(direction) != 0.0f) ? glm::normalize(direction) : direction) * m_speed;
 
 		//rotation
-		m_Yaw += mouseDelta.x * m_RotateSpeed;
-		m_Pitch -= mouseDelta.y * m_RotateSpeed;
+		m_Yaw += mouseDelta.x * r_speed;
+		m_Pitch -= mouseDelta.y * r_speed;
 
 		//constexpr float pitchLimit{ glm::radians(89.0f) };
 		//m_Pitch = glm::clamp(m_Pitch, -pitchLimit, pitchLimit);
@@ -152,7 +151,7 @@ namespace Dark
 	{
 		//zooming the camera
 		float y_Offset{ e.GetYOffset() };
-		m_Fov -= y_Offset * glm::radians(5.0f);
+		m_Fov -= y_Offset * glm::radians(m_ZoomSpeed);
 		m_Fov = glm::clamp(m_Fov, glm::radians(24.0f), glm::radians(165.0f));
 		CalcProjectionMat();
 

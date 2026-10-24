@@ -235,18 +235,30 @@ namespace Dark {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Settings"))
+			{
+				if (ImGui::MenuItem("Editor Settings"))
+					m_ShowEditorSettings = true;
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenuBar();
 		}
 
+		//editor settings menu imgui
+		if(m_ShowEditorSettings)
+			EditorSettingsMenu();
+
 		//viewport and framebuffer bullshit
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
-		ImGui::Begin("Viewport"); //viewport
-
+		if (ImGui::Begin("Viewport")) //viewport
+		{ 
 			//if the viewport is focused or hovered
 			m_ViewportFocused = ImGui::IsWindowFocused();
 			m_ViewportHovered = ImGui::IsWindowHovered();
 			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
-			
+
 			ImVec2 viewportPos{ ImGui::GetWindowPos() };
 			ImVec2 viewportPanelSize{ ImGui::GetContentRegionAvail() };
 
@@ -254,7 +266,7 @@ namespace Dark {
 				m_ViewportPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0.0f, 1.0f }, { 1.0f, 0.0f });
-			
+
 			//Gizmos
 			Entity selectedEntity{ m_SceneHierarchyPanel.GetSelectedEntity() };
 			if (selectedEntity && (m_GizmoType != -1))
@@ -275,19 +287,19 @@ namespace Dark {
 
 				//snapping
 				bool snap{ Input::IsKeyPressed(KeyCode::KEY_LEFT_CONTROL) };
-				float snapVal{ (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ? 45.0f : 0.5f  }; //0.5m for translation/scale and 45.0f degree for rotation;
+				float snapVal{ (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ? 45.0f : 0.5f }; //0.5m for translation/scale and 45.0f degree for rotation;
 
 				float snapValues[3]{ snapVal, snapVal, snapVal };
 
 				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType,
 					ImGuizmo::MODE::LOCAL, glm::value_ptr(entityTransform), nullptr, (snap ? snapValues : nullptr));
 
-				if (ImGuizmo::IsUsing()) 
+				if (ImGuizmo::IsUsing())
 				{
 					Math::DecomposeTransfrom(entityTransform, entityTc.Translation, entityTc.Rotation, entityTc.Scale);
 				}
 			}
-
+		}
 		ImGui::End(); //viewport
 		ImGui::PopStyleVar();
 
@@ -298,6 +310,88 @@ namespace Dark {
 		ImGui::End();
 	}
 
+	void UltraEditorLayer::EditorSettingsMenu()
+	{
+		if (ImGui::Begin("EditorSettings", &m_ShowEditorSettings))
+		{
+
+			if (ImGui::TreeNodeEx("Editor Camera", (ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick)))
+			{
+
+				//fov
+				ImGui::Columns(2, "##Fov");
+				ImGui::SetColumnWidth(0, 80.0f);
+				ImGui::Text("Fov");
+				ImGui::NextColumn();
+				float cameraFov{ glm::degrees(m_EditorCamera.GetYFov()) };
+				if (ImGui::DragFloat("##Fov", &cameraFov, 1.0f, 24.0f, 165.0f))
+					m_EditorCamera.SetYFov(glm::radians(cameraFov));
+				ImGui::Columns(1);
+
+				//near clip
+				ImGui::Columns(2, "##NearClip");
+				ImGui::SetColumnWidth(0, 80.0f);
+				ImGui::Text("NearClip");
+				ImGui::NextColumn();
+				float nearClip{ m_EditorCamera.GetNearClip() };
+				if (ImGui::DragFloat("##NearClip", &nearClip, 0.1f, 0.00001f, 10000.0f))
+					m_EditorCamera.SetNearClip(nearClip);
+				ImGui::Columns(1);
+
+				//far clip
+				ImGui::Columns(2, "##FarClip");
+				ImGui::SetColumnWidth(0, 80.0f);
+				ImGui::Text("FarClip");
+				ImGui::NextColumn();
+				float farClip{ m_EditorCamera.GetFarClip() };
+				if (ImGui::DragFloat("##FarClip", &farClip, 0.1f,0.00001f, 10000.0f))
+					m_EditorCamera.SetFarClip(farClip);
+				ImGui::Columns(1);
+
+				//move speed
+				ImGui::Columns(2, "##MoveSpeed");
+				ImGui::SetColumnWidth(0, 80.0f);
+				ImGui::Text("MoveSpeed");
+				ImGui::NextColumn();
+				float moveSpeed{ m_EditorCamera.GetMoveSpeed() };
+				if (ImGui::DragFloat("##MoveSpeed", &moveSpeed, 0.1f, 1.0f, 24.0f))
+					m_EditorCamera.SetMoveSpeed(moveSpeed);
+				ImGui::Columns(1);
+
+				//rotate speed
+				ImGui::Columns(2, "##RotateSpeed");
+				ImGui::SetColumnWidth(0, 80.0f);
+				ImGui::Text("RotateSpeed");
+				ImGui::NextColumn();
+				float rotateSpeed{ m_EditorCamera.GetRotateSpeed() };
+				if (ImGui::DragFloat("##RotateSpeed", &rotateSpeed, 1.0f, 1.0f, 180.0f))
+					m_EditorCamera.SetRotateSpeed(rotateSpeed);
+				ImGui::Columns(1);
+
+				//zoom speed
+				ImGui::Columns(2, "##ZoomSpeed");
+				ImGui::SetColumnWidth(0, 80.0f);
+				ImGui::Text("ZoomSpeed");
+				ImGui::NextColumn();
+				float zoomSpeed{ m_EditorCamera.GetZoomSpeed() };
+				if (ImGui::DragFloat("##ZoomSpeed", &zoomSpeed, 1.0f, 1.0f, 24.0f))
+					m_EditorCamera.SetZoomSpeed(zoomSpeed);
+				ImGui::Columns(1);
+
+				ImGui::TreePop();
+			}
+
+
+
+			//close button
+			if (ImGui::Button("Close"))
+				m_ShowEditorSettings = false;
+
+		}
+		ImGui::End();
+
+	}
+
 	//events
 	void UltraEditorLayer::OnEvent(Event& e)
 	{
@@ -305,8 +399,7 @@ namespace Dark {
 
 		dispatcher.Dispatch<KeyPressedEvent>(DARK_BIND_EVENT_FN(UltraEditorLayer::OnKeyPressed));
 
-		if(m_ViewportFocused && m_ViewportHovered)
-			m_EditorCamera.OnEvent(e);
+		m_EditorCamera.OnEvent(e);
 	}
 
 	bool UltraEditorLayer::OnKeyPressed(KeyPressedEvent& e)

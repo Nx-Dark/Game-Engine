@@ -26,6 +26,8 @@ namespace Dark {
 
 		//panels
 		SceneHierarchyPanel m_SceneHierarchyPanel{};
+		//editor settings stuff
+		bool m_ShowEditorSettings{};
 
 		//editor camera
 		EditorCamera m_EditorCamera;
@@ -48,6 +50,9 @@ namespace Dark {
 		void NewSceneFile();
 		void OpenSceneFile();
 		void SaveSceneFileAs();
+
+		//menu stuff
+		void EditorSettingsMenu();
 	};
 
 }
