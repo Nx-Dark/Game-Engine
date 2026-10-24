@@ -8,12 +8,6 @@ namespace Dark
 		SetContext(context);
 	}
 
-	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
-	{
-		m_Context = context;
-		m_EntitySelection = { };
-	}
-
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
 		//scene hierarchy
@@ -76,7 +70,6 @@ namespace Dark
 			m_EntitySelection = entity;
 		}
 
-
 		bool isEntityTobeDestroyed{};
 		if (ImGui::BeginPopupContextItem(0, (ImGuiPopupFlags_MouseButtonRight))) 
 		{
@@ -86,7 +79,6 @@ namespace Dark
 
 			ImGui::EndPopup();
 		}
-
 
 		if (treeNodeExpanded) 
 		{

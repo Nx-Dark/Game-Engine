@@ -130,10 +130,12 @@ namespace Dark {
 #endif
 
 		//panels
+		m_SceneViewportPanel.SetContext(m_ActiveScene);
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 		//editor camera
-		m_EditorCamera = EditorCamera{ { 0.0f, 0.0f, 10.0f }, (uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y, glm::radians(60.0f), 0.01f, 10000.0f };
+		m_EditorCamera = EditorCamera{ { 0.0f, 0.0f, 10.0f }, (uint32_t)m_SceneViewportPanel.GetViewportPanelSize().x, 
+			(uint32_t)m_SceneViewportPanel.GetViewportPanelSize().y, glm::radians(60.0f), 0.01f, 10000.0f};
 
 	}
 
@@ -146,19 +148,20 @@ namespace Dark {
 	{
 
 		//resizing the framebuffer and the viewport panel
+		const glm::vec2& sceneViewportPanelSize{ m_SceneViewportPanel.GetViewportPanelSize() };
 		if (const auto& frameBufferSpec{ m_Framebuffer->GetSpecifications() };
-			m_ViewportPanelSize.x != 0.0f && m_ViewportPanelSize.y != 0.0f
-			&& (frameBufferSpec.Width != m_ViewportPanelSize.x || frameBufferSpec.Height != m_ViewportPanelSize.y))
+			sceneViewportPanelSize.x != 0.0f && sceneViewportPanelSize.y != 0.0f
+			&& (frameBufferSpec.Width != sceneViewportPanelSize.x || frameBufferSpec.Height != sceneViewportPanelSize.y))
 		{
-			m_Framebuffer->ReSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+			m_Framebuffer->ReSize((uint32_t)sceneViewportPanelSize.x, (uint32_t)sceneViewportPanelSize.y);
 
 			//resizing the viewport of the current active scene and editor camera;
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
-			m_EditorCamera.SetViewportSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+			m_ActiveScene->OnViewportResize((uint32_t)sceneViewportPanelSize.x, (uint32_t)sceneViewportPanelSize.y);
+			m_EditorCamera.SetViewportSize((uint32_t)sceneViewportPanelSize.x, (uint32_t)sceneViewportPanelSize.y);
 		}
 
 		//updating the editor camera;
-		if(m_ViewportFocused && m_ViewportHovered)
+		if(m_SceneViewportPanel.GetViewportFocused() && m_SceneViewportPanel.GetViewportHovered())
 			m_EditorCamera.OnUpdate(dt);
 
 		//Dark::Renderer2D::ResetStats();
@@ -251,64 +254,8 @@ namespace Dark {
 		if(m_ShowEditorSettings)
 			EditorSettingsMenu();
 
-		//viewport and framebuffer bullshit
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
-		if (ImGui::Begin("Viewport")) //viewport
-		{ 
-			//if the viewport is focused or hovered
-			m_ViewportFocused = ImGui::IsWindowFocused();
-			m_ViewportHovered = ImGui::IsWindowHovered();
-			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
-
-			ImVec2 viewportPanelSize{ ImGui::GetContentRegionAvail() };
-			if (m_ViewportPanelSize != glm::vec2{ viewportPanelSize.x, viewportPanelSize.y })
-				m_ViewportPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
-
-			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0.0f, 1.0f }, { 1.0f, 0.0f });
-
-			//Gizmos
-			Entity selectedEntity{ m_SceneHierarchyPanel.GetSelectedEntity() };
-			if (selectedEntity && (m_GizmoType != -1))
-			{
-				ImGuizmo::SetOrthographic(false);
-				ImGuizmo::SetDrawlist();
-
-				float windowW{ static_cast<float>(ImGui::GetWindowWidth()) };
-				float windowH{ static_cast<float>(ImGui::GetWindowHeight()) };
-				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowW, windowH);
-
-				//runtime camera/scene camera from the ECS
-				//auto cameraEntity{ m_ActiveScene->GetPrimaryCameraEntity() };
-				//const auto& camera{ cameraEntity.GetComponents<CameraComponent>().Camera };
-				//const auto& cameraProjection{ camera.GetProjection() };
-				//glm::mat4 cameraView{ glm::inverse(cameraEntity.GetComponents<TransformComponent>().GetTransform()) };
-
-				//editor camera 
-				const glm::mat4& cameraProjection{ m_EditorCamera.GetProjection() };
-				const glm::mat4& cameraView{ m_EditorCamera.GetViewMatrix() };
-
-				//Currently Selected Entity transform
-				auto& entityTc{ selectedEntity.GetComponents<TransformComponent>() };
-				glm::mat4 entityTransform{ entityTc.GetTransform() };
-
-				//snapping
-				bool snap{ Input::IsKeyPressed(KeyCode::KEY_LEFT_CONTROL) };
-				float snapVal{ (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ? 45.0f : 0.5f }; //0.5m for translation/scale and 45.0f degree for rotation;
-
-				float snapValues[3]{ snapVal, snapVal, snapVal };
-
-				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType,
-					ImGuizmo::MODE::LOCAL, glm::value_ptr(entityTransform), nullptr, (snap ? snapValues : nullptr));
-
-				if (ImGuizmo::IsUsing())
-				{
-					Math::DecomposeTransfrom(entityTransform, entityTc.Translation, entityTc.Rotation, entityTc.Scale);
-				}
-			}
-		}
-		ImGui::End(); //viewport
-		ImGui::PopStyleVar();
-
+		//viewport
+		m_SceneViewportPanel.OnImGuiRender(m_EditorCamera, m_Framebuffer, m_SceneHierarchyPanel.GetSelectedEntity());
 		//scene hierarchy panel
 		m_SceneHierarchyPanel.OnImGuiRender();
 
@@ -406,6 +353,7 @@ namespace Dark {
 		dispatcher.Dispatch<KeyPressedEvent>(DARK_BIND_EVENT_FN(UltraEditorLayer::OnKeyPressed));
 
 		m_EditorCamera.OnEvent(e);
+		m_SceneViewportPanel.OnEvent(e);
 	}
 
 	bool UltraEditorLayer::OnKeyPressed(KeyPressedEvent& e)
@@ -439,20 +387,6 @@ namespace Dark {
 					SaveSceneFileAs();
 				break;
 			}
-
-			//shortcut keys for gizmos
-			case KeyCode::KEY_Q:
-				m_GizmoType = -1;
-				break;
-			case KeyCode::KEY_W:
-				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-				break;
-			case KeyCode::KEY_E:
-				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-				break;
-			case KeyCode::KEY_R:
-				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-				break;
 		}
 
 		return false;
@@ -462,7 +396,9 @@ namespace Dark {
 	void UltraEditorLayer::NewSceneFile()
 	{
 		m_ActiveScene = CreateRef<Scene>();
-		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+		const auto& viewportPanelSize{ m_SceneViewportPanel.GetViewportPanelSize() };
+		m_ActiveScene->OnViewportResize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+		m_SceneViewportPanel.SetContext(m_ActiveScene);
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
@@ -473,7 +409,9 @@ namespace Dark {
 		if (!filePath.empty())
 		{
 			m_ActiveScene = CreateRef<Scene>();
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+			const auto& viewportPanelSize{ m_SceneViewportPanel.GetViewportPanelSize() };
+			m_ActiveScene->OnViewportResize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+			m_SceneViewportPanel.SetContext(m_ActiveScene);
 			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 			SceneSerializer serializer{ m_ActiveScene };

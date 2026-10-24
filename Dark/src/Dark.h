@@ -29,6 +29,8 @@
 #include "Dark/Renderer/Texture.h"
 #include "Dark/Renderer/SubTexture.h"
 
+#include "Dark/Renderer/EditorCamera.h"
+
 //--Entity Component System and Scene--
 #include "Dark/Scene/Scene.h"
 #include "Dark/Scene/SceneCamera.h"

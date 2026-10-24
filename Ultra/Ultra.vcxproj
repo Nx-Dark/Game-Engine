@@ -146,10 +146,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
+    <ClInclude Include="src\Panels\SceneViewportPanel.h" />
     <ClInclude Include="src\UltraEditorLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />
+    <ClCompile Include="src\Panels\SceneViewportPanel.cpp" />
     <ClCompile Include="src\UltraEditorApp.cpp" />
     <ClCompile Include="src\UltraEditorLayer.cpp" />
   </ItemGroup>

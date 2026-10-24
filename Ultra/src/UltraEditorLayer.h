@@ -2,6 +2,7 @@
 
 #include "Dark.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/SceneViewportPanel.h"
 #include "Dark/Renderer/EditorCamera.h"
 
 namespace Dark {
@@ -15,16 +16,10 @@ namespace Dark {
 
 		Ref<Scene> m_ActiveScene{};
 
-		//viewport panel stuff
-		bool m_ViewportFocused{};
-		bool m_ViewportHovered{};
-		glm::vec2 m_ViewportPanelSize{ 1.0f, 1.0f };
-
-		//gizmo stuff
-		int m_GizmoType{ -1 };
-
 		//panels
+		SceneViewportPanel m_SceneViewportPanel{};
 		SceneHierarchyPanel m_SceneHierarchyPanel{};
+
 		//editor settings stuff
 		bool m_ShowEditorSettings{};
 

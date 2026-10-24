@@ -10,6 +10,7 @@
       <Filter>Panels</Filter>
     </ClInclude>
     <ClInclude Include="src\UltraEditorLayer.h" />
+    <ClInclude Include="src\Panels\SceneViewportPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp">
@@ -17,5 +18,6 @@
     </ClCompile>
     <ClCompile Include="src\UltraEditorApp.cpp" />
     <ClCompile Include="src\UltraEditorLayer.cpp" />
+    <ClCompile Include="src\Panels\SceneViewportPanel.cpp" />
   </ItemGroup>
 </Project>

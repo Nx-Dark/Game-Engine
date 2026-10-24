@@ -19,7 +19,7 @@ namespace Dark
 		SceneHierarchyPanel(const Ref<Scene>& scene);
 		
 		//context is the scene which we are selecting for the scene hierarchy panel
-		void SetContext(const Ref<Scene>& context);
+		inline void SetContext(const Ref<Scene>& context) { m_Context = context; m_EntitySelection = {}; }
 
 		//rendering the imgui panel cause obviously
 		void OnImGuiRender();
