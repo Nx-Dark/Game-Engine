@@ -19,7 +19,6 @@ namespace Dark {
 		bool m_ViewportFocused{};
 		bool m_ViewportHovered{};
 		glm::vec2 m_ViewportPanelSize{ 1.0f, 1.0f };
-		bool m_IsMouseLocked{};
 
 		//gizmo stuff
 		int m_GizmoType{ -1 };

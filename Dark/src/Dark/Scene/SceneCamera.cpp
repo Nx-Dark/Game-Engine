@@ -24,14 +24,12 @@ namespace Dark
 
 				m_Projection = glm::ortho(orthoLeft, orthoRight, orthoBottom, orthoTop,
 					m_OrthographicNear, m_OrthographicFar);
-
 				break;
 			}
 
 			case ProjectionType::Perspective:
 			{
 				m_Projection = glm::perspective(m_PerspectiveVerticalFov, m_AspectRatio, m_PerspectiveNear, m_PerspectiveFar);
-
 				break;
 			}
 		}
@@ -60,7 +58,7 @@ namespace Dark
 	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width, m_ViewportHeight = height;
-		m_AspectRatio = (float)width / (float)height ;
+		m_AspectRatio = (float)width / (float)height;
 		RecalcProjection();
 	}
 

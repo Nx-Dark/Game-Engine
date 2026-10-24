@@ -145,11 +145,11 @@ namespace Dark {
 		StartBatch();
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform) //this transform is the view matrix which defines the camera's oreintation
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform) //this transform defines the camera's oreintation and position
 	{
 		DARK_PROFILE_FUNCTION();
 
-		glm::mat4 viewProj{ camera.GetProjection() * glm::inverse(transform) };
+		glm::mat4 viewProj{ camera.GetProjection() * glm::inverse(transform) }; //inversing the camera's transform to get view matrix;
 
 		s_RendererData.TextureShader->Bind();
 		s_RendererData.TextureShader->SetMat4("u_ProjectionView", viewProj);

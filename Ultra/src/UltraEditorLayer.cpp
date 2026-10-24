@@ -146,7 +146,7 @@ namespace Dark {
 	{
 
 		//resizing the framebuffer and the viewport panel
-		if (auto frameBufferSpec{ m_Framebuffer->GetSpecifications() };
+		if (const auto& frameBufferSpec{ m_Framebuffer->GetSpecifications() };
 			m_ViewportPanelSize.x != 0.0f && m_ViewportPanelSize.y != 0.0f
 			&& (frameBufferSpec.Width != m_ViewportPanelSize.x || frameBufferSpec.Height != m_ViewportPanelSize.y))
 		{
@@ -158,7 +158,8 @@ namespace Dark {
 		}
 
 		//updating the editor camera;
-		m_EditorCamera.OnUpdate(dt);
+		if(m_ViewportFocused && m_ViewportHovered)
+			m_EditorCamera.OnUpdate(dt);
 
 		//Dark::Renderer2D::ResetStats();
 
@@ -259,9 +260,7 @@ namespace Dark {
 			m_ViewportHovered = ImGui::IsWindowHovered();
 			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
-			ImVec2 viewportPos{ ImGui::GetWindowPos() };
 			ImVec2 viewportPanelSize{ ImGui::GetContentRegionAvail() };
-
 			if (m_ViewportPanelSize != glm::vec2{ viewportPanelSize.x, viewportPanelSize.y })
 				m_ViewportPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
 
@@ -278,6 +277,13 @@ namespace Dark {
 				float windowH{ static_cast<float>(ImGui::GetWindowHeight()) };
 				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowW, windowH);
 
+				//runtime camera/scene camera from the ECS
+				//auto cameraEntity{ m_ActiveScene->GetPrimaryCameraEntity() };
+				//const auto& camera{ cameraEntity.GetComponents<CameraComponent>().Camera };
+				//const auto& cameraProjection{ camera.GetProjection() };
+				//glm::mat4 cameraView{ glm::inverse(cameraEntity.GetComponents<TransformComponent>().GetTransform()) };
+
+				//editor camera 
 				const glm::mat4& cameraProjection{ m_EditorCamera.GetProjection() };
 				const glm::mat4& cameraView{ m_EditorCamera.GetViewMatrix() };
 
@@ -404,7 +410,6 @@ namespace Dark {
 
 	bool UltraEditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-
 		if (e.GetRepeatCount() > 0)
 			return false;
 
@@ -418,7 +423,6 @@ namespace Dark {
 			{
 				if (control)
 					NewSceneFile();
-
 				break;
 			}
 
@@ -426,7 +430,6 @@ namespace Dark {
 			{
 				if (control)
 					OpenSceneFile();
-
 				break;
 			}
 
@@ -434,7 +437,6 @@ namespace Dark {
 			{
 				if (control && shift)
 					SaveSceneFileAs();
-
 				break;
 			}
 

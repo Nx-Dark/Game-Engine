@@ -113,12 +113,12 @@ namespace Dark
 		tag.Tag = name.empty() ? "Entity" : name;
 		return e;
 	}
-
+	//destroying an entity
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
 	}
-
+	//look through the registry and return the entity which contains the primary camera component
 	Entity Scene::GetPrimaryCameraEntity()
 	{
 		auto view{ m_Registry.view<CameraComponent>() };

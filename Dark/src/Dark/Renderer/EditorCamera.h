@@ -83,11 +83,11 @@ namespace Dark
 		inline void CalcViewMat() { m_ViewMat = glm::lookAt(m_Position, m_Position + m_Forward, m_Up); }
 		inline std::pair<float, float> CalcPanSpeed()
 		{
-			float x{ std::min(m_ViewportWidth / 640.0f, 3.0f) };
-			float y{ std::min(m_ViewportHeight / 640.0f, 3.0f) };
+			float x{ std::min(m_ViewportWidth / 1000.0f, 3.0f) };
+			float y{ std::min(m_ViewportHeight / 1000.0f, 3.0f) };
 
-			float xFactor{ 0.036f * (x * x) + 0.025f * x + 0.302f };
-			float yFactor{ 0.036f * (y * y) + 0.025f * y + 0.302f };
+			float xFactor{ 0.036f * (x * x) + 0.025f * x + 0.0302f };
+			float yFactor{ 0.036f * (y * y) + 0.025f * y + 0.0302f };
 
 			return { xFactor, yFactor };
 		}
