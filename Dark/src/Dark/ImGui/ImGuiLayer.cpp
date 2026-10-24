@@ -3,6 +3,7 @@
 
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/imgui_internal.h>
 
 #include "Dark/Core/Application.h"
 
@@ -10,6 +11,9 @@
 
 //TEMPORARY
 #include <GLFW/glfw3.h>
+
+//imguizmo
+#include <ImGuizmo/ImGuizmo.h>
 
 namespace Dark {
 
@@ -79,7 +83,11 @@ namespace Dark {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 
+		//disabling left alt key navigation
+		if (GImGui->NavWindowingToggleLayer)
+			GImGui->NavWindowingToggleLayer = false;
 	}
 
 	void ImGuiLayer::End()
@@ -107,15 +115,9 @@ namespace Dark {
 
 	}
 
-	void ImGuiLayer::OnImGuiRender()
-	{
-		DARK_PROFILE_FUNCTION();
-
-	}
-
 	void ImGuiLayer::OnEvent(Event& e)
 	{
-		if (!m_AllowEvents) {
+		if (m_BlockEvents) {
 			//not allowing or blocking the events from passing through this imgui layer;
 			ImGuiIO io{ ImGui::GetIO() };
 			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;

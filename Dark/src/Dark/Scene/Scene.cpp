@@ -37,7 +37,23 @@ namespace Dark
 		});
 	}
 
-	void Scene::OnUpdate(DeltaTime dt)
+	//scene update in editor
+	void Scene::OnUpdateEditor(DeltaTime dt, const EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		m_Registry.group<TransformComponent, SpriteRendererComponent>().each([](const auto entity, auto& tc, auto& src)
+		{
+
+			Renderer2D::DrawQuad(tc.GetTransform(), src.Color);
+
+		});
+
+		Renderer2D::EndScene();
+	}
+
+	//scene update in runtime
+	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
 
 		//updating the scripts
@@ -101,6 +117,19 @@ namespace Dark
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
+	}
+
+	Entity Scene::GetPrimaryCameraEntity()
+	{
+		auto view{ m_Registry.view<CameraComponent>() };
+		for (auto entity : view)
+		{
+			auto& cameraComp{ view.get<CameraComponent>(entity) };
+			if (cameraComp.Primary)
+				return { entity, this };
+		}
+
+		return {};
 	}
 
 

@@ -26,6 +26,7 @@ project "Dark"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.mini_audio}",
@@ -37,6 +38,7 @@ project "Dark"
         "GLFW",
         "GLAD",
         "ImGui",
+        "ImGuizmo",
         "MINIAUDIO",
         "YAMLCPP",
         "opengl32.lib"

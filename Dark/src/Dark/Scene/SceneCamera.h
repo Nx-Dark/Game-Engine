@@ -27,6 +27,8 @@ namespace Dark
 
 		float m_AspectRatio{ 1.0f };
 
+		uint32_t m_ViewportWidth{ 1 }, m_ViewportHeight{ 1 };
+
 	private:
 		void RecalcProjection();
 

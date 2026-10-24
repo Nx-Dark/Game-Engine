@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>dpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;YAML_CPP_STATIC_DEFINE;DARK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\ImGuizmo;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -103,7 +103,7 @@
       <PrecompiledHeaderFile>dpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;YAML_CPP_STATIC_DEFINE;DARK_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\ImGuizmo;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -131,7 +131,7 @@
       <PrecompiledHeaderFile>dpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DARK_PLATFORM_WINDOWS;_GLFW_WIN32;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;YAML_CPP_STATIC_DEFINE;DARK_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\ImGuizmo;vendor\glm;vendor\stb_image;vendor\miniaudio\includes;vendor\EnTT\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -177,8 +177,10 @@
     <ClInclude Include="src\Dark\Events\KeyEvent.h" />
     <ClInclude Include="src\Dark\Events\MouseEvent.h" />
     <ClInclude Include="src\Dark\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Dark\Math\Math.h" />
     <ClInclude Include="src\Dark\Renderer\Buffer.h" />
     <ClInclude Include="src\Dark\Renderer\Camera.h" />
+    <ClInclude Include="src\Dark\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Dark\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Dark\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Dark\Renderer\OrthoGraphicCamera.h" />
@@ -638,7 +640,9 @@
     <ClCompile Include="src\Dark\Core\Window.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Dark\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Dark\Math\Math.cpp" />
     <ClCompile Include="src\Dark\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Dark\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Dark\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCamera.cpp" />
     <ClCompile Include="src\Dark\Renderer\OrthoGraphicCameraController.cpp" />
@@ -661,8 +665,8 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\dpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -678,6 +682,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\ImGui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\ImGuizmo\ImGuizmo.vcxproj">
+      <Project>{36FD234F-22CA-7E5A-4BE3-6C02370FB4E8}</Project>
     </ProjectReference>
     <ProjectReference Include="vendor\miniaudio\MINIAUDIO.vcxproj">
       <Project>{C4549F7D-30BF-53F4-79FD-049AE5A63149}</Project>

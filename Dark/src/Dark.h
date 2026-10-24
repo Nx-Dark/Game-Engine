@@ -29,23 +29,18 @@
 #include "Dark/Renderer/Texture.h"
 #include "Dark/Renderer/SubTexture.h"
 
-#include "Dark/Renderer/OrthoGraphicCamera.h"
-#include "Dark/Renderer/OrthoGraphicCameraController.h"
-
 //--Entity Component System and Scene--
 #include "Dark/Scene/Scene.h"
+#include "Dark/Scene/SceneCamera.h"
 #include "Dark/Scene/Components.h"
 #include "Dark/Scene/Entity.h"
 #include "Dark/Scene/ScriptableEntity.h"
-#include "Dark/Scene/SceneCamera.h"
 
 //audio
 #include "Dark/Audio/AudioMixer.h"
 
 //Math and stuff--------------//
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "Dark/Math/Math.h"
 //----------------------------//
 
 //Utils

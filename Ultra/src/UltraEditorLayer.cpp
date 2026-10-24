@@ -2,6 +2,8 @@
 
 #include "Dark/Scene/SceneSerializer.h"
 
+#include "ImGuizmo/ImGuizmo.h"
+
 namespace Dark {
 
 	UltraEditorLayer::UltraEditorLayer()
@@ -130,6 +132,9 @@ namespace Dark {
 		//panels
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
+		//editor camera
+		m_EditorCamera = EditorCamera{ { 0.0f, 0.0f, 10.0f }, (uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y, glm::radians(60.0f), 0.01f, 10000.0f };
+
 	}
 
 	void UltraEditorLayer::OnDetach()
@@ -137,7 +142,7 @@ namespace Dark {
 
 	}
 
-	void UltraEditorLayer::OnUpdate(Dark::DeltaTime dt)
+	void UltraEditorLayer::OnUpdate(DeltaTime dt)
 	{
 
 		//resizing the framebuffer and the viewport panel
@@ -147,9 +152,13 @@ namespace Dark {
 		{
 			m_Framebuffer->ReSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
 
-			//resizing the viewport of the current active scene;
+			//resizing the viewport of the current active scene and editor camera;
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
+			m_EditorCamera.SetViewportSize((uint32_t)m_ViewportPanelSize.x, (uint32_t)m_ViewportPanelSize.y);
 		}
+
+		//updating the editor camera;
+		m_EditorCamera.OnUpdate(dt);
 
 		//Dark::Renderer2D::ResetStats();
 
@@ -158,7 +167,7 @@ namespace Dark {
 		Dark::Renderer::Clear({ 0.1f, 0.1f, 0.1f, 1.0f });
 
 		// Updatting and Rendering the Scene
-		m_ActiveScene->OnUpdate(dt);
+		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
 
 		m_Framebuffer->UnBind();
 	}
@@ -229,35 +238,57 @@ namespace Dark {
 			ImGui::EndMenuBar();
 		}
 
-		//ImGui::Begin("Stats");
-		//	auto stats = Dark::Renderer2D::GetStats();
-		//	ImGui::Text("Stats:");
-		//	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		//	ImGui::Text("Quads: %d", stats.QuadCount);
-		//	ImGui::Text("Vertices: %d", stats.GetQuadVertexCount());
-		//	ImGui::Text("Indices: %d", stats.GetQuadIndexCount());
-
-		//ImGui::End();
-		
-
 		//viewport and framebuffer bullshit
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
-		ImGui::Begin("Viewport");
+		ImGui::Begin("Viewport"); //viewport
 
 			//if the viewport is focused or hovered
 			m_ViewportFocused = ImGui::IsWindowFocused();
 			m_ViewportHovered = ImGui::IsWindowHovered();
-			Application::Get().GetImGuiLayer()->AllowEvents(m_ViewportFocused && m_ViewportHovered);
-
+			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
+			
+			ImVec2 viewportPos{ ImGui::GetWindowPos() };
 			ImVec2 viewportPanelSize{ ImGui::GetContentRegionAvail() };
 
-			if (m_ViewportPanelSize != glm::vec2{ viewportPanelSize.x, viewportPanelSize.y }) {
+			if (m_ViewportPanelSize != glm::vec2{ viewportPanelSize.x, viewportPanelSize.y })
 				m_ViewportPanelSize = { viewportPanelSize.x, viewportPanelSize.y };
-			}
 
 			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0.0f, 1.0f }, { 1.0f, 0.0f });
+			
+			//Gizmos
+			Entity selectedEntity{ m_SceneHierarchyPanel.GetSelectedEntity() };
+			if (selectedEntity && (m_GizmoType != -1))
+			{
+				ImGuizmo::SetOrthographic(false);
+				ImGuizmo::SetDrawlist();
 
-		ImGui::End();
+				float windowW{ static_cast<float>(ImGui::GetWindowWidth()) };
+				float windowH{ static_cast<float>(ImGui::GetWindowHeight()) };
+				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowW, windowH);
+
+				const glm::mat4& cameraProjection{ m_EditorCamera.GetProjection() };
+				const glm::mat4& cameraView{ m_EditorCamera.GetViewMatrix() };
+
+				//Currently Selected Entity transform
+				auto& entityTc{ selectedEntity.GetComponents<TransformComponent>() };
+				glm::mat4 entityTransform{ entityTc.GetTransform() };
+
+				//snapping
+				bool snap{ Input::IsKeyPressed(KeyCode::KEY_LEFT_CONTROL) };
+				float snapVal{ (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ? 45.0f : 0.5f  }; //0.5m for translation/scale and 45.0f degree for rotation;
+
+				float snapValues[3]{ snapVal, snapVal, snapVal };
+
+				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType,
+					ImGuizmo::MODE::LOCAL, glm::value_ptr(entityTransform), nullptr, (snap ? snapValues : nullptr));
+
+				if (ImGuizmo::IsUsing()) 
+				{
+					Math::DecomposeTransfrom(entityTransform, entityTc.Translation, entityTc.Rotation, entityTc.Scale);
+				}
+			}
+
+		ImGui::End(); //viewport
 		ImGui::PopStyleVar();
 
 		//scene hierarchy panel
@@ -268,11 +299,14 @@ namespace Dark {
 	}
 
 	//events
-	void UltraEditorLayer::OnEvent(Dark::Event& e)
+	void UltraEditorLayer::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher{ e };
 
 		dispatcher.Dispatch<KeyPressedEvent>(DARK_BIND_EVENT_FN(UltraEditorLayer::OnKeyPressed));
+
+		if(m_ViewportFocused && m_ViewportHovered)
+			m_EditorCamera.OnEvent(e);
 	}
 
 	bool UltraEditorLayer::OnKeyPressed(KeyPressedEvent& e)
@@ -286,7 +320,7 @@ namespace Dark {
 
 		switch (e.GetKeyCode())
 		{
-
+			//shortcut keys for scene loading/saving and stuff
 			case KeyCode::KEY_N:
 			{
 				if (control)
@@ -310,6 +344,20 @@ namespace Dark {
 
 				break;
 			}
+
+			//shortcut keys for gizmos
+			case KeyCode::KEY_Q:
+				m_GizmoType = -1;
+				break;
+			case KeyCode::KEY_W:
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			case KeyCode::KEY_E:
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			case KeyCode::KEY_R:
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
 		}
 
 		return false;

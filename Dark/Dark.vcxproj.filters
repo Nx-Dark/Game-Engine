@@ -28,6 +28,9 @@
     <Filter Include="src\Dark\Scene">
       <UniqueIdentifier>{1B784A78-0746-3E7E-F0D9-AEA4DC461AE3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Dark\Utils">
+      <UniqueIdentifier>{5E0C7878-4ADA-6B7E-336E-DCA41FDB47E3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -197,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="src\Dark\Scene\ScriptableEntity.h">
       <Filter>src\Dark\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dark\Utils\PlatformUtils.h">
+      <Filter>src\Dark\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1488,7 +1494,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Dark\Utils\PlatformUtils.h" />
+    <ClInclude Include="src\Dark\Math\Math.h" />
+    <ClInclude Include="src\Dark\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Dark\Audio\AudioMixer.cpp">
@@ -1587,6 +1594,9 @@
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp">
+      <Filter>src\Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
@@ -1596,6 +1606,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\Windows\WindowsPlatformUtils.cpp" />
+    <ClCompile Include="src\Dark\Math\Math.cpp" />
+    <ClCompile Include="src\Dark\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

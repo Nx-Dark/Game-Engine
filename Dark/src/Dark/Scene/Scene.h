@@ -5,6 +5,7 @@
 //---------------------
 
 #include "Dark/Core/DeltaTime.h"
+#include "Dark/Renderer/EditorCamera.h"
 
 namespace Dark
 {
@@ -32,12 +33,16 @@ namespace Dark
 		Scene();
 		~Scene();
 
-		void OnUpdate(DeltaTime dt);
+		void OnUpdateEditor(DeltaTime dt, const EditorCamera& camera);
+		void OnUpdateRuntime(DeltaTime dt);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		//creating entity in the current active scene;
 		Entity CreateEntity(const std::string& name = std::string{});
 		void DestroyEntity(Entity entity);
+
+		//temporary solution for a permanent problem ig
+		Entity GetPrimaryCameraEntity();
 
 	private:
 		template<typename T>

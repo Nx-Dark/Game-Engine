@@ -15,9 +15,9 @@ project "Ultra" -- Engine Editor
     includedirs {
         "%{wks.location}/Dark/vendor/spdlog/include",
         "%{wks.location}/Dark/src",
-        "%{wks.location}/Dark/vendor",
         "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.ecs_entt}"
     }
 

@@ -24,6 +24,9 @@ namespace Dark
 		//rendering the imgui panel cause obviously
 		void OnImGuiRender();
 
+		//getter for the selected entity;
+		inline Entity GetSelectedEntity() const { return m_EntitySelection; }
+
 	private:
 		void DrawEntityNode(Entity entity);
 		void DrawEntityComponents(Entity entity);
