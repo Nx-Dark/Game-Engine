@@ -1,4 +1,4 @@
-#version 330 core
+#version 450
 
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec4 aColor;
@@ -10,7 +10,7 @@ uniform mat4 u_ProjectionView;
 
 out vec2 v_TexCoords;
 out vec4 v_Color;
-out float v_TexID;
+out flat float v_TexID;
 out float v_TilingFactor;
 
 void main() {

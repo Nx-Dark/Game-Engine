@@ -334,8 +334,6 @@ namespace Dark {
 				ImGui::TreePop();
 			}
 
-
-
 			//close button
 			if (ImGui::Button("Close"))
 				m_ShowEditorSettings = false;

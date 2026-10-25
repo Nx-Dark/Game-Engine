@@ -255,13 +255,15 @@ namespace Dark
 		{
 			if (ImGui::MenuItem("Camera"))
 			{
-				m_EntitySelection.AddComponent<CameraComponent>();
+				if (!m_EntitySelection.HasAnyofComponent<CameraComponent>()) m_EntitySelection.AddComponent<CameraComponent>();
+				else DARK_CORE_WARN("Entity Already has this Camera Component!");
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (ImGui::MenuItem("Sprite Renderer"))
 			{
-				m_EntitySelection.AddComponent<SpriteRendererComponent>();
+				if (!m_EntitySelection.HasAnyofComponent<SpriteRendererComponent>()) m_EntitySelection.AddComponent<SpriteRendererComponent>();
+				else DARK_CORE_WARN("Entity Already has this SpriteRenderer Component!");
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -272,6 +274,7 @@ namespace Dark
 		ImGui::Separator();
 		ImGui::Spacing();
 
+		//drawing the component stuff in the properties panel
 		DrawEntityComponent<TransformComponent>("Transform", entity, false, [](TransformComponent& tc) -> void
 		{
 			DrawVec3Control("Translate", tc.Translation);
@@ -366,7 +369,6 @@ namespace Dark
 
 			}
 		});
-
 
 		//sprite renderer component
 		DrawEntityComponent<SpriteRendererComponent>("Sprite Renderer", entity, true, [](auto& src) -> void 
