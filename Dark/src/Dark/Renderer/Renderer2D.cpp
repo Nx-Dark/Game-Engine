@@ -56,16 +56,13 @@ namespace Dark {
 
 		s_RendererData.VertexBuffer = VertexBuffer::Create(s_RendererData.MaxVertexCount * sizeof(QuadVertex));
 
-		BufferLayout layout
-		{
+		s_RendererData.VertexBuffer->SetLayout({
 			{"aPos", ShaderDataType::Float3},
 			{"aColor", ShaderDataType::Float4},
 			{"aTexCoords", ShaderDataType::Float2},
 			{"aTexID", ShaderDataType::Float},
 			{"aTilingFactor", ShaderDataType::Float}
-		};
-
-		s_RendererData.VertexBuffer->SetLayout(layout);
+		});
 		s_RendererData.VertexArray->AddVertexBuffer(s_RendererData.VertexBuffer);
 
 		s_RendererData.QuadVertexBufferBase = new QuadVertex[s_RendererData.MaxVertexCount];

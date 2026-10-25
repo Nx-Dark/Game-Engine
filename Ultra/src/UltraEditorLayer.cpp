@@ -20,10 +20,9 @@ namespace Dark {
 	{
 
 		//framebuffer
-		Dark::FramebufferSpecifications fbSpec;
-		fbSpec.Width = Dark::Application::Get().GetWindow().GetWidth();
-		fbSpec.Height = Dark::Application::Get().GetWindow().GetHeight();
-		m_Framebuffer = Dark::Framebuffer::Create(fbSpec);
+		FramebufferSpecifications fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		//active scene
 		m_ActiveScene = CreateRef<Scene>();
@@ -402,9 +401,9 @@ namespace Dark {
 
 	void UltraEditorLayer::OpenSceneFile()
 	{
-		std::string filePath{ FileDialogs::OpenFile("Dark Scene (*.dscn)\0*.dscn\0") };
+		std::optional<std::string> filePath{ FileDialogs::OpenFile("Dark Scene (*.dscn)\0*.dscn\0") };
 
-		if (!filePath.empty())
+		if (filePath)
 		{
 			m_ActiveScene = CreateRef<Scene>();
 			const auto& viewportPanelSize{ m_SceneViewportPanel.GetViewportPanelSize() };
@@ -413,18 +412,18 @@ namespace Dark {
 			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 			SceneSerializer serializer{ m_ActiveScene };
-			serializer.Deserialize(filePath);
+			serializer.Deserialize(*filePath);
 		}
 	}
 
 	void UltraEditorLayer::SaveSceneFileAs()
 	{
-		std::string filePath{ FileDialogs::SaveFile("Dark Scene (*.dscn)\0*.dscn\0") };
+		std::optional<std::string> filePath{ FileDialogs::SaveFile("Dark Scene (*.dscn)\0*.dscn\0") };
 
-		if (!filePath.empty())
+		if (filePath)
 		{
 			SceneSerializer serializer{ m_ActiveScene };
-			serializer.Serialize(filePath);
+			serializer.Serialize(*filePath);
 		}
 	}
 }

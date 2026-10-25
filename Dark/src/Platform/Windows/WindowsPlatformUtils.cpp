@@ -13,7 +13,7 @@
 
 namespace Dark {
 
-	std::string FileDialogs::OpenFile(const char* filter)
+	std::optional<std::string> FileDialogs::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[256]{ 0 };
@@ -29,13 +29,11 @@ namespace Dark {
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 		if (GetOpenFileNameA(&ofn) == TRUE)
-		{
 			return ofn.lpstrFile;
-		}
-		return {};
+		return std::nullopt;
 	}
 
-	std::string FileDialogs::SaveFile(const char* filter)
+	std::optional<std::string> FileDialogs::SaveFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR szFile[256]{ 0 };
@@ -51,10 +49,8 @@ namespace Dark {
 		ofn.nFilterIndex = 1;
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 		if (GetSaveFileNameA(&ofn) == TRUE)
-		{
 			return ofn.lpstrFile;
-		}
-		return {};
+		return std::nullopt;
 	}
 
 }

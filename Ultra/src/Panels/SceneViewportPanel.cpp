@@ -55,7 +55,7 @@ namespace Dark
 			m_ViewportPanelSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y };
 
 			//rendering the framebuffer to the viewport panel
-			ImGui::Image((void*)frameBuffer->GetColorAttachmentRendererID(), { m_ViewportPanelSize.x, m_ViewportPanelSize.y }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
+			ImGui::Image((void*)frameBuffer->GetColorAttachmentRendererID(1), { m_ViewportPanelSize.x, m_ViewportPanelSize.y }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
 
 			//Gizmos
 			m_EntitySelection = { selectedEntity };

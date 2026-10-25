@@ -181,24 +181,13 @@ namespace Dark
 	void SceneSerializer::SerializeRuntime(const std::filesystem::path& filePath)
 	{
 		//not implemented yet;
-		DARK_CORE_ASSERT(false, "");
+		DARK_CORE_ASSERT(false);
 	}
 
 	bool SceneSerializer::Deserialize(const std::filesystem::path& filePath)
 	{
-		std::ifstream fileStream{ filePath };
+		YAML::Node data{ YAML::LoadFile(filePath.string()) };
 
-		if (!fileStream.is_open())
-		{
-			DARK_CORE_ERROR("Scene File Couldn't Be opened, FilePath: {0}", filePath.string());
-			DARK_CORE_ASSERT(false, "Scene File Couldn't Be Opened");
-			return false;
-		}
-
-		std::stringstream strStream{};
-		strStream << fileStream.rdbuf();
-
-		YAML::Node data{ YAML::Load(strStream.str()) };
 		if (!data["Scene"])
 			return false;
 
@@ -275,7 +264,7 @@ namespace Dark
 	bool SceneSerializer::DeserializeRuntime(const std::filesystem::path& filePath)
 	{
 		//not implemented yet
-		DARK_CORE_ASSERT(false, "");
+		DARK_CORE_ASSERT(false);
 		return false;
 	}
 }

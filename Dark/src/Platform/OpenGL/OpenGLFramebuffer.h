@@ -11,9 +11,16 @@ namespace Dark
 	private:
 		FramebufferSpecifications m_Specifications{};
 		uint32_t m_RendererID{};
-		uint32_t m_ColorAttachment{}, m_DepthStencilAttachment{};
 
-	public:
+		//attachments
+		std::vector<FramebufferTextureSpecifications> m_ColorAttachmentSpecs{};
+		FramebufferTextureSpecifications m_DepthAttachmentSpec{};
+
+		//attachment ids;
+		std::vector<uint32_t> m_ColorAttachments{};
+		uint32_t m_DepthAttachment{};
+
+	public: 
 		OpenGLFramebuffer(const FramebufferSpecifications& spec);
 		virtual ~OpenGLFramebuffer();
 
@@ -29,7 +36,8 @@ namespace Dark
 		inline virtual uint32_t GetSizeX() const override { return m_Specifications.Width; }
 		inline virtual uint32_t GetSizeY() const override { return m_Specifications.Height; }
 
-		inline virtual uint32_t GetColorAttachmentRendererID() const override { return m_ColorAttachment; }
+		inline virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override 
+			{ DARK_CORE_ASSERT(index < m_ColorAttachments.size()); return m_ColorAttachments[index]; }
 
 		inline virtual const FramebufferSpecifications& GetSpecifications() const override { return m_Specifications; }
 		inline virtual FramebufferSpecifications& GetSpecifications() override { return m_Specifications; }

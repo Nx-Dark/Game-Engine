@@ -7,10 +7,44 @@
 namespace Dark
 {
 
+	enum class FramebufferTextureFormat
+	{
+		None = 0,
+
+		//Color
+		RGBA8,
+
+		//Depth
+		DEPTH24STENCIL8,
+
+		//Defaults
+		Depth = DEPTH24STENCIL8
+	};
+
+	struct FramebufferTextureSpecifications
+	{
+		FramebufferTextureSpecifications() = default;
+		FramebufferTextureSpecifications(FramebufferTextureFormat format)
+			: TextureFormat{format} {}
+
+		FramebufferTextureFormat TextureFormat{ FramebufferTextureFormat::None };
+		//TODO: Filtering and Wrap
+	};
+
+	struct FramebufferAttachmentSpecifications
+	{
+		FramebufferAttachmentSpecifications() = default;
+		FramebufferAttachmentSpecifications(std::initializer_list<FramebufferTextureSpecifications> attachments)
+			: Attachments{attachments} { }
+
+		std::vector<FramebufferTextureSpecifications> Attachments{};
+	};
+
 	struct FramebufferSpecifications
 	{
 		uint32_t Width{ 960 }, Height{ 540 };
-		uint32_t Samples{ 1 };
+		FramebufferAttachmentSpecifications Attachments{};
+		uint32_t Samples{ 1 }; //for multi sampling
 		bool SwapChainTarget{};
 	};
 
@@ -30,7 +64,7 @@ namespace Dark
 		virtual uint32_t GetSizeX() const = 0;
 		virtual uint32_t GetSizeY() const = 0;
 
-		virtual uint32_t GetColorAttachmentRendererID() const = 0;
+		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const = 0;
 
 		virtual const FramebufferSpecifications& GetSpecifications() const = 0;
 		virtual FramebufferSpecifications& GetSpecifications() = 0;
