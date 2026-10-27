@@ -18,7 +18,6 @@ namespace Dark
 		bool m_ViewportHovered{};
 		bool m_ViewportFocused{};
 		glm::vec2 m_ViewportPanelSize{ 1.0f };
-		glm::vec2 m_ViewportBounds[2]{};
 
 		//imguizo shit
 		int m_GizmoType{ -1 };
@@ -39,9 +38,6 @@ namespace Dark
 
 		inline const glm::vec2& GetViewportPanelSize() const { return m_ViewportPanelSize; }
 		inline void SetViewportPanelSize(const glm::vec2& _size) { m_ViewportPanelSize = _size; }
-
-		inline const glm::vec2* GetViewportPanelBounds() const { return m_ViewportBounds; }
-		inline void SetViewportPanelBounds(const glm::vec2& _minBounds, const glm::vec2& _maxBounds) { m_ViewportBounds[0] = _minBounds; m_ViewportBounds[1] = _maxBounds; }
 
 		inline bool GetViewportHovered() const { return m_ViewportHovered; }
 		inline bool GetViewportFocused() const { return m_ViewportFocused; }
