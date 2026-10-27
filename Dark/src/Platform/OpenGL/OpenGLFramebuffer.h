@@ -36,8 +36,6 @@ namespace Dark
 		inline virtual uint32_t GetSizeX() const override { return m_Specifications.Width; }
 		inline virtual uint32_t GetSizeY() const override { return m_Specifications.Height; }
 
-		virtual int ReadPixels(uint32_t attachmentIndex, int _mx, int _my) const override;
-
 		inline virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override 
 			{ DARK_CORE_ASSERT(index < m_ColorAttachments.size()); return m_ColorAttachments[index]; }
 

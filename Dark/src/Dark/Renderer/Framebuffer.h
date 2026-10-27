@@ -13,9 +13,6 @@ namespace Dark
 
 		//Color
 		RGBA8,
-		RGB8,
-		RGBA16F,
-		RED_INTEGER,
 
 		//Depth
 		DEPTH24STENCIL8,
@@ -66,8 +63,6 @@ namespace Dark
 		virtual const std::pair<uint32_t, uint32_t> GetSize() const = 0;
 		virtual uint32_t GetSizeX() const = 0;
 		virtual uint32_t GetSizeY() const = 0;
-
-		virtual int ReadPixels(uint32_t attachmentIndex, int _mx, int _my) const = 0;
 
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const = 0;
 
