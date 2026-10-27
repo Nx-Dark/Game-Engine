@@ -1,7 +1,7 @@
 #version 450
 
 layout(location = 0) out vec4 fragColor;
-layout(location = 1) out vec4 testColor; //for the 2nd color attachment in the framebuffer(testing)
+layout(location = 1) out int entityIds;
 
 in vec2 v_TexCoords;
 in vec4 v_Color;
@@ -50,6 +50,7 @@ void main() {
 	}
 
 	fragColor = texColor;
-	testColor = texColor * vec4(0.5f, 0.3f, 0.2f, 1.0f);
+
+	entityIds = 50;
 
 }

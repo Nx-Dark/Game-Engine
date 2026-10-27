@@ -52,10 +52,15 @@ namespace Dark
 			m_ViewportHovered = ImGui::IsWindowHovered();
 			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
+			//viewport pos and stuff
 			m_ViewportPanelSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y };
+			ImVec2 minBound{ ImGui::GetCursorScreenPos() };
+			ImVec2 maxBound{ minBound.x + m_ViewportPanelSize.x, minBound.y + m_ViewportPanelSize.y };
+			m_ViewportBounds[0] = { minBound.x, minBound.y };
+			m_ViewportBounds[1] = { maxBound.x, maxBound.y };
 
 			//rendering the framebuffer to the viewport panel
-			ImGui::Image((void*)frameBuffer->GetColorAttachmentRendererID(1), { m_ViewportPanelSize.x, m_ViewportPanelSize.y }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
+			ImGui::Image(reinterpret_cast<void*>(frameBuffer->GetColorAttachmentRendererID()), { m_ViewportPanelSize.x, m_ViewportPanelSize.y }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
 
 			//Gizmos
 			m_EntitySelection = { selectedEntity };

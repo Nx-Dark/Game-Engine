@@ -128,6 +128,10 @@ namespace Dark
 					case FramebufferTextureFormat::RGBA8:
 						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specifications.Samples, GL_RGBA8, GL_RGBA, m_Specifications.Width, m_Specifications.Height, i);
 						break;
+					case FramebufferTextureFormat::RED_INTEGER:
+						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specifications.Samples, GL_R32I, GL_RED_INTEGER, m_Specifications.Width, m_Specifications.Height, i);
+						break;
+
 				}
 			}
 		}
@@ -188,6 +192,17 @@ namespace Dark
 	const std::pair<uint32_t, uint32_t> OpenGLFramebuffer::GetSize() const
 	{
 		return { m_Specifications.Width, m_Specifications.Height };
+	}
+
+	int OpenGLFramebuffer::ReadPixels(uint32_t attachmentIndex, int _mx, int _my) const
+	{
+		//make sure to bind the framebuffer before callling this func;
+		DARK_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+		int pixelVal{};
+		glReadPixels(_mx, _my, 1, 1, GL_RED_INTEGER, GL_INT, &pixelVal);
+		return pixelVal;
 	}
 
 }
