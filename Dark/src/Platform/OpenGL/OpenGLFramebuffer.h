@@ -31,6 +31,8 @@ namespace Dark
 		virtual void Bind() override;
 		virtual void UnBind() override;
 
+		virtual void ClearColorAttachment(uint32_t attachmentIndex, int clearValue) override;
+
 		virtual void ReSize(uint32_t _width, uint32_t _height) override;
 		virtual const std::pair<uint32_t, uint32_t> GetSize() const override;
 		inline virtual uint32_t GetSizeX() const override { return m_Specifications.Width; }

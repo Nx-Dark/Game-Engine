@@ -65,6 +65,19 @@ namespace Dark
 			}
 			return false;
 		}
+
+		static GLenum DarkFBTextureFormatToGL(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+				case FramebufferTextureFormat::RGBA8: return GL_RGBA8;
+				case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+				case FramebufferTextureFormat::DEPTH24STENCIL8: return GL_DEPTH24_STENCIL8;
+			}
+
+			DARK_CORE_ASSERT(false);
+			return GL_NONE;
+		}
 	}
 
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecifications& spec)
@@ -175,6 +188,15 @@ namespace Dark
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void OpenGLFramebuffer::ClearColorAttachment(uint32_t attachmentIndex, int clearValue)
+	{
+		DARK_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+
+		const auto& textureFormat{ m_ColorAttachmentSpecs[attachmentIndex].TextureFormat };
+
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::DarkFBTextureFormatToGL(textureFormat), GL_INT, &clearValue);
+	}
+
 	void OpenGLFramebuffer::ReSize(uint32_t _width, uint32_t _height)
 	{
 		if (_width == 0 || _height == 0 || _width > s_MaxFramebufferSize || _height > s_MaxFramebufferSize) {
@@ -204,5 +226,7 @@ namespace Dark
 		glReadPixels(_mx, _my, 1, 1, GL_RED_INTEGER, GL_INT, &pixelVal);
 		return pixelVal;
 	}
+
+
 
 }

@@ -13,8 +13,6 @@ namespace Dark
 
 		//Color
 		RGBA8,
-		RGB8,
-		RGBA16F,
 		RED_INTEGER,
 
 		//Depth
@@ -61,6 +59,10 @@ namespace Dark
 
 		virtual void Bind() = 0;
 		virtual void UnBind() = 0;
+
+		//maybe make this templated
+		virtual void ClearColorAttachment(uint32_t attachmentIndex, int clearValue) = 0;
+		//add clear depth attachment later
 
 		virtual void ReSize(uint32_t _width, uint32_t _height) = 0;
 		virtual const std::pair<uint32_t, uint32_t> GetSize() const = 0;
