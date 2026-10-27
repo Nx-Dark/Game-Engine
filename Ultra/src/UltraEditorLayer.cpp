@@ -21,7 +21,7 @@ namespace Dark {
 
 		//framebuffer
 		FramebufferSpecifications fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
 		//active scene
@@ -171,6 +171,24 @@ namespace Dark {
 
 		// Updatting and Rendering the Scene
 		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
+		
+		//sm viewport and shit
+		auto [mx, my] { ImGui::GetMousePos() };
+		//changes the absolute screen space posiiton to [0,0](top left relative to the viewport panel)
+		mx -= m_SceneViewportPanel.GetViewportPanelBounds()[0].x;
+		my -= m_SceneViewportPanel.GetViewportPanelBounds()[0].y;
+		const glm::vec2& viewportPanelSize{ m_SceneViewportPanel.GetViewportPanelSize() };
+		my = viewportPanelSize.y - my;
+
+		int mouseX{ (int)mx };
+		int mouseY{ (int)my };
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX <= (int)viewportPanelSize.x && mouseY <= (int)viewportPanelSize.y)
+		{
+			int pixelData{ m_Framebuffer->ReadPixels(1, mouseX, mouseY) };
+			DARK_CORE_TRACE("PixelData: {0}", pixelData);
+		}
+
 
 		m_Framebuffer->UnBind();
 	}
